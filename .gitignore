@@ -15,26 +15,6 @@
 
 typescript
 
-<<<<<<< HEAD
-.idea
-*.iml
-
-######
-# start go
-#
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary, build with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-=======
 .vscode
->>>>>>> bdf262559b41266a23dd9a4d7f5e0feb1758068e
+
+daring-cyclops
