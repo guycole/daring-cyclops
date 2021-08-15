@@ -14,6 +14,7 @@ import (
 
 const Banner = "Daring Cyclops V0.0"
 
+// Configuration this is a test comment
 type Configuration struct {
 	Address      string
 	ReadTimeout  int64
@@ -133,7 +134,9 @@ func Manager() {
 
 	// fall into event loop
 
-	httpSetup()
+	//httpSetup()
+
+	freshGameBoard()
 }
 
 func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
