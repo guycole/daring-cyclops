@@ -4,9 +4,13 @@
 package main
 
 import (
-	"github.com/guycole/daring-cyclops/manager"
+	"log"
+
+	"github.com/guycole/daring-cyclops/game"
 )
 
 func main() {
-	manager.Manager()
+	log.Println("Banner")
+	game.NewGame(123)
+	//manager.Manager()
 }
