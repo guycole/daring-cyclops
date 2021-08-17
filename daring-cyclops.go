@@ -12,5 +12,4 @@ import (
 func main() {
 	log.Println("Banner")
 	game.NewGame(123)
-	//manager.Manager()
 }

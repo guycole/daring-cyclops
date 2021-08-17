@@ -45,32 +45,21 @@ func freshGameBoard() GameBoardType {
 		}
 	}
 
+	addPlanets(gameBoard)
 	addStarGates(gameBoard)
 
-	// add planets, etc
-	/*
-		for yy := 0; yy < MaxBoardSideY; yy++ {
-			for xx := 0; xx < MaxBoardSideX; xx++ {
-				var boardCell = gameBoard.BoardArray[yy][xx]
-				//test(boardCell)
-			}
-		}
-	*/
-
 	return gameBoard
+}
+
+func addPlanets(gb GameBoardType) {
+
 }
 
 func addStarGates(gb GameBoardType) {
 	for ndx := 0; ndx < 9; ndx++ {
 		sg := newStarGate(ndx)
 		log.Println(sg)
-	}
 
-	/*
-		// stargate 1
-		boardCell := gb.BoardArray[12][34]
-
-		setStarGate(boardCell, sg.uuid)
 		gb.StarGates[sg.uuid] = *sg
-	*/
+	}
 }
