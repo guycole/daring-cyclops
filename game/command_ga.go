@@ -1,6 +1,6 @@
 package game
 
-func commandGate(ship *shipType gameBoard *GameBoardType) int {
+func commandGate(ship *shipType, gameBoard *GameBoardType) int {
 
 	//discover if adjacent to star gate
 	/*
