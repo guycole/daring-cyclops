@@ -83,19 +83,17 @@ var legalCommands = [...][2]string{
 
 // CommandType ryryr
 type CommandType struct {
-	command commandEnum
-	user    string
+	command  commandEnum
+	duration int
+	user     string
 }
 
 func findCommand(arg string) int {
 	for ndx := 0; ndx < len(legalCommands); ndx++ {
 		if legalCommands[ndx][0] == arg || legalCommands[ndx][1] == arg {
-			log.Println("match:", ndx)
 			return ndx
 		}
 	}
-
-	log.Println("match failure")
 
 	return -1
 }
@@ -108,10 +106,15 @@ func NewJsonCommand(command, user string) *CommandType {
 
 // NewTextCommand ryryry
 func NewTextCommand(command, user string) *CommandType {
+	commandNdx := findCommand(command)
+
+	if commandNdx < 0 {
+		log.Println("error error error")
+	}
+
 	result := CommandType{user: user}
-	//	commandNdx := findCommand(command)
-	//	result := CommandType{}
-	//	result.command = commandNdx
+	result.command = commandEnum(commandNdx)
+
 	return &result
 }
 
