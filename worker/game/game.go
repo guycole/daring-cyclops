@@ -86,6 +86,26 @@ func PlayerDelete(target string, gt *GameType) {
 	log.Println("no match red")
 }
 
+// PlayerFind remove player from game
+func PlayerFind(target string, gt *GameType) *PlayerType {
+	for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+		if strings.Compare(gt.playersBlue[ndx].uuid, target) == 0 {
+			return gt.playersBlue[ndx]
+		}
+	}
+
+	log.Println("no match blue")
+
+	for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+		if strings.Compare(gt.playersRed[ndx].uuid, target) == 0 {
+			return gt.playersRed[ndx]
+		}
+	}
+
+	log.Println("no match red")
+	return nil
+}
+
 // ShipAdd add fresh ship to game
 func ShipAdd(st *ShipType, gt *GameType) {
 	// find player

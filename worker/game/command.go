@@ -1,6 +1,20 @@
 package game
 
-import "log"
+import (
+	"log"
+)
+
+// CommandRawType contains a raw command string from HTTP server
+type CommandRawType struct {
+	cookie  string // player uuid
+	payload string // json
+}
+
+// NewRawCommand package a raw command
+func NewRawCommand(cookie, payload string) *CommandRawType {
+	result := CommandRawType{cookie: cookie, payload: payload}
+	return &result
+}
 
 type commandEnum int
 
@@ -60,7 +74,7 @@ var legalCommands = [...][2]string{
 	{"honor", ""},
 	{"impulse", ""},
 	{"list", ""},
-	{"move", ""},
+	{"move", "m"},
 	{"news", ""},
 	{"phasers", ""},
 	{"planet", ""},
@@ -100,10 +114,16 @@ func findCommand(arg string) int {
 
 // NewJsonCommand ryryr
 func NewJsonCommand(command, user string) *CommandType {
+	commandNdx := findCommand(command)
+	if commandNdx < 0 {
+		log.Println("error error error")
+	}
+
 	result := CommandType{user: user}
 	return &result
 }
 
+/*
 // NewTextCommand ryryry
 func NewTextCommand(command, user string) *CommandType {
 	commandNdx := findCommand(command)
@@ -117,9 +137,10 @@ func NewTextCommand(command, user string) *CommandType {
 
 	return &result
 }
+*/
 
 func unknownCommand() {
-	log.Println("fix me")
+	log.Println("unknownCommand")
 }
 
 // DispatchCommand ryryry
