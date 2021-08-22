@@ -1,7 +1,7 @@
 #
 FROM ubuntu:18.04
-LABEL build_date="2021-09-04"
-LABEL description="daring-cyclops-worker"
+LABEL build_date="2020-09-04"
+LABEL description="daring-cyclops"
 LABEL maintainer="guycole@gmail.com"
 #
 RUN apt-get update && apt-get -y upgrade
@@ -11,22 +11,22 @@ RUN apt-get update && apt-get -y upgrade
 #RUN apt-get install -y virtualenv
 #RUN pip3 install --upgrade pip
 #
-#RUN apt-get install -y ctags
-#RUN apt-get install -y curl
-#RUN apt-get install -y git
-#RUN apt-get install -y less
-#RUN apt-get install -y inetutils-tools inetutils-ping inetutils-telnet
-#RUN apt-get install -y netcat
+RUN apt-get install -y ctags
+RUN apt-get install -y curl
+RUN apt-get install -y git
+RUN apt-get install -y less
+RUN apt-get install -y inetutils-tools inetutils-ping inetutils-telnet
+RUN apt-get install -y netcat
 #RUN apt-get install -y net-tools
-#RUN apt-get install -y unzip
+RUN apt-get install -y unzip
 RUN apt-get install -y vim
 RUN apt-get install -y wget
 #
-#RUN apt-get install -y autoconf automake
-#RUN apt-get install -y build-essential
-#RUN apt-get install -y libtool
-#RUN apt-get install -y pkg-config
-#RUN apt-get install -y uuid-dev
+RUN apt-get install -y autoconf automake
+RUN apt-get install -y build-essential
+RUN apt-get install -y libtool
+RUN apt-get install -y pkg-config
+RUN apt-get install -y uuid-dev
 #
 #RUN apt-get install -y libboost-system-dev
 #RUN apt-get install -y postgresql-client
