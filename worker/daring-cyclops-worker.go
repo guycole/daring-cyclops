@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/guycole/daring-cyclops/worker/game"
@@ -14,14 +15,23 @@ const Banner = "Daring Cyclops Worker V0.0"
 func main() {
 	log.Println(Banner)
 
-	game1 := game.NewGame(123)
-	log.Println(game1)
+	worker := game.NewWorker("gameId")
+	log.Println(worker)
 
-	player1 := game.NewPlayer("player1", game.Player1, game.CaptainRank, game.BlueTeam)
-	log.Println(player1)
-	game.PlayerAdd(player1, game1)
-	playerTest := game.PlayerFind(game.Player1, game1)
-	log.Println(playerTest)
+	message1 := `{"command":["newPlayer", "player1uuid", "CaptainRank", "BlueTeam"]}`
+
+	var result map[string]interface{}
+	json.Unmarshal([]byte(message1), &result)
+
+	game.DispatchCommand(message1, *worker)
+
+	/*
+		player1 := game.NewPlayer("player1", game.Player1, game.CaptainRank, game.BlueTeam)
+		log.Println(player1)
+		game.PlayerAdd(player1, game1)
+		playerTest := game.PlayerFind(game.Player1, game1)
+		log.Println(playerTest)
+	*/
 
 	/*
 		ship1 := game.NewShip("shipName", game.Player1, game.FighterShip, game.BlueTeam)

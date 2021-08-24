@@ -1,6 +1,7 @@
 package game
 
 import (
+	"encoding/json"
 	"log"
 )
 
@@ -143,8 +144,22 @@ func unknownCommand() {
 	log.Println("unknownCommand")
 }
 
+func DispatchCommand(command string, game WorkerType) {
+	log.Println(command)
+
+	var result map[string]interface{}
+	json.Unmarshal([]byte(command), &result)
+	args := result["command"]
+
+	log.Println(result)
+	log.Println(result["command"])
+	log.Println(args)
+	log.Println(args[0])
+}
+
+/*
 // DispatchCommand ryryry
-func DispatchCommand(command *CommandType, game GameType) {
+func DispatchCommand(command *CommandType, game WorkerType) {
 	log.Println("dispatch command")
 
 	switch command.command {
@@ -222,3 +237,4 @@ func DispatchCommand(command *CommandType, game GameType) {
 		unknownCommand()
 	}
 }
+*/

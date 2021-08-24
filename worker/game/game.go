@@ -2,37 +2,29 @@ package game
 
 import (
 	"log"
-	"strings"
-
-	"github.com/google/uuid"
 )
 
 const maxTeamPlayers = 5
 const maxPlayers = maxTeamPlayers * 2
 
-// Game ryry
-type GameType struct {
-	active bool
-	age    int
-	//	gameBoard    GameBoardType
-	playersBlue  [maxTeamPlayers]*PlayerType
-	playersRed   [maxTeamPlayers]*PlayerType
-	score        scoreType
-	sequentialID int
-	uuid         string
+// WorkerType main game structure
+type WorkerType struct {
+	//gameBoard   GameBoardType
+	players     [maxPlayers]*PlayerType
+	turnCounter int
+	uuid        string
 }
 
-// NewGame creates new game
-func NewGame(id int) *GameType {
-	log.Println("fresh game")
+// NewGame creates new game (should be init)
+func NewWorker(id string) *WorkerType {
+	log.Println("new game:", id)
 
-	gt := GameType{active: true, sequentialID: id}
-	gt.uuid = uuid.NewString()
-
+	wt := WorkerType{uuid: id}
 	//	result.gameBoard = freshGameBoard()
-	return &gt
+	return &wt
 }
 
+/*
 // PlayerAdd add fresh player to game
 func PlayerAdd(pt *PlayerType, gt *GameType) {
 	log.Println(pt)
@@ -64,7 +56,9 @@ func PlayerAdd(pt *PlayerType, gt *GameType) {
 		log.Println("unkown team")
 	}
 }
+*/
 
+/*
 // PlayerDelete remove player from game
 func PlayerDelete(target string, gt *GameType) {
 	for ndx := 0; ndx < maxTeamPlayers; ndx++ {
@@ -85,7 +79,9 @@ func PlayerDelete(target string, gt *GameType) {
 
 	log.Println("no match red")
 }
+*/
 
+/*
 // PlayerFind remove player from game
 func PlayerFind(target string, gt *GameType) *PlayerType {
 	for ndx := 0; ndx < maxTeamPlayers; ndx++ {
@@ -105,7 +101,9 @@ func PlayerFind(target string, gt *GameType) *PlayerType {
 	log.Println("no match red")
 	return nil
 }
+*/
 
+/*
 // ShipAdd add fresh ship to game
 func ShipAdd(st *ShipType, gt *GameType) {
 	// find player
@@ -118,3 +116,4 @@ func ShipAdd(st *ShipType, gt *GameType) {
 // ShipDelete remove ship from game
 func ShipDelete(target string, gt *GameType) {
 }
+*/
