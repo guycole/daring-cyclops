@@ -7,4 +7,7 @@ require (
 	github.com/guycole/daring-cyclops/worker/game v0.0.0-00010101000000-000000000000 // indirect
 )
 
-replace github.com/guycole/daring-cyclops/worker/game => /Users/gsc/documents/github/daring-cyclops/worker/game
+// ling ling
+// replace github.com/guycole/daring-cyclops/worker/game => /Users/gsc/documents/github/daring-cyclops/worker/game
+// not ling long
+replace github.com/guycole/daring-cyclops/worker/game => /Users/gcole/github/daring-cyclops/worker/game

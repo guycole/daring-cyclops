@@ -11,16 +11,18 @@ type CommandRawType struct {
 	payload string // json
 }
 
+/*
 // NewRawCommand package a raw command
 func NewRawCommand(cookie, payload string) *CommandRawType {
 	result := CommandRawType{cookie: cookie, payload: payload}
 	return &result
 }
+*/
 
-type commandEnum int
+type commandGameEnum int
 
 const (
-	basesCommand commandEnum = iota
+	basesCommand commandGameEnum = iota
 	buildCommand
 	captureCommand
 	chroniclesCommand
@@ -57,8 +59,8 @@ const (
 	usersCommand
 )
 
-// must match order for commandEnum
-var legalCommands = [...][2]string{
+// must match order for commandGameEnum
+var legalGameCommands = [...][2]string{
 	{"bases", "ba"},
 	{"build", "bu"},
 	{"capture", "ca"},
@@ -96,16 +98,16 @@ var legalCommands = [...][2]string{
 	{"users", ""},
 }
 
-// CommandType ryryr
-type CommandType struct {
-	command  commandEnum
+// CommandGameType ryryr
+type CommandGameType struct {
+	command  commandGameEnum
 	duration int
 	user     string
 }
 
-func findCommand(arg string) int {
-	for ndx := 0; ndx < len(legalCommands); ndx++ {
-		if legalCommands[ndx][0] == arg || legalCommands[ndx][1] == arg {
+func findGameCommand(arg string) int {
+	for ndx := 0; ndx < len(legalGameCommands); ndx++ {
+		if legalGameCommands[ndx][0] == arg || legalGameCommands[ndx][1] == arg {
 			return ndx
 		}
 	}
@@ -114,13 +116,13 @@ func findCommand(arg string) int {
 }
 
 // NewJsonCommand ryryr
-func NewJsonCommand(command, user string) *CommandType {
-	commandNdx := findCommand(command)
+func NewJsonCommand(command, user string) *CommandGameType {
+	commandNdx := findGameCommand(command)
 	if commandNdx < 0 {
 		log.Println("error error error")
 	}
 
-	result := CommandType{user: user}
+	result := CommandGameType{user: user}
 	return &result
 }
 
@@ -154,7 +156,7 @@ func DispatchCommand(command string, game WorkerType) {
 	log.Println(result)
 	log.Println(result["command"])
 	log.Println(args)
-	log.Println(args[0])
+	//log.Println(args[0])
 }
 
 /*
