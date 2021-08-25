@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/guycole/daring-cyclops/worker/game v0.0.0-00010101000000-000000000000 // indirect
+	github.com/streadway/amqp v1.0.0 // indirect
 )
 
 // ling ling
