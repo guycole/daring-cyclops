@@ -4,65 +4,83 @@ package main
 
 import (
 	"log"
+	"time"
 
-	"github.com/streadway/amqp"
+	"github.com/guycole/daring-cyclops/worker/game"
 )
 
 // Banner splash message
-const Banner = "Daring Cyclops Worker V0.0"
+const banner = "Daring Cyclops Worker V0.0"
 
+/*
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
 	}
 }
+*/
 
 func main() {
-	log.Println(Banner)
+	log.Println(banner)
 
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
-	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
+	worker := game.NewWorker("gameId")
+	//log.Println(worker)
 
-	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
-	defer ch.Close()
+	for ndx := 0; ndx < 5; ndx++ {
+		start := time.Now()
 
-	q, err := ch.QueueDeclare(
-		"hello", // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
+		game.TurnManager(worker)
 
-	msgs, err := ch.Consume(
-		q.Name, // queue
-		"",     // consumer
-		true,   // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
-	)
-	failOnError(err, "Failed to register a consumer")
+		elapsed := time.Since(start)
+		log.Printf("turn took %s", elapsed)
 
-	forever := make(chan bool)
-
-	go func() {
-		for d := range msgs {
-			log.Printf("Received a message: %s", d.Body)
-		}
-	}()
-
-	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
-	<-forever
+		time.Sleep(time.Second)
+	}
 
 	/*
-		worker := game.NewWorker("gameId")
-		log.Println(worker)
+		conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+		failOnError(err, "Failed to connect to RabbitMQ")
+		defer conn.Close()
+
+		ch, err := conn.Channel()
+		failOnError(err, "Failed to open a channel")
+		defer ch.Close()
+
+		q, err := ch.QueueDeclare(
+			"hello", // name
+			false,   // durable
+			false,   // delete when unused
+			false,   // exclusive
+			false,   // no-wait
+			nil,     // arguments
+		)
+		failOnError(err, "Failed to declare a queue")
+
+		msgs, err := ch.Consume(
+			q.Name, // queue
+			"",     // consumer
+			true,   // auto-ack
+			false,  // exclusive
+			false,  // no-local
+			false,  // no-wait
+			nil,    // args
+		)
+		failOnError(err, "Failed to register a consumer")
+
+		forever := make(chan bool)
+
+		go func() {
+			for d := range msgs {
+				log.Printf("Received a message: %s", d.Body)
+			}
+		}()
+
+		log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+		<-forever
+	*/
+
+	/*
+
 
 		message1 := `{"command":["newPlayer", "player1uuid", "CaptainRank", "BlueTeam"]}`
 

@@ -10,7 +10,7 @@ const maxPlayers = maxTeamPlayers * 2
 // WorkerType main game structure
 type WorkerType struct {
 	//gameBoard   GameBoardType
-	players     [maxPlayers]*PlayerType
+	//players     [maxPlayers]*PlayerType
 	turnCounter int
 	uuid        string
 }
@@ -22,6 +22,27 @@ func NewWorker(id string) *WorkerType {
 	wt := WorkerType{uuid: id}
 	//	result.gameBoard = freshGameBoard()
 	return &wt
+}
+
+// TurnManager manage game play
+func TurnManager(wt *WorkerType) {
+	wt.turnCounter += 1
+	log.Printf("starting turn:%d", wt.turnCounter)
+
+	serviceInboundQueue(wt)
+	serviceEventQueue(wt)
+
+	log.Printf("ending turn:%d", wt.turnCounter)
+}
+
+// serviceEventQueue dispatch events
+func serviceEventQueue(wt *WorkerType) {
+	log.Printf("serviceEventQueue:%d", wt.turnCounter)
+}
+
+// serviceInboundQueue read from RabbitMQ and add to event queue
+func serviceInboundQueue(wt *WorkerType) {
+	log.Printf("serviceInboundQueue:%d", wt.turnCounter)
 }
 
 /*
