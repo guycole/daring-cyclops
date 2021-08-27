@@ -24,12 +24,12 @@ func main() {
 	log.Println(banner)
 
 	worker := game.NewWorker("gameId")
-	//log.Println(worker)
+	log.Println(worker)
 
 	for ndx := 0; ndx < 5; ndx++ {
 		start := time.Now()
 
-		game.TurnManager(worker)
+		//game.TurnManager(worker)
 
 		elapsed := time.Since(start)
 		log.Printf("turn took %s", elapsed)
@@ -80,8 +80,6 @@ func main() {
 	*/
 
 	/*
-
-
 		message1 := `{"command":["newPlayer", "player1uuid", "CaptainRank", "BlueTeam"]}`
 
 		var result map[string]interface{}

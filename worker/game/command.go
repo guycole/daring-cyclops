@@ -5,6 +5,18 @@ import (
 	"log"
 )
 
+type commandType struct {
+	cookie  string // player uuid
+	payload string // json
+	turn    int
+	next    *commandType
+}
+
+func newCommand(cookie, payload string, turn int) *commandType {
+	result := commandType{cookie: cookie, payload: payload, turn: turn}
+	return &result
+}
+
 // CommandRawType contains a raw command string from HTTP server
 type CommandRawType struct {
 	cookie  string // player uuid

@@ -7,12 +7,69 @@ import (
 const maxTeamPlayers = 5
 const maxPlayers = maxTeamPlayers * 2
 
+const maxEventQueue = 100
+
 // WorkerType main game structure
 type WorkerType struct {
 	//gameBoard   GameBoardType
 	//players     [maxPlayers]*PlayerType
 	turnCounter int
-	uuid        string
+	//eventQueue  *turnEventType
+	eventQueue [maxEventQueue]turnEventType
+	eventQueueNdx int
+	uuid       string
+}
+
+// turnEventType must be sorted by turn
+type turnEventType struct {
+	payload *commandType
+}
+
+func eventQueuePop(wt *WorkerType) *commandType {
+	return nil
+	/*
+			payload := wt.eventQueue.payload
+			if payload == nil {
+				// all commands for this turn have been consumed
+				if wt.eventQueue.next == nil {
+					wt.eventQueue = nil
+				} else {
+					wt.eventQueue = wt.eventQueue.next
+				}
+			} else {
+				wt.eventQueue.payload = payload.next
+				payload.next = nil
+			}
+
+		return payload
+	*/
+}
+
+func eventQueuePush(ct *commandType, wt *WorkerType) {
+	xxx := ct.turn % maxEventQueue
+	log.Println(xxx)
+
+	/*
+		if wt.eventQueue == nil {
+			eq := newTurnEvent(ct.turn)
+			eq.payload = ct
+			wt.eventQueue = eq
+			return
+		}
+	*/
+
+	/*
+		if ct.turn < wt.eventQueue.turn {
+			eq = newTurnEvent(ct.turn)
+			eq.payload = ct
+			eq.next = wt.eventQueue
+			wt.eventQueue = eq.next
+		}
+
+		for ndx := 0; xxx; ndx++ {
+		}
+	*/
+	log.Println("kill me")
 }
 
 // NewGame creates new game (should be init)
@@ -21,13 +78,19 @@ func NewWorker(id string) *WorkerType {
 
 	wt := WorkerType{uuid: id}
 	//	result.gameBoard = freshGameBoard()
+
+	for ndx := 0; ndx < maxEventQueue; ndx++ {
+		wt.eventQueue[ndx] = turnEventType{}
+	}
+
 	return &wt
 }
 
 // TurnManager manage game play
 func TurnManager(wt *WorkerType) {
 	wt.turnCounter += 1
-	log.Printf("starting turn:%d", wt.turnCounter)
+	wt.eventQueueNdx := wt.turnCounter % maxEventQueue
+	log.Printf("starting turn:%d %d", wt.turnCounter, wt.eventQueueNdx)
 
 	serviceInboundQueue(wt)
 	serviceEventQueue(wt)
@@ -38,11 +101,27 @@ func TurnManager(wt *WorkerType) {
 // serviceEventQueue dispatch events
 func serviceEventQueue(wt *WorkerType) {
 	log.Printf("serviceEventQueue:%d", wt.turnCounter)
+
+	/*
+		for ndx := 0; ndx <= wt.turnCounter; ndx++ {
+			if wt.eventQueue == nil || wt.eventQueue.turn > wt.turnCounter {
+				log.Println("skipping empty event queue")
+				break
+			} else {
+				command := eventQueuePop(wt)
+				log.Println(command)
+				break
+			}
+		}
+	*/
 }
 
 // serviceInboundQueue read from RabbitMQ and add to event queue
 func serviceInboundQueue(wt *WorkerType) {
 	log.Printf("serviceInboundQueue:%d", wt.turnCounter)
+
+	ct := newCommand("aaa", "bbb", 3)
+	eventQueuePush(ct, wt)
 }
 
 /*
