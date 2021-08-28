@@ -21,6 +21,7 @@ WORKDIR /app
 #
 COPY *.go ./
 #
+#RUN go mod init 
 RUN go build -o /worker
 
 # This is for documentation purposes only.

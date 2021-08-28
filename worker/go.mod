@@ -13,4 +13,4 @@ require (
 // not ling long
 //replace github.com/guycole/daring-cyclops/worker/game => /Users/gcole/github/daring-cyclops/worker/game
 // waifu
-replace github.com/guycole/daring-cyclops/worker/game => /home/gsc/github/daring-cyclops/worker/game
+//replace github.com/guycole/daring-cyclops/worker/game => /home/gsc/github/daring-cyclops/worker/game
