@@ -15,9 +15,9 @@ type WorkerType struct {
 	//players     [maxPlayers]*PlayerType
 	turnCounter int
 	//eventQueue  *turnEventType
-	eventQueue [maxEventQueue]turnEventType
+	eventQueue    [maxEventQueue]turnEventType
 	eventQueueNdx int
-	uuid       string
+	uuid          string
 }
 
 // turnEventType must be sorted by turn
@@ -89,7 +89,7 @@ func NewWorker(id string) *WorkerType {
 // TurnManager manage game play
 func TurnManager(wt *WorkerType) {
 	wt.turnCounter += 1
-	wt.eventQueueNdx := wt.turnCounter % maxEventQueue
+	wt.eventQueueNdx = wt.turnCounter % maxEventQueue
 	log.Printf("starting turn:%d %d", wt.turnCounter, wt.eventQueueNdx)
 
 	serviceInboundQueue(wt)
