@@ -17,4 +17,5 @@ typescript
 
 .vscode
 
-daring-cyclops
+daring-cyclops/manager/manager
+daring-cyclops/manager/worker
