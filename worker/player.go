@@ -1,4 +1,4 @@
-package game
+package main
 
 // playerRankEnum comment
 type playerRankEnum int

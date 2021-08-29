@@ -5,8 +5,6 @@ package main
 import (
 	"log"
 	"time"
-
-	"github.com/guycole/daring-cyclops/worker/game"
 )
 
 // Banner splash message
@@ -23,7 +21,7 @@ func failOnError(err error, msg string) {
 func main() {
 	log.Println(banner)
 
-	worker := game.NewWorker("gameId")
+	worker := NewWorker("gameId")
 	log.Println(worker)
 
 	for ndx := 0; ndx < 5; ndx++ {

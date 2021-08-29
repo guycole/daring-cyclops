@@ -1,4 +1,4 @@
-package game
+package main
 
 func commandGate(ship *ShipType, gt *WorkerType) int {
 
