@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 )
 
@@ -100,7 +99,7 @@ var legalGameCommands = [...][2]string{
 	{"scan", ""},
 	{"set", ""},
 	{"shields", ""},
-	{"status", ""},
+	{"status", "st"},
 	{"summary", ""},
 	{"target", ""},
 	{"tell", ""},
@@ -159,7 +158,12 @@ func unknownCommand() {
 	log.Println("unknownCommand")
 }
 
-func dispatchCommand(command string, gt gameType) {
+func dispatchCommand(command commandType, gt *gameType) {
+	log.Println(command)
+}
+
+/*
+func dispatchCommand2(command string, gt gameType) {
 	log.Println(command)
 
 	var result map[string]interface{}
@@ -171,6 +175,7 @@ func dispatchCommand(command string, gt gameType) {
 	log.Println(args)
 	//log.Println(args[0])
 }
+*/
 
 /*
 // DispatchCommand ryryry

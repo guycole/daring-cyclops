@@ -24,7 +24,7 @@ func main() {
 	game := newGame("gameId")
 	log.Println(game)
 
-	for ndx := 0; ndx < 3; ndx++ {
+	for ndx := 0; ndx < 13; ndx++ {
 		start := time.Now()
 
 		turnManager(game)

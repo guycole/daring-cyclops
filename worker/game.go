@@ -99,7 +99,7 @@ func newGame(id string) *gameType {
 	return &gt
 }
 
-// turnManager schedule game play
+// turnManager schedules game play
 func turnManager(gt *gameType) {
 	gt.turnCounter++
 	gt.eventQueueNdx = gt.turnCounter % maxEventQueue
@@ -130,7 +130,7 @@ func serviceEventQueue(gt *gameType) {
 		if current == nil {
 			break
 		} else {
-			log.Println(current.payload)
+			dispatchCommand(*current, gt)
 		}
 	}
 }
