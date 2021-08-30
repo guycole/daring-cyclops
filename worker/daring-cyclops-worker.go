@@ -21,13 +21,13 @@ func failOnError(err error, msg string) {
 func main() {
 	log.Println(banner)
 
-	worker := NewWorker("gameId")
-	log.Println(worker)
+	game := newGame("gameId")
+	log.Println(game)
 
-	for ndx := 0; ndx < 5; ndx++ {
+	for ndx := 0; ndx < 3; ndx++ {
 		start := time.Now()
 
-		//game.TurnManager(worker)
+		turnManager(game)
 
 		elapsed := time.Since(start)
 		log.Printf("turn took %s", elapsed)

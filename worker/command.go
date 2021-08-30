@@ -5,15 +5,16 @@ import (
 	"log"
 )
 
+// commandType single linked list of commands (for each event)
 type commandType struct {
-	cookie  string // player uuid
-	payload string // json
+	payload string // original json
+	player  string // player uuid
 	turn    int
 	next    *commandType
 }
 
-func newCommand(cookie, payload string, turn int) *commandType {
-	result := commandType{cookie: cookie, payload: payload, turn: turn}
+func newCommand(payload, player string, currentTurn int) *commandType {
+	result := commandType{payload: payload, player: player}
 	return &result
 }
 
@@ -158,7 +159,7 @@ func unknownCommand() {
 	log.Println("unknownCommand")
 }
 
-func DispatchCommand(command string, game WorkerType) {
+func dispatchCommand(command string, gt gameType) {
 	log.Println(command)
 
 	var result map[string]interface{}

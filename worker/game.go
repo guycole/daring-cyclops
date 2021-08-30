@@ -7,10 +7,10 @@ import (
 const maxTeamPlayers = 5
 const maxPlayers = maxTeamPlayers * 2
 
-const maxEventQueue = 100
+const maxEventQueue = 10
 
-// WorkerType main game structure
-type WorkerType struct {
+// gameType main game structure
+type gameType struct {
 	//gameBoard   GameBoardType
 	//players     [maxPlayers]*PlayerType
 	turnCounter int
@@ -20,109 +20,122 @@ type WorkerType struct {
 	uuid          string
 }
 
-// turnEventType must be sorted by turn
 type turnEventType struct {
-	payload *commandType
+	payload *commandType // single linked list of commands in execution order
 }
 
-func eventQueuePop(wt *WorkerType) *commandType {
-	return nil
-	/*
-			payload := wt.eventQueue.payload
-			if payload == nil {
-				// all commands for this turn have been consumed
-				if wt.eventQueue.next == nil {
-					wt.eventQueue = nil
-				} else {
-					wt.eventQueue = wt.eventQueue.next
-				}
-			} else {
-				wt.eventQueue.payload = payload.next
-				payload.next = nil
-			}
+func eventQueueSimulator(gt *gameType) {
+	log.Println("simulator")
 
-		return payload
-	*/
+	temp1 := newCommand("tell all byte me 111", player1, 0)
+	log.Println(temp1)
+	eventQueuePush(*temp1, gt)
+
+	temp2 := newCommand("tell all byte me 222", player1, 0)
+	log.Println(temp2)
+	eventQueuePush(*temp2, gt)
+
+	temp3 := newCommand("tell all byte me 333", player1, 0)
+	log.Println(temp3)
+	eventQueuePush(*temp3, gt)
 }
 
-func eventQueuePush(ct *commandType, wt *WorkerType) {
-	xxx := ct.turn % maxEventQueue
-	log.Println(xxx)
-
-	/*
-		if wt.eventQueue == nil {
-			eq := newTurnEvent(ct.turn)
-			eq.payload = ct
-			wt.eventQueue = eq
-			return
-		}
-	*/
-
-	/*
-		if ct.turn < wt.eventQueue.turn {
-			eq = newTurnEvent(ct.turn)
-			eq.payload = ct
-			eq.next = wt.eventQueue
-			wt.eventQueue = eq.next
-		}
-
-		for ndx := 0; xxx; ndx++ {
-		}
-	*/
-	log.Println("kill me")
-}
-
-// NewGame creates new game (should be init)
-func NewWorker(id string) *WorkerType {
-	log.Println("new game:", id)
-
-	wt := WorkerType{uuid: id}
-	//	result.gameBoard = freshGameBoard()
+// eventQueueDump writes event queue to stdout
+func eventQueueDump(gt gameType) {
+	log.Println("=-=-=-= eventQueueDump =-=-=-=")
 
 	for ndx := 0; ndx < maxEventQueue; ndx++ {
-		wt.eventQueue[ndx] = turnEventType{}
-	}
+		temp := gt.eventQueue[ndx].payload
 
-	return &wt
-}
-
-// TurnManager manage game play
-func TurnManager(wt *WorkerType) {
-	wt.turnCounter += 1
-	wt.eventQueueNdx = wt.turnCounter % maxEventQueue
-	log.Printf("starting turn:%d %d", wt.turnCounter, wt.eventQueueNdx)
-
-	serviceInboundQueue(wt)
-	serviceEventQueue(wt)
-
-	log.Printf("ending turn:%d", wt.turnCounter)
-}
-
-// serviceEventQueue dispatch events
-func serviceEventQueue(wt *WorkerType) {
-	log.Printf("serviceEventQueue:%d", wt.turnCounter)
-
-	/*
-		for ndx := 0; ndx <= wt.turnCounter; ndx++ {
-			if wt.eventQueue == nil || wt.eventQueue.turn > wt.turnCounter {
-				log.Println("skipping empty event queue")
+		for {
+			if temp == nil {
+				log.Printf("%d nil", ndx)
 				break
 			} else {
-				command := eventQueuePop(wt)
-				log.Println(command)
-				break
+				log.Printf("%d %s %s", ndx, temp.player, temp.payload)
+				temp = temp.next
 			}
 		}
-	*/
+	}
+
+	log.Println("=-=-=-= eventQueueDump =-=-=-=")
+}
+
+// eventQueuePop consume event from queue
+func eventQueuePop(gt *gameType) *commandType {
+	payload := gt.eventQueue[gt.eventQueueNdx].payload
+	if payload != nil {
+		gt.eventQueue[gt.eventQueueNdx].payload = payload.next
+	}
+
+	return payload
+}
+
+// eventQueuePush add event to queue
+func eventQueuePush(ct commandType, gt *gameType) {
+	ndx := ct.turn % maxEventQueue
+
+	if gt.eventQueue[ndx].payload == nil {
+		// first command
+		gt.eventQueue[ndx].payload = &ct
+	} else {
+		// new tail
+		current := gt.eventQueue[ndx].payload
+		for ; current.next != nil; current = current.next {
+			// empty
+		}
+
+		current.next = &ct
+	}
+}
+
+func newGame(id string) *gameType {
+	log.Println("new game:", id)
+
+	gt := gameType{uuid: id}
+
+	//	result.gameBoard = freshGameBoard()
+
+	return &gt
+}
+
+// turnManager schedule game play
+func turnManager(gt *gameType) {
+	gt.turnCounter++
+	gt.eventQueueNdx = gt.turnCounter % maxEventQueue
+	log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
+
+	serviceInboundQueue(gt)
+	serviceEventQueue(gt)
+
+	log.Printf("ending turn:%d", gt.turnCounter)
 }
 
 // serviceInboundQueue read from RabbitMQ and add to event queue
-func serviceInboundQueue(wt *WorkerType) {
-	log.Printf("serviceInboundQueue:%d", wt.turnCounter)
+func serviceInboundQueue(gt *gameType) {
+	log.Printf("serviceInboundQueue:%d", gt.turnCounter)
 
-	ct := newCommand("aaa", "bbb", 3)
-	eventQueuePush(ct, wt)
+	if gt.turnCounter == 1 {
+		eventQueueSimulator(gt)
+		eventQueueDump(*gt)
+	}
 }
+
+// serviceEventQueue dispatch events
+func serviceEventQueue(gt *gameType) {
+	log.Printf("serviceEventQueue:%d", gt.turnCounter)
+
+	for {
+		current := eventQueuePop(gt)
+		if current == nil {
+			break
+		} else {
+			log.Println(current.payload)
+		}
+	}
+}
+
+/////////// kill below
 
 /*
 // PlayerAdd add fresh player to game

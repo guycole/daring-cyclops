@@ -9,5 +9,7 @@ require (
 
 // ling ling
 // replace github.com/guycole/daring-cyclops/worker/game => /Users/gsc/documents/github/daring-cyclops/worker/game
-// not ling ling
-// replace github.com/guycole/daring-cyclops/worker/game => /Users/gcole/github/daring-cyclops/worker/game
+// not ling long
+//replace github.com/guycole/daring-cyclops/worker/game => /Users/gcole/github/daring-cyclops/worker/game
+// waifu
+//replace github.com/guycole/daring-cyclops/worker/game => /home/gsc/github/daring-cyclops/worker/game

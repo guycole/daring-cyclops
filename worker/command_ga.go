@@ -1,6 +1,6 @@
 package main
 
-func commandGate(ship *ShipType, gt *WorkerType) int {
+func commandGate(ship *ShipType, gt *gameType) int {
 
 	//discover if adjacent to star gate
 	/*
