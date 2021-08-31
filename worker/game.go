@@ -9,7 +9,7 @@ const maxPlayers = maxTeamPlayers * 2
 
 const maxEventQueue = 10
 
-// gameType main game structure
+// gameType main game structure, only one instance per game
 type gameType struct {
 	//gameBoard   GameBoardType
 	//players     [maxPlayers]*PlayerType
@@ -38,6 +38,20 @@ func eventQueueSimulator(gt *gameType) {
 	temp3 := newCommand("tell all byte me 333", player1, 0)
 	log.Println(temp3)
 	eventQueuePush(*temp3, gt)
+
+	message1 := `{"command":[ "commandUuid", "player1uuid", "createUser", "CaptainRank", "BlueTeam"]}`
+	log.Println(message1)
+	temp4 := newJsonCommand(message1)
+	if temp4 == nil {
+
+	}
+
+	message2 := `{"command":[ "commandUuid", "player1uuid", "createShip", "player1uuid", "nimrod"]}`
+	log.Println(message2)
+	temp5 := newJsonCommand(message2)
+	if temp5 == nil {
+
+	}
 }
 
 // eventQueueDump writes event queue to stdout

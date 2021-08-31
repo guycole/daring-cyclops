@@ -17,27 +17,15 @@ func newCommand(payload, player string, currentTurn int) *commandType {
 	return &result
 }
 
-// CommandRawType contains a raw command string from HTTP server
-type CommandRawType struct {
-	cookie  string // player uuid
-	payload string // json
-}
-
-/*
-// NewRawCommand package a raw command
-func NewRawCommand(cookie, payload string) *CommandRawType {
-	result := CommandRawType{cookie: cookie, payload: payload}
-	return &result
-}
-*/
-
 type commandGameEnum int
 
+// must match order for legalGameCommands
 const (
 	basesCommand commandGameEnum = iota
 	buildCommand
 	captureCommand
 	chroniclesCommand
+	createUserCommand
 	damagesCommand
 	dockCommand
 	dropCommand
@@ -77,6 +65,7 @@ var legalGameCommands = [...][2]string{
 	{"build", "bu"},
 	{"capture", "ca"},
 	{"chronicles", ""},
+	{"createUser", "createUser"},
 	{"damages", ""},
 	{"dock", ""},
 	{"drop", ""},
@@ -111,7 +100,7 @@ var legalGameCommands = [...][2]string{
 }
 
 // CommandGameType ryryr
-type CommandGameType struct {
+type commandGameType struct {
 	command  commandGameEnum
 	duration int
 	user     string
@@ -128,14 +117,21 @@ func findGameCommand(arg string) int {
 }
 
 // NewJsonCommand ryryr
-func NewJsonCommand(command, user string) *CommandGameType {
-	commandNdx := findGameCommand(command)
-	if commandNdx < 0 {
-		log.Println("error error error")
-	}
+func newJsonCommand(command string) *commandGameType {
+	log.Println(command)
+	return nil
 
-	result := CommandGameType{user: user}
-	return &result
+	/*
+		commandNdx := findGameCommand(command)
+		if commandNdx < 0 {
+			log.Println("error error error")
+		}
+
+		result := CommandGameType{user: user}
+		result.command = commandGameEnum(commandNdx)
+
+		return &result
+	*/
 }
 
 /*
