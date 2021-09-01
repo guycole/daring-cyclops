@@ -1,21 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 )
-
-// commandType single linked list of commands (for each event)
-type commandType struct {
-	payload string // original json
-	player  string // player uuid
-	turn    int
-	next    *commandType
-}
-
-func newCommand(payload, player string, currentTurn int) *commandType {
-	result := commandType{payload: payload, player: player}
-	return &result
-}
 
 type commandGameEnum int
 
@@ -24,8 +12,8 @@ const (
 	basesCommand commandGameEnum = iota
 	buildCommand
 	captureCommand
-	chroniclesCommand
-	createUserCommand
+	//	chroniclesCommand
+	createPlayerCommand
 	damagesCommand
 	dockCommand
 	dropCommand
@@ -35,7 +23,7 @@ const (
 	gripeCommand
 	helpCommand
 	historyCommand
-	honorCommand
+	//	honorCommand
 	impulseCommand
 	listCommand
 	moveCommand
@@ -56,6 +44,7 @@ const (
 	torpedoCommand
 	tractorCommand
 	typeCommand
+	unknownCommand
 	usersCommand
 )
 
@@ -64,8 +53,8 @@ var legalGameCommands = [...][2]string{
 	{"bases", "ba"},
 	{"build", "bu"},
 	{"capture", "ca"},
-	{"chronicles", ""},
-	{"createUser", "createUser"},
+	//	{"chronicles", ""},
+	{"createPlayer", "createPlayer"},
 	{"damages", ""},
 	{"dock", ""},
 	{"drop", ""},
@@ -75,7 +64,7 @@ var legalGameCommands = [...][2]string{
 	{"gripe", ""},
 	{"help", ""},
 	{"history", ""},
-	{"honor", ""},
+	//	{"honor", ""},
 	{"impulse", ""},
 	{"list", ""},
 	{"move", "m"},
@@ -96,161 +85,75 @@ var legalGameCommands = [...][2]string{
 	{"torpedo", ""},
 	{"tractor", ""},
 	{"type", ""},
+	{"unknownCommand", "unknownCommand"},
 	{"users", ""},
 }
 
-// CommandGameType ryryr
-type commandGameType struct {
-	command  commandGameEnum
-	duration int
-	user     string
-}
-
-func findGameCommand(arg string) int {
+func findGameCommand(arg string) commandGameEnum {
 	for ndx := 0; ndx < len(legalGameCommands); ndx++ {
 		if legalGameCommands[ndx][0] == arg || legalGameCommands[ndx][1] == arg {
-			return ndx
+			return commandGameEnum(ndx)
 		}
 	}
 
-	return -1
+	return commandGameEnum(unknownCommand)
 }
 
-// NewJsonCommand ryryr
-func newJsonCommand(command string) *commandGameType {
-	log.Println(command)
-	return nil
-
-	/*
-		commandNdx := findGameCommand(command)
-		if commandNdx < 0 {
-			log.Println("error error error")
-		}
-
-		result := CommandGameType{user: user}
-		result.command = commandGameEnum(commandNdx)
-
-		return &result
-	*/
+func findCommandDuration(arg commandGameEnum) int {
+	// TODO
+	return 1
 }
 
-/*
-// NewTextCommand ryryry
-func NewTextCommand(command, user string) *CommandType {
-	commandNdx := findCommand(command)
+// commandType single linked list of commands (for each event)
+type commandType struct {
+	player  string // player uuid
+	raw     string // original json
+	request string // request uuid
 
-	if commandNdx < 0 {
-		log.Println("error error error")
+	duration int // command duration (in turns)
+	turn     int // turn counter for command execution
+
+	args    []string
+	command commandGameEnum
+
+	next *commandType
+}
+
+// parseJsonCommand parse fresh command
+func parseJsonCommand(raw string, tc int) *commandType {
+	var jsonMap map[string]interface{}
+	json.Unmarshal([]byte(raw), &jsonMap)
+
+	player := jsonMap["player"].(string)
+	request := jsonMap["requestId"].(string)
+
+	tempArray := jsonMap["command"].([]interface{})
+	argArray := make([]string, len(tempArray))
+	for key, value := range tempArray {
+		argArray[key] = value.(string)
 	}
 
-	result := CommandType{user: user}
-	result.command = commandEnum(commandNdx)
+	command := findGameCommand(argArray[0])
+	if command == unknownCommand {
+		log.Printf("unknownCommand:%s", argArray[0])
+		return nil
+	}
+
+	result := commandType{raw: raw, player: player, request: request}
+	result.args = argArray
+	result.command = command
+	result.duration = findCommandDuration(command)
+	result.turn = result.duration + tc
 
 	return &result
 }
-*/
-
-func unknownCommand() {
-	log.Println("unknownCommand")
-}
 
 func dispatchCommand(command commandType, gt *gameType) {
-	log.Println(command)
-}
-
-/*
-func dispatchCommand2(command string, gt gameType) {
-	log.Println(command)
-
-	var result map[string]interface{}
-	json.Unmarshal([]byte(command), &result)
-	args := result["command"]
-
-	log.Println(result)
-	log.Println(result["command"])
-	log.Println(args)
-	//log.Println(args[0])
-}
-*/
-
-/*
-// DispatchCommand ryryry
-func DispatchCommand(command *CommandType, game WorkerType) {
-	log.Println("dispatch command")
-
 	switch command.command {
-	case 0: // bases
-		unknownCommand()
-	case 1: // build
-		unknownCommand()
-	case 2: // capture
-		unknownCommand()
-	case 3: // chronicles
-		unknownCommand()
-	case 4: // damages
-		unknownCommand()
-	case 5: // dock
-		unknownCommand()
-	case 6: // drop
-		unknownCommand()
-	case 7: // energy
-		unknownCommand()
-	case 8: // exit
-		unknownCommand()
-	case 9: // gate
-		unknownCommand()
-	case 10: // gripe
-		unknownCommand()
-	case 11: // help
-		unknownCommand()
-	case 12: // history
-		unknownCommand()
-	case 13: // honor
-		unknownCommand()
-	case 14: // impulse
-		unknownCommand()
-	case 15: // list
-		unknownCommand()
-	case 16: // move
-		unknownCommand()
-	case 17: // news
-		unknownCommand()
-	case 18: // phasers
-		unknownCommand()
-	case 19: // planet
-		unknownCommand()
-	case 20: // points
-		unknownCommand()
-	case 21: // radio
-		unknownCommand()
-	case 22: // repair
-		unknownCommand()
-	case 23: // scan
-		unknownCommand()
-	case 24: // set
-		unknownCommand()
-	case 25: // shields
-		unknownCommand()
-	case 26: // status
-		unknownCommand()
-	case 27: // summary
-		unknownCommand()
-	case 28: // target
-		unknownCommand()
-	case 29: // tell
-		unknownCommand()
-	case 30: // time
-		unknownCommand()
-	case 31: // torpedo
-		unknownCommand()
-	case 32: // tractor
-		unknownCommand()
-	case 33: // type
-		unknownCommand()
-	case 34: // users
-		unknownCommand()
+	case createPlayerCommand:
+		log.Println("create player noted")
+		commandCreatePlayer(command, gt)
 	default:
-		unknownCommand()
+		log.Println("unknown command")
 	}
 }
-*/

@@ -1,49 +1,194 @@
 package main
 
-// playerRankEnum comment
+import (
+	"log"
+	"strings"
+)
+
+// playerRankEnum
 type playerRankEnum int
 
+// must match order for legalPlayerRanks
 const (
-	// CadetRank is beginner
-	CadetRank playerRankEnum = iota
-	// LieutenantRank arg
-	LieutenantRank
-	// CaptainRank arg
-	CaptainRank
-	// AdmiralRank arg
-	AdmiralRank
+	unknownRank playerRankEnum = iota
+	cadetRank
+	lieutenantRank
+	captainRank
+	admiralRank
 )
 
-func (pre playerRankEnum) string() string {
-	return [...]string{"Cadet", "Lieutenant", "Captain", "Admiral"}[pre]
+// must match order for playerRankEnum
+var legalPlayerRanks = [...]string{
+	"unknown",
+	"cadet",
+	"lieutenant",
+	"captain",
+	"admiral",
 }
 
-// playerTeam comment
+// must match order for playerRankEnum
+func (pre playerRankEnum) string() string {
+	return [...]string{"Unknown", "Cadet", "Lieutenant", "Captain", "Admiral"}[pre]
+}
+
+func findPlayerRank(arg string) playerRankEnum {
+	for ndx := 0; ndx < len(legalPlayerRanks); ndx++ {
+		if legalPlayerRanks[ndx] == arg {
+			return playerRankEnum(ndx)
+		}
+	}
+
+	return playerRankEnum(unknownRank)
+}
+
+// playerTeamEnum
 type playerTeamEnum int
 
+// must match order for legalPlayerTeams
 const (
-	// NeutralTeam no team
-	NeutralTeam playerTeamEnum = iota
-	// BlueTeam ry
-	BlueTeam
-	// RedTeam ry
-	RedTeam
+	unknownTeam playerTeamEnum = iota
+	neutralTeam
+	blueTeam
+	redTeam
 )
 
+// must match order for playerTeamEnum
+var legalPlayerTeams = [...]string{
+	"unknown",
+	"neutral",
+	"blue",
+	"red",
+}
+
+// must match order for playerTeamEnum
 func (pte playerTeamEnum) string() string {
-	return [...]string{"Neutral", "Blue", "Red"}[pte]
+	return [...]string{"Unknown", "Neutral", "Blue", "Red"}[pte]
+}
+
+func findPlayerTeam(arg string) playerTeamEnum {
+	for ndx := 0; ndx < len(legalPlayerTeams); ndx++ {
+		if legalPlayerTeams[ndx] == arg {
+			return playerTeamEnum(ndx)
+		}
+	}
+
+	return playerTeamEnum(unknownTeam)
 }
 
 // PlayerType comment
-type PlayerType struct {
-	name string
-	rank playerRankEnum
-	team playerTeamEnum
-	uuid string
+type playerType struct {
+	active bool
+	name   string
+	rank   playerRankEnum
+	team   playerTeamEnum
+	uuid   string
 }
 
+func playerAdd(pt playerType, gt *gameType) int {
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		if gt.players[ndx].active == false {
+			gt.players[ndx] = pt
+			return ndx
+		}
+	}
+
+	return -1
+}
+
+func playerCensus(gt gameType) (int, int) {
+	blue := 0
+	red := 0
+
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		if gt.players[ndx].active == true {
+			switch gt.players[ndx].team {
+			case blueTeam:
+				blue++
+			case redTeam:
+				red++
+			}
+		}
+	}
+
+	return blue, red
+}
+
+func playerDelete(target string, gt *gameType) int {
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		if strings.Compare(gt.players[ndx].uuid, target) == 0 {
+			gt.players[ndx].active = false
+			return ndx
+		}
+	}
+
+	return -1
+}
+
+func playerDump(gt gameType) {
+	log.Println("=-=-=-= playerDump =-=-=-=")
+
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		rank := gt.players[ndx].rank.string()
+		team := gt.players[ndx].team.string()
+
+		log.Printf("%d %t %s %s %s %s", ndx, gt.players[ndx].active, gt.players[ndx].name, rank, team, gt.players[ndx].uuid)
+	}
+
+	log.Println("=-=-=-= playerDump =-=-=-=")
+}
+
+func playerFind(target string, gt *gameType) int {
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		if gt.players[ndx].active == true {
+			if strings.Compare(gt.players[ndx].uuid, target) == 0 {
+				log.Println("match match")
+				return ndx
+			}
+		}
+	}
+
+	log.Println("fail fail")
+	return -1
+}
+
+/*
 // NewPlayer ryryr
-func NewPlayer(name, id string, rank playerRankEnum, team playerTeamEnum) *PlayerType {
+func newPlayer(name, id string, rank playerRankEnum, team playerTeamEnum) *PlayerType {
 	result := PlayerType{name: name, rank: rank, team: team, uuid: id}
 	return &result
+}
+*/
+
+func commandCreatePlayer(command commandType, gt *gameType) {
+	log.Println("create player")
+
+	playerDump(*gt)
+
+	// convert structure
+	pt := playerType{active: true, name: command.args[1], uuid: command.player}
+	pt.rank = findPlayerRank(command.args[2])
+	pt.team = findPlayerTeam(command.args[3])
+
+	log.Println(pt)
+
+	blue, red := playerCensus(*gt)
+	log.Println(blue)
+	log.Println(red)
+
+	// test for duplicate
+	duplicate := playerFind(pt.uuid, gt)
+	log.Println(duplicate)
+
+	// ensure team size limits
+	blue, red = playerCensus(*gt)
+	log.Println(blue)
+	log.Println(red)
+
+	// add to player array
+	ndx := playerAdd(pt, gt)
+	log.Println(gt.players[ndx])
+	playerDump(*gt)
+
+	duplicate = playerFind(pt.uuid, gt)
+	log.Println(duplicate)
 }

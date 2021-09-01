@@ -12,12 +12,13 @@ const maxEventQueue = 10
 // gameType main game structure, only one instance per game
 type gameType struct {
 	//gameBoard   GameBoardType
-	//players     [maxPlayers]*PlayerType
+	players     [maxPlayers]playerType
 	turnCounter int
-	//eventQueue  *turnEventType
+
 	eventQueue    [maxEventQueue]turnEventType
 	eventQueueNdx int
-	uuid          string
+
+	uuid string
 }
 
 type turnEventType struct {
@@ -27,30 +28,32 @@ type turnEventType struct {
 func eventQueueSimulator(gt *gameType) {
 	log.Println("simulator")
 
-	temp1 := newCommand("tell all byte me 111", player1, 0)
-	log.Println(temp1)
-	eventQueuePush(*temp1, gt)
-
-	temp2 := newCommand("tell all byte me 222", player1, 0)
-	log.Println(temp2)
-	eventQueuePush(*temp2, gt)
-
-	temp3 := newCommand("tell all byte me 333", player1, 0)
-	log.Println(temp3)
-	eventQueuePush(*temp3, gt)
-
-	message1 := `{"command":[ "commandUuid", "player1uuid", "createUser", "CaptainRank", "BlueTeam"]}`
+	message1 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["users"]}`
 	log.Println(message1)
-	temp4 := newJsonCommand(message1)
-	if temp4 == nil {
-
+	temp1 := parseJsonCommand(message1, gt.turnCounter)
+	if temp1 != nil {
+		eventQueuePush(*temp1, gt)
 	}
 
-	message2 := `{"command":[ "commandUuid", "player1uuid", "createShip", "player1uuid", "nimrod"]}`
+	message2 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["createPlayer", "playerName1", "captain", "blue"]}`
 	log.Println(message2)
-	temp5 := newJsonCommand(message2)
-	if temp5 == nil {
+	temp2 := parseJsonCommand(message2, gt.turnCounter)
+	if temp2 != nil {
+		eventQueuePush(*temp2, gt)
+	}
 
+	message3 := `{"player":"player2uuid", "requestId":"request2uuid", "command":["createPlayer", "playerName2", "admiral", "red"]}`
+	log.Println(message3)
+	temp3 := parseJsonCommand(message3, gt.turnCounter)
+	if temp3 != nil {
+		eventQueuePush(*temp3, gt)
+	}
+
+	message5 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["createShip", "ShipName"]}`
+	log.Println(message5)
+	temp5 := parseJsonCommand(message5, gt.turnCounter)
+	if temp5 != nil {
+		eventQueuePush(*temp5, gt)
 	}
 }
 
@@ -66,7 +69,7 @@ func eventQueueDump(gt gameType) {
 				log.Printf("%d nil", ndx)
 				break
 			} else {
-				log.Printf("%d %s %s", ndx, temp.player, temp.payload)
+				log.Printf("%d %s %s", ndx, temp.player, temp.raw)
 				temp = temp.next
 			}
 		}
@@ -109,6 +112,8 @@ func newGame(id string) *gameType {
 	gt := gameType{uuid: id}
 
 	//	result.gameBoard = freshGameBoard()
+
+	playerDump(gt)
 
 	return &gt
 }
