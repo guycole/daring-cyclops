@@ -1,7 +1,7 @@
 package main
 
 // commandStatus
-func commandStatus(ship *ShipType, gt *gameType) int {
+func commandStatus(gt *gameType) int {
 
 	//discover if adjacent to star gate
 	/*

@@ -7,18 +7,23 @@ import (
 const maxTeamPlayers = 5
 const maxPlayers = maxTeamPlayers * 2
 
+const maxTeamShips = 5
+const maxShips = maxTeamShips * 2
+
 const maxEventQueue = 10
 
 // gameType main game structure, only one instance per game
 type gameType struct {
 	//gameBoard   GameBoardType
-	players     [maxPlayers]playerType
-	turnCounter int
+
+	players [maxPlayers]playerType
+	ships   [maxShips]shipType
 
 	eventQueue    [maxEventQueue]turnEventType
-	eventQueueNdx int
+	eventQueueNdx int // current queue index
+	turnCounter   int // current game turn
 
-	uuid string
+	uuid string // game identifier
 }
 
 type turnEventType struct {
@@ -49,7 +54,14 @@ func eventQueueSimulator(gt *gameType) {
 		eventQueuePush(*temp3, gt)
 	}
 
-	message5 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["createShip", "ShipName"]}`
+	message4 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["createShip", "nimrod"]}`
+	log.Println(message4)
+	temp4 := parseJsonCommand(message4, gt.turnCounter)
+	if temp4 != nil {
+		eventQueuePush(*temp4, gt)
+	}
+
+	message5 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["move", "3", "3"]}`
 	log.Println(message5)
 	temp5 := parseJsonCommand(message5, gt.turnCounter)
 	if temp5 != nil {

@@ -14,6 +14,7 @@ const (
 	captureCommand
 	//	chroniclesCommand
 	createPlayerCommand
+	createShipCommand
 	damagesCommand
 	dockCommand
 	dropCommand
@@ -55,6 +56,7 @@ var legalGameCommands = [...][2]string{
 	{"capture", "ca"},
 	//	{"chronicles", ""},
 	{"createPlayer", "createPlayer"},
+	{"createShip", "createShip"},
 	{"damages", ""},
 	{"dock", ""},
 	{"drop", ""},
@@ -153,6 +155,11 @@ func dispatchCommand(command commandType, gt *gameType) {
 	case createPlayerCommand:
 		log.Println("create player noted")
 		commandCreatePlayer(command, gt)
+	case createShipCommand:
+		log.Println("create ship noted")
+		commandCreateShip(command, gt)
+	case moveCommand:
+		log.Println("move noted")
 	default:
 		log.Println("unknown command")
 	}

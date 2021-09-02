@@ -75,7 +75,7 @@ func findPlayerTeam(arg string) playerTeamEnum {
 	return playerTeamEnum(unknownTeam)
 }
 
-// PlayerType comment
+// playerType comment
 type playerType struct {
 	active bool
 	name   string
@@ -141,13 +141,11 @@ func playerFind(target string, gt *gameType) int {
 	for ndx := 0; ndx < maxPlayers; ndx++ {
 		if gt.players[ndx].active == true {
 			if strings.Compare(gt.players[ndx].uuid, target) == 0 {
-				log.Println("match match")
 				return ndx
 			}
 		}
 	}
 
-	log.Println("fail fail")
 	return -1
 }
 
