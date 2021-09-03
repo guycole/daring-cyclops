@@ -7,6 +7,20 @@ import (
 	"github.com/google/uuid"
 )
 
+type conditionEnum int
+
+const (
+	unknownCondition conditionEnum = iota
+	greenCondition
+	yellowCondition
+	redCondition
+)
+
+// must match order for conditionEnum
+func (ce conditionEnum) string() string {
+	return [...]string{"Unknown", "Green", "Yellow", "Red"}[ce]
+}
+
 type shipEnum int
 
 // must match order for legalShips
@@ -259,6 +273,8 @@ const std::string Ship::kRedFlagships[] = {"dagon",   "gordon",   "hydra",  "ten
 // ShipType ry
 type shipType struct {
 	active    bool
+	condition conditionEnum
+	docked    bool
 	name      nameEnum
 	position  locationType
 	owner     string // player UUID
@@ -354,11 +370,23 @@ func shipFind(target string, gt *gameType) int {
 	return -1
 }
 
+func shipFindByOwner(target string, gt *gameType) int {
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if gt.ships[ndx].active == true {
+			if strings.Compare(gt.ships[ndx].owner, target) == 0 {
+				return ndx
+			}
+		}
+	}
+
+	return -1
+}
+
 func commandCreateShip(command commandType, gt *gameType) {
 	log.Println("create ship")
 
 	// convert structure
-	st := shipType{active: true, owner: command.player}
+	st := shipType{active: true, condition: greenCondition, docked: false, owner: command.player}
 	st.name = findShipName(command.args[1])
 	st.team, st.shipClass = findShipTeam(st.name)
 	st.uuid = uuid.NewString()
@@ -405,6 +433,30 @@ func commandCreateShip(command commandType, gt *gameType) {
 	log.Println(ndx)
 
 	shipDump(*gt)
+}
+
+func commandMoveShip(command commandType, gt *gameType) {
+	log.Println("move ship")
+
+	playerNdx := playerFind(command.player, gt)
+	if playerNdx < 0 {
+		log.Println("unknown player")
+		// return
+	}
+
+	log.Println("player noted")
+	player := gt.players[playerNdx]
+	log.Println(player.name)
+
+	shipNdx := shipFindByOwner(command.player, gt)
+	if shipNdx < 0 {
+		log.Println("unknown ship")
+		// return
+	}
+	ship := gt.ships[shipNdx]
+	log.Println(ship)
+
+	//	{"player":"player1uuid", "requestId":"request1uuid", "command":["move", "3", "3"]}
 }
 
 // NewShip ry

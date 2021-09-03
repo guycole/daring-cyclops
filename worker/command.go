@@ -160,6 +160,7 @@ func dispatchCommand(command commandType, gt *gameType) {
 		commandCreateShip(command, gt)
 	case moveCommand:
 		log.Println("move noted")
+		commandMoveShip(command, gt)
 	default:
 		log.Println("unknown command")
 	}

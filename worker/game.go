@@ -67,6 +67,13 @@ func eventQueueSimulator(gt *gameType) {
 	if temp5 != nil {
 		eventQueuePush(*temp5, gt)
 	}
+
+	message6 := `{"player":"player1uuid", "requestId":"request1uuid", "command":["move", "3", "3"]}`
+	log.Println(message6)
+	temp6 := parseJsonCommand(message6, gt.turnCounter)
+	if temp6 != nil {
+		eventQueuePush(*temp6, gt)
+	}
 }
 
 // eventQueueDump writes event queue to stdout
@@ -78,10 +85,10 @@ func eventQueueDump(gt gameType) {
 
 		for {
 			if temp == nil {
-				log.Printf("%d nil", ndx)
+				log.Printf("%d %d nil", ndx, gt.eventQueueNdx)
 				break
 			} else {
-				log.Printf("%d %s %s", ndx, temp.player, temp.raw)
+				log.Printf("%d %d %s %s", ndx, gt.eventQueueNdx, temp.player, temp.raw)
 				temp = temp.next
 			}
 		}
