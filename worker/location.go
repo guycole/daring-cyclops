@@ -3,17 +3,17 @@ package main
 import "math"
 
 type locationType struct {
-	x int
-	y int
+	xx int // column
+	yy int // row
 }
 
 func newLocation(y, x int) *locationType {
-	result := locationType{y: y, x: x}
+	result := locationType{yy: y, xx: x}
 	return &result
 }
 
 func getDistance(origin, destination *locationType) int {
-	var x = float64(origin.x - destination.x)
-	var y = float64(origin.y - destination.y)
+	var x = float64(origin.xx - destination.xx)
+	var y = float64(origin.yy - destination.yy)
 	return int(math.Round(math.Sqrt(x*x + y*y)))
 }

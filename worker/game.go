@@ -14,20 +14,39 @@ const maxEventQueue = 10
 
 // gameType main game structure, only one instance per game
 type gameType struct {
-	//gameBoard   GameBoardType
+	// TODO creation time
+	gameBoard gameBoardType
 
 	players [maxPlayers]playerType
 	ships   [maxShips]shipType
 
+	/*
+		Planets   map[string]planetType
+		StarGates map[string]starGateType
+
+		Ships map[string]shipType
+	*/
+
 	eventQueue    [maxEventQueue]turnEventType
 	eventQueueNdx int // current queue index
 	turnCounter   int // current game turn
+
+	outQueue outputType
 
 	uuid string // game identifier
 }
 
 type turnEventType struct {
 	payload *commandType // single linked list of commands in execution order
+}
+
+type outputType struct {
+	player  string // player uuid
+	request string // request uuid
+
+	args []string
+
+	next *outputType
 }
 
 func eventQueueSimulator(gt *gameType) {
@@ -130,8 +149,10 @@ func newGame(id string) *gameType {
 
 	gt := gameType{uuid: id}
 
-	//	result.gameBoard = freshGameBoard()
+	gt.gameBoard = newGameBoard(emptyBoard01)
+	boardGenerator(&gt)
 
+	boardDump(gt)
 	playerDump(gt)
 
 	return &gt
@@ -145,6 +166,7 @@ func turnManager(gt *gameType) {
 
 	serviceInboundQueue(gt)
 	serviceEventQueue(gt)
+	serviceOutboundQueue(gt)
 
 	log.Printf("ending turn:%d", gt.turnCounter)
 }
@@ -171,6 +193,11 @@ func serviceEventQueue(gt *gameType) {
 			dispatchCommand(*current, gt)
 		}
 	}
+}
+
+// serviceOutboundQueue by writing all pending traffic to manager
+func serviceOutboundQueue(gt *gameType) {
+	log.Printf("serviceOutboundQueue:%d", gt.turnCounter)
 }
 
 /////////// kill below
