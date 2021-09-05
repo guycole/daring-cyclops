@@ -5,27 +5,27 @@ import (
 )
 
 func TestFreshLocation(t *testing.T) {
-	cases := []struct {
-		y, x int
+	tests := []struct {
+		yy, xx int
 	}{
 		{3, 3},
 		{3, -3},
 		{-3, 3},
 		{-3, -3},
 	}
-	for _, ndx := range cases {
-		result := newLocation(ndx.y, ndx.x)
-		if result.x != ndx.x {
-			t.Errorf("getFreshLocation(%d, %d) failure", ndx.y, ndx.x)
+	for _, ndx := range tests {
+		result := newLocation(ndx.yy, ndx.xx)
+		if result.xx != ndx.xx {
+			t.Errorf("getFreshLocation(%d, %d) failure", ndx.yy, ndx.xx)
 		}
-		if result.y != ndx.y {
-			t.Errorf("getFreshLocation(%d, %d) failure", ndx.y, ndx.x)
+		if result.yy != ndx.yy {
+			t.Errorf("getFreshLocation(%d, %d) failure", ndx.yy, ndx.xx)
 		}
 	}
 }
 
 func TestDistance(t *testing.T) {
-	cases := []struct {
+	tests := []struct {
 		y1, x1, y2, x2, target int
 	}{
 		{0, 0, 3, 3, 4},
@@ -33,7 +33,7 @@ func TestDistance(t *testing.T) {
 		{0, 0, -3, -3, 4},
 		{0, 0, -3, 3, 4},
 	}
-	for _, ndx := range cases {
+	for _, ndx := range tests {
 		loc1 := newLocation(ndx.y1, ndx.x1)
 		loc2 := newLocation(ndx.y2, ndx.x2)
 		result := getDistance(loc1, loc2)

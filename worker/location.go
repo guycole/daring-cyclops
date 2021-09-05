@@ -2,6 +2,7 @@ package main
 
 import "math"
 
+//row column origin = 0,0 lower left corner of map
 type locationType struct {
 	xx int // column
 	yy int // row

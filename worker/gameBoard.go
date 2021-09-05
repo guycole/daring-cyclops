@@ -43,6 +43,18 @@ func boardDump(gt gameType) {
 	log.Printf("boardType:%s", boardType)
 
 	/*
+		for yy := 0; yy < maxBoardSideY; yy++ {
+			var buffer string
+
+			for xx := 0; xx < maxBoardSideX; xx++ {
+				buffer += " "
+			}
+
+			log.Println(buffer)
+		}
+	*/
+
+	/*
 		for ndx := 0; ndx < maxPlayers; ndx++ {
 			rank := gt.players[ndx].rank.string()
 			team := gt.players[ndx].team.string()

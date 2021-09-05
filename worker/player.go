@@ -1,6 +1,11 @@
+// Copyright 2021 Guy Cole. All rights reserved.
+// Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
+//
+// player support
 package main
 
 import (
+	"errors"
 	"log"
 	"strings"
 )
@@ -28,7 +33,7 @@ var legalPlayerRanks = [...]string{
 
 // must match order for playerRankEnum
 func (pre playerRankEnum) string() string {
-	return [...]string{"Unknown", "Cadet", "Lieutenant", "Captain", "Admiral"}[pre]
+	return [...]string{"unknown", "cadet", "lieutenant", "captain", "admiral"}[pre]
 }
 
 func findPlayerRank(arg string) playerRankEnum {
@@ -82,6 +87,42 @@ type playerType struct {
 	rank   playerRankEnum
 	team   playerTeamEnum
 	uuid   string
+}
+
+/*
+func newPlayer(name, id string, rank playerRankEnum, team playerTeamEnum) playerType {
+	result := playerType{active: true, name: name, rank: rank, team: team, uuid: id}
+	return result
+}
+*/
+
+func newPlayer(name, id string, rank string, team string) (*playerType, error) {
+	if len(id) < 1 {
+		return nil, errors.New("bad player id")
+	}
+
+	if len(name) < 1 {
+		return nil, errors.New("bad player name")
+	}
+
+	result := playerType{active: true, name: name, uuid: id}
+	playerRank := findPlayerRank(rank)
+	if playerRank == unknownRank {
+		log.Println("boo")
+		return nil, errors.New("unknown rank")
+	}
+
+	result.rank = playerRank
+
+	playerTeam := findPlayerTeam(team)
+	if playerTeam == unknownTeam {
+		log.Println("boo2")
+		return nil, errors.New("unknown team")
+	}
+
+	result.team = playerTeam
+
+	return &result, nil
 }
 
 func playerAdd(pt playerType, gt *gameType) int {
@@ -148,14 +189,6 @@ func playerFind(target string, gt *gameType) int {
 
 	return -1
 }
-
-/*
-// NewPlayer ryryr
-func newPlayer(name, id string, rank playerRankEnum, team playerTeamEnum) *PlayerType {
-	result := PlayerType{name: name, rank: rank, team: team, uuid: id}
-	return &result
-}
-*/
 
 func commandCreatePlayer(command commandType, gt *gameType) {
 	log.Println("create player")

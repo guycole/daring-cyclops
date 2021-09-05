@@ -18,7 +18,7 @@ const (
 
 // must match order for conditionEnum
 func (ce conditionEnum) string() string {
-	return [...]string{"Unknown", "Green", "Yellow", "Red"}[ce]
+	return [...]string{"unknown", "green", "yellow", "red"}[ce]
 }
 
 type shipEnum int

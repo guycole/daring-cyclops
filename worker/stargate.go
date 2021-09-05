@@ -1,4 +1,4 @@
-package game
+package main
 
 import (
 	"log"
@@ -43,7 +43,7 @@ type starGateType struct {
 	active          bool
 	damage          int
 	energy          int
-	position        *locationType
+	position        locationType
 	gateDestination [9]int
 	gateNdx         int
 	uuid            string
@@ -52,7 +52,7 @@ type starGateType struct {
 func newStarGate(ndx int) *starGateType {
 	result := starGateType{active: true, gateNdx: ndx}
 	result.energy = 100 //tweak me
-	result.position = newLocation(starGateLocations[ndx][0], starGateLocations[ndx][1])
+	//	result.position = newLocation(starGateLocations[ndx][0], starGateLocations[ndx][1])
 	result.uuid = uuid.NewString()
 
 	log.Println(starGateLocations[ndx][0])
@@ -75,36 +75,36 @@ func starGateAdjacent(shipPosition, starGatePosition *locationType) int {
 	for ndx := 0; ndx < 9; ndx++ {
 		switch ndx {
 		case 0:
-			x = starGatePosition.x - 1
-			y = starGatePosition.y + 1
+			x = starGatePosition.xx - 1
+			y = starGatePosition.yy + 1
 		case 1:
-			x = starGatePosition.x
-			y = starGatePosition.y + 1
+			x = starGatePosition.xx
+			y = starGatePosition.yy + 1
 		case 2:
-			x = starGatePosition.x + 1
-			y = starGatePosition.y + 1
+			x = starGatePosition.xx + 1
+			y = starGatePosition.yy + 1
 		case 3:
-			x = starGatePosition.x - 1
-			y = starGatePosition.y
+			x = starGatePosition.xx - 1
+			y = starGatePosition.yy
 		case 4: // should never match
-			x = starGatePosition.x
-			y = starGatePosition.y
+			x = starGatePosition.xx
+			y = starGatePosition.yy
 		case 5:
-			x = starGatePosition.x + 1
-			y = starGatePosition.y
+			x = starGatePosition.xx + 1
+			y = starGatePosition.yy
 		case 6:
-			x = starGatePosition.x - 1
-			y = starGatePosition.y - 1
+			x = starGatePosition.xx - 1
+			y = starGatePosition.yy - 1
 		case 7:
-			x = starGatePosition.x
-			y = starGatePosition.y - 1
+			x = starGatePosition.xx
+			y = starGatePosition.yy - 1
 		case 8:
-			x = starGatePosition.x + 1
-			y = starGatePosition.y - 1
+			x = starGatePosition.xx + 1
+			y = starGatePosition.yy - 1
 		}
 
 		temp := newLocation(y, x)
-		if temp.x == shipPosition.x && temp.y == shipPosition.y {
+		if temp.xx == shipPosition.xx && temp.yy == shipPosition.yy {
 			return ndx
 		}
 
