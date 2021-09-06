@@ -1,7 +1,6 @@
 // Copyright 2021 Guy Cole. All rights reserved.
-// Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
-//
-// player support
+// Use of this source code is governed by a GPL-3 license that can be found
+// in the LICENSE file.
 package main
 
 import (
@@ -67,7 +66,7 @@ var legalPlayerTeams = [...]string{
 
 // must match order for playerTeamEnum
 func (pte playerTeamEnum) string() string {
-	return [...]string{"Unknown", "Neutral", "Blue", "Red"}[pte]
+	return [...]string{"unknown", "neutral", "blue", "red"}[pte]
 }
 
 func findPlayerTeam(arg string) playerTeamEnum {
@@ -80,22 +79,20 @@ func findPlayerTeam(arg string) playerTeamEnum {
 	return playerTeamEnum(unknownTeam)
 }
 
-// playerType comment
 type playerType struct {
-	active bool
-	name   string
-	rank   playerRankEnum
-	team   playerTeamEnum
-	uuid   string
+	name string
+	rank playerRankEnum
+	team playerTeamEnum
+	uuid string
 }
 
-/*
-func newPlayer(name, id string, rank playerRankEnum, team playerTeamEnum) playerType {
-	result := playerType{active: true, name: name, rank: rank, team: team, uuid: id}
-	return result
-}
-*/
+const maxTeamPlayers = 5
+const maxPlayers = maxTeamPlayers * 2
 
+// playerArrayType contains all active players
+type playerArrayType [maxPlayers]*playerType
+
+// newPlayer convenience function to populate struct
 func newPlayer(name, id string, rank string, team string) (*playerType, error) {
 	if len(id) < 1 {
 		return nil, errors.New("bad player id")
@@ -105,10 +102,9 @@ func newPlayer(name, id string, rank string, team string) (*playerType, error) {
 		return nil, errors.New("bad player name")
 	}
 
-	result := playerType{active: true, name: name, uuid: id}
+	result := playerType{name: name, uuid: id}
 	playerRank := findPlayerRank(rank)
 	if playerRank == unknownRank {
-		log.Println("boo")
 		return nil, errors.New("unknown rank")
 	}
 
@@ -116,7 +112,6 @@ func newPlayer(name, id string, rank string, team string) (*playerType, error) {
 
 	playerTeam := findPlayerTeam(team)
 	if playerTeam == unknownTeam {
-		log.Println("boo2")
 		return nil, errors.New("unknown team")
 	}
 
@@ -125,10 +120,31 @@ func newPlayer(name, id string, rank string, team string) (*playerType, error) {
 	return &result, nil
 }
 
-func playerAdd(pt playerType, gt *gameType) int {
+const testPlayerID1 = "testId1"
+const testPlayerName1 = "testName1"
+
+// testPlayer1 returns test player1
+func testPlayer1() *playerType {
+	np1, _ := newPlayer(testPlayerName1, testPlayerID1, "cadet", "blue")
+	return np1
+}
+
+const testPlayerID2 = "testId2"
+const testPlayerName2 = "testName2"
+
+// testPlayer2 returns test player2
+func testPlayer2() *playerType {
+	np2, _ := newPlayer(testPlayerName2, testPlayerID2, "admiral", "red")
+	return np2
+}
+
+// playerAdd adds player to array
+func playerAdd(pt *playerType, pat *playerArrayType) int {
+	log.Printf("playerAdd:%s %s", pt.name, pt.uuid)
+
 	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if gt.players[ndx].active == false {
-			gt.players[ndx] = pt
+		if pat[ndx] == nil {
+			pat[ndx] = pt
 			return ndx
 		}
 	}
@@ -136,52 +152,33 @@ func playerAdd(pt playerType, gt *gameType) int {
 	return -1
 }
 
-func playerCensus(gt gameType) (int, int) {
-	blue := 0
-	red := 0
+// playerCensus returns population of red/blue players
+func playerCensus(pat playerArrayType) (int, int) {
+	bluePopulation := 0
+	redPopulation := 0
 
 	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if gt.players[ndx].active == true {
-			switch gt.players[ndx].team {
+		if pat[ndx] != nil {
+			switch pat[ndx].team {
 			case blueTeam:
-				blue++
+				bluePopulation++
 			case redTeam:
-				red++
+				redPopulation++
 			}
 		}
 	}
 
-	return blue, red
+	return bluePopulation, redPopulation
 }
 
-func playerDelete(target string, gt *gameType) int {
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if strings.Compare(gt.players[ndx].uuid, target) == 0 {
-			gt.players[ndx].active = false
-			return ndx
-		}
-	}
-
-	return -1
-}
-
-func playerDump(gt gameType) {
-	log.Println("=-=-=-= playerDump =-=-=-=")
+// playerDelete removes player from array
+func playerDelete(target string, pat *playerArrayType) int {
+	log.Printf("playerDelete:%s", target)
 
 	for ndx := 0; ndx < maxPlayers; ndx++ {
-		rank := gt.players[ndx].rank.string()
-		team := gt.players[ndx].team.string()
-
-		log.Printf("%d %t %s %s %s %s", ndx, gt.players[ndx].active, gt.players[ndx].name, rank, team, gt.players[ndx].uuid)
-	}
-
-	log.Println("=-=-=-= playerDump =-=-=-=")
-}
-
-func playerFind(target string, gt *gameType) int {
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if gt.players[ndx].active == true {
-			if strings.Compare(gt.players[ndx].uuid, target) == 0 {
+		if pat[ndx] != nil {
+			if strings.Compare(pat[ndx].uuid, target) == 0 {
+				pat[ndx] = nil
 				return ndx
 			}
 		}
@@ -190,36 +187,62 @@ func playerFind(target string, gt *gameType) int {
 	return -1
 }
 
-func commandCreatePlayer(command commandType, gt *gameType) {
-	log.Println("create player")
+// playerDump diagnostic
+func playerDump(pat playerArrayType) {
+	log.Println("=-=-=-= playerDump =-=-=-=")
 
-	playerDump(*gt)
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		if pat[ndx] == nil {
+			log.Printf("%d nil", ndx)
+		} else {
+			rank := pat[ndx].rank.string()
+			team := pat[ndx].team.string()
 
-	// convert structure
-	pt := playerType{active: true, name: command.args[1], uuid: command.player}
-	pt.rank = findPlayerRank(command.args[2])
-	pt.team = findPlayerTeam(command.args[3])
+			log.Printf("%d %s %s %s %s", ndx, pat[ndx].name, rank, team, pat[ndx].uuid)
+		}
+	}
 
-	log.Println(pt)
+	log.Println("=-=-=-= playerDump =-=-=-=")
+}
 
-	blue, red := playerCensus(*gt)
-	log.Println(blue)
-	log.Println(red)
+// playerFind returns array index for player by uuid
+func playerFind(target string, pat playerArrayType) int {
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		if pat[ndx] != nil {
+			if strings.Compare(pat[ndx].uuid, target) == 0 {
+				return ndx
+			}
+		}
+	}
 
-	// test for duplicate
-	duplicate := playerFind(pt.uuid, gt)
-	log.Println(duplicate)
+	return -1
+}
 
-	// ensure team size limits
-	blue, red = playerCensus(*gt)
-	log.Println(blue)
-	log.Println(red)
+// commandPlayerCreate services command
+func commandPlayerCreate(ct commandType, gt *gameType) error {
+	duplicate := playerFind(ct.player, gt.players)
+	if duplicate >= 0 {
+		return errors.New("duplicate player id")
+	}
 
-	// add to player array
-	ndx := playerAdd(pt, gt)
-	log.Println(gt.players[ndx])
-	playerDump(*gt)
+	// TODO test for max players per side
 
-	duplicate = playerFind(pt.uuid, gt)
-	log.Println(duplicate)
+	np, err := newPlayer(ct.args[1], ct.player, ct.args[2], ct.args[3])
+	if err != nil {
+		return errors.New("newPlayer creation failure")
+	}
+
+	if np == nil {
+		return errors.New("newPlayer returns nil")
+	}
+
+	playerAdd(np, &gt.players)
+
+	return nil
+}
+
+// commandPlayerDelete services command
+func commandPlayerDelete(ct commandType, gt *gameType) {
+	// TODO delete ship
+	playerDelete(ct.player, &gt.players)
 }

@@ -6,6 +6,20 @@ import (
 	"github.com/google/uuid"
 )
 
+type starGateType struct {
+	active          bool
+	damage          int
+	energy          int
+	position        locationType
+	gateDestination [9]int
+	gateNdx         int
+	uuid            string
+}
+
+const maxStarGates = 9
+
+type starGateArrayType [maxStarGates]*starGateType
+
 //row column origin = 0,0 lower left
 var starGateLocations = [9][2]int{
 	{8, 9},
@@ -38,16 +52,6 @@ var starGateDestinations = [9][9]int{
 }
 
 //type gateIndicesArray[maxGateIndices] int
-
-type starGateType struct {
-	active          bool
-	damage          int
-	energy          int
-	position        locationType
-	gateDestination [9]int
-	gateNdx         int
-	uuid            string
-}
 
 func newStarGate(ndx int) *starGateType {
 	result := starGateType{active: true, gateNdx: ndx}

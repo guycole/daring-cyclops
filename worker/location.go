@@ -1,6 +1,11 @@
+// Copyright 2021 Guy Cole. All rights reserved.
+// Use of this source code is governed by a GPL-3 license that can be found
+// in the LICENSE file.
 package main
 
-import "math"
+import (
+	"math"
+)
 
 //row column origin = 0,0 lower left corner of map
 type locationType struct {

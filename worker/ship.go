@@ -1,31 +1,36 @@
+// Copyright 2021 Guy Cole. All rights reserved.
+// Use of this source code is governed by a GPL-3 license that can be found
+// in the LICENSE file.
 package main
 
 import (
+	"errors"
 	"log"
 	"strings"
 
 	"github.com/google/uuid"
 )
 
-type conditionEnum int
+// shipConditionEnum
+type shipConditionEnum int
 
 const (
-	unknownCondition conditionEnum = iota
+	unknownCondition shipConditionEnum = iota
 	greenCondition
 	yellowCondition
 	redCondition
 )
 
-// must match order for conditionEnum
-func (ce conditionEnum) string() string {
-	return [...]string{"unknown", "green", "yellow", "red"}[ce]
+// must match order for shipConditionEnum
+func (sce shipConditionEnum) string() string {
+	return [...]string{"unknown", "green", "yellow", "red"}[sce]
 }
 
-type shipEnum int
+type shipClassEnum int
 
-// must match order for legalShips
+// must match order for legalShipClasses
 const (
-	unknownShip shipEnum = iota
+	unknownShip shipClassEnum = iota
 	scoutShip
 	fighterShip
 	minerShip
@@ -33,7 +38,7 @@ const (
 )
 
 // must match order for shipEnum
-var legalShips = [...]string{
+var legalShipClasses = [...]string{
 	"unknownShip",
 	"scout",
 	"fighter",
@@ -41,70 +46,70 @@ var legalShips = [...]string{
 	"flag",
 }
 
-// must match order for shipEnum
-func (se shipEnum) string() string {
-	return [...]string{"Unknown", "Scout", "Fighter", "Miner", "FlagShip"}[se]
+// must match order for shipClassEnum
+func (sce shipClassEnum) string() string {
+	return [...]string{"unknown", "scout", "fighter", "miner", "flagShip"}[sce]
 }
 
-func findShipClass(arg string) shipEnum {
-	for ndx := 0; ndx < len(legalShips); ndx++ {
-		if legalShips[ndx] == arg {
-			return shipEnum(ndx)
+func findShipClass(arg string) shipClassEnum {
+	for ndx := 0; ndx < len(legalShipClasses); ndx++ {
+		if legalShipClasses[ndx] == arg {
+			return shipClassEnum(ndx)
 		}
 	}
 
-	return shipEnum(unknownShip)
+	return shipClassEnum(unknownShip)
 }
 
-type nameEnum int
+type shipNameEnum int
 
-// must match order for legalNames
+// must match order for legalShipNames
 const (
-	unknownName nameEnum = iota
-	lazorName
-	nikeName
-	rapierName
-	saberName
-	vanirName
-	levantName
-	nimrodName
-	roninName
-	scorpionName
-	viperName
-	lynxName
-	napierName
-	rigelName
-	spartanName
-	voyagerName
-	lotusName
-	nemesisName
-	reliantName
-	shogunName
-	vegaName
-	dirkName
-	griffinName
-	hornetName
-	talonName
-	waspName
-	demonName
-	gargoyleName
-	hunterName
-	tritonName
-	wolfName
-	delphosName
-	gibbetName
-	hansenName
-	tiradeName
-	wightName
-	dagonName
-	gordonName
-	hydraName
-	tendrilName
-	welinkName
+	unknownShipName shipNameEnum = iota
+	lazorShipName
+	nikeShipName
+	rapierShipName
+	saberShipName
+	vanirShipName
+	levantShipName
+	nimrodShipName
+	roninShipName
+	scorpionShipName
+	viperShipName
+	lynxShipName
+	napierShipName
+	rigelShipName
+	spartanShipName
+	voyagerShipName
+	lotusShipName
+	nemesisShipName
+	reliantShipName
+	shogunShipName
+	vegaShipName
+	dirkShipName
+	griffinShipName
+	hornetShipName
+	talonShipName
+	waspShipName
+	demonShipName
+	gargoyleShipName
+	hunterShipName
+	tritonShipName
+	wolfShipName
+	delphosShipName
+	gibbetShipName
+	hansenShipName
+	tiradeShipName
+	wightShipName
+	dagonShipName
+	gordonShipName
+	hydraShipName
+	tendrilShipName
+	welinkShipName
 )
 
-// must match order for nameEnum
-var legalNames = [...]string{
+// must match order for shipNameEnum
+var legalShipNames = [...]string{
 	"unknown",
 	"lazor",
 	"nike",
@@ -148,137 +153,123 @@ var legalNames = [...]string{
 	"welink",
 }
 
-// must match order for playerRankEnum
-func (ne nameEnum) string() string {
-	return [...]string{"Unknown",
-		"Lazor", "Nike", "Rapier", "Saber", "Vanir",
-		"Levant", "Nimrod", "Ronin", "Scorpion", "Viper",
-		"Lynx", "Napier", "Rigel", "Spartan", "Voyager",
-		"Lotus", "Nemesis", "Reliant", "Shogun", "Vega",
-		"Dirk", "Griffin", "Hornet", "Talon", "Wasp",
-		"Demon", "Gargoyle", "Hunter", "Triton", "Wolf",
-		"Delphos", "Gibbet", "Hansen", "Tirade", "Wight",
-		"Dagon", "Gordon", "Hydra", "Tendril", "Welink"}[ne]
+// must match order for shipNameEnum
+func (sne shipNameEnum) string() string {
+	return [...]string{"unknown",
+		"lazor", "nike", "rapier", "saber", "vanir",
+		"levant", "nimrod", "ronin", "scorpion", "viper",
+		"lynx", "napier", "rigel", "spartan", "voyager",
+		"lotus", "nemesis", "reliant", "shogun", "vega",
+		"dirk", "griffin", "hornet", "talon", "wasp",
+		"demon", "gargoyle", "hunter", "triton", "wolf",
+		"delphos", "gibbet", "hansen", "tirade", "wight",
+		"dagon", "gordon", "hydra", "tendril", "welink"}[sne]
 }
 
-func findShipName(arg string) nameEnum {
-	for ndx := 0; ndx < len(legalNames); ndx++ {
-		if legalNames[ndx] == arg {
-			return nameEnum(ndx)
+func findShipName(arg string) shipNameEnum {
+	for ndx := 0; ndx < len(legalShipNames); ndx++ {
+		if legalShipNames[ndx] == arg {
+			return shipNameEnum(ndx)
 		}
 	}
 
-	return nameEnum(unknownName)
+	return shipNameEnum(unknownShipName)
 }
 
-func findShipTeam(arg nameEnum) (playerTeamEnum, shipEnum) {
+func findShipClassTeam(arg shipNameEnum) (shipClassEnum, playerTeamEnum) {
 	switch arg {
-	case lazorName:
+	case lazorShipName:
 		fallthrough
-	case nikeName:
+	case nikeShipName:
 		fallthrough
-	case rapierName:
+	case rapierShipName:
 		fallthrough
-	case saberName:
+	case saberShipName:
 		fallthrough
-	case vanirName:
-		return blueTeam, scoutShip
-	case levantName:
+	case vanirShipName:
+		return scoutShip, blueTeam
+	case levantShipName:
 		fallthrough
-	case nimrodName:
+	case nimrodShipName:
 		fallthrough
-	case roninName:
+	case roninShipName:
 		fallthrough
-	case scorpionName:
+	case scorpionShipName:
 		fallthrough
-	case viperName:
-		return blueTeam, fighterShip
-	case lynxName:
+	case viperShipName:
+		return fighterShip, blueTeam
+	case lynxShipName:
 		fallthrough
-	case napierName:
+	case napierShipName:
 		fallthrough
-	case rigelName:
+	case rigelShipName:
 		fallthrough
-	case spartanName:
+	case spartanShipName:
 		fallthrough
-	case voyagerName:
-		return blueTeam, minerShip
-	case lotusName:
+	case voyagerShipName:
+		return minerShip, blueTeam
+	case lotusShipName:
 		fallthrough
-	case nemesisName:
+	case nemesisShipName:
 		fallthrough
-	case reliantName:
+	case reliantShipName:
 		fallthrough
-	case shogunName:
+	case shogunShipName:
 		fallthrough
-	case vegaName:
-		return blueTeam, flagShip
-	case dirkName:
+	case vegaShipName:
+		return flagShip, blueTeam
+	case dirkShipName:
 		fallthrough
-	case griffinName:
+	case griffinShipName:
 		fallthrough
-	case hornetName:
+	case hornetShipName:
 		fallthrough
-	case talonName:
+	case talonShipName:
 		fallthrough
-	case waspName:
-		return redTeam, scoutShip
-	case demonName:
+	case waspShipName:
+		return scoutShip, redTeam
+	case demonShipName:
 		fallthrough
-	case gargoyleName:
+	case gargoyleShipName:
 		fallthrough
-	case hunterName:
+	case hunterShipName:
 		fallthrough
-	case tritonName:
+	case tritonShipName:
 		fallthrough
-	case wolfName:
-		return redTeam, fighterShip
-	case delphosName:
+	case wolfShipName:
+		return fighterShip, redTeam
+	case delphosShipName:
 		fallthrough
-	case gibbetName:
+	case gibbetShipName:
 		fallthrough
-	case hansenName:
+	case hansenShipName:
 		fallthrough
-	case tiradeName:
+	case tiradeShipName:
 		fallthrough
-	case wightName:
-		return redTeam, minerShip
-	case dagonName:
+	case wightShipName:
+		return minerShip, redTeam
+	case dagonShipName:
 		fallthrough
-	case gordonName:
+	case gordonShipName:
 		fallthrough
-	case hydraName:
+	case hydraShipName:
 		fallthrough
-	case tendrilName:
+	case tendrilShipName:
 		fallthrough
-	case welinkName:
-		return redTeam, flagShip
+	case welinkShipName:
+		return flagShip, redTeam
 	default:
-		return unknownTeam, unknownShip
+		return unknownShip, unknownTeam
 	}
 }
 
-/*
-const std::string Ship::kBlueScouts[] =    {"lazor",  "nike",    "rapier",   "saber",    "vanir"};
-const std::string Ship::kBlueFighters[] =  {"levant", "nimrod",  "ronin",   "scorpion", "viper"};
-const std::string Ship::kBlueMiners[] =    {"lynx",   "napier",  "rigel",   "spartan",  "voyager"};
-const std::string Ship::kBlueFlagships[] = {"lotus",  "nemesis", "reliant", "shogun",   "vega"};
-
-const std::string Ship::kRedScouts[] =    {"dirk",    "griffin",  "hornet", "talon",   "wasp"};
-const std::string Ship::kRedFighters[] =  {"demon",   "gargoyle", "hunter", "triton",  "wolf"};
-const std::string Ship::kRedMiners[] =    {"delphos", "gibbet",   "hansen", "tirade",  "wight"};
-const std::string Ship::kRedFlagships[] = {"dagon",   "gordon",   "hydra",  "tendril", "welink"};
-*/
-
-// ShipType ry
 type shipType struct {
-	active    bool
-	condition conditionEnum
+	condition shipConditionEnum
 	docked    bool
-	name      nameEnum
+	shipName  shipNameEnum
 	position  locationType
 	owner     string // player UUID
-	shipClass shipEnum
+	shipClass shipClassEnum
 	team      playerTeamEnum
 	uuid      string // ship UUID
 
@@ -305,90 +296,31 @@ type shipType struct {
 	energy int
 }
 
-func shipAdd(st shipType, gt *gameType) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if gt.ships[ndx].active == false {
-			gt.ships[ndx] = st
-			return ndx
-		}
+const maxShipTeam = 5
+const maxShips = maxShipTeam * 2
+
+// shipArrayType contains all active ships
+type shipArrayType [maxShips]*shipType
+
+// newShip convenience function to populate struct
+func newShip(shipName, shipOwner string) (*shipType, error) {
+	if len(shipName) < 1 {
+		return nil, errors.New("empty ship name")
 	}
 
-	return -1
-}
-
-func shipCensus(gt gameType) (int, int) {
-	blue := 0
-	red := 0
-
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if gt.players[ndx].active == true {
-			switch gt.ships[ndx].team {
-			case blueTeam:
-				blue++
-			case redTeam:
-				red++
-			}
-		}
+	if len(shipOwner) < 1 {
+		return nil, errors.New("empty ship owner")
 	}
 
-	return blue, red
-}
-
-func shipDelete(target string, gt *gameType) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if strings.Compare(gt.ships[ndx].uuid, target) == 0 {
-			gt.ships[ndx].active = false
-			return ndx
-		}
+	shipName2 := findShipName(shipName)
+	if shipName2 == unknownShipName {
+		return nil, errors.New("unknown ship name")
 	}
 
-	return -1
-}
+	shipClass, playerTeam := findShipClassTeam(shipName2)
 
-func shipDump(gt gameType) {
-	log.Println("=-=-=-= shipDump =-=-=-=")
-
-	for ndx := 0; ndx < maxShips; ndx++ {
-		shipClass := gt.ships[ndx].shipClass.string()
-		shipName := gt.ships[ndx].name.string()
-		shipTeam := gt.ships[ndx].team.string()
-		log.Printf("%d %t %s %s %s %s", ndx, gt.ships[ndx].active, shipName, shipClass, shipTeam, gt.ships[ndx].uuid)
-	}
-
-	log.Println("=-=-=-= shipDump =-=-=-=")
-}
-
-func shipFind(target string, gt *gameType) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if gt.ships[ndx].active == true {
-			if strings.Compare(gt.ships[ndx].uuid, target) == 0 {
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-
-func shipFindByOwner(target string, gt *gameType) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if gt.ships[ndx].active == true {
-			if strings.Compare(gt.ships[ndx].owner, target) == 0 {
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-
-func commandCreateShip(command commandType, gt *gameType) {
-	log.Println("create ship")
-
-	// convert structure
-	st := shipType{active: true, condition: greenCondition, docked: false, owner: command.player}
-	st.name = findShipName(command.args[1])
-	st.team, st.shipClass = findShipTeam(st.name)
+	st := shipType{condition: greenCondition, shipName: shipName2, owner: shipOwner, shipClass: shipClass, team: playerTeam}
+	// FIXME st.position = randomLocation()
 	st.uuid = uuid.NewString()
 
 	st.computer = 100
@@ -403,7 +335,8 @@ func commandCreateShip(command commandType, gt *gameType) {
 	st.phasers = 100
 	st.torpedoTubes = 100
 
-	switch st.shipClass {
+	// TODO resolve inventory values
+	switch shipClass {
 	case scoutShip:
 		log.Println("scout")
 		st.energy = 1
@@ -425,86 +358,211 @@ func commandCreateShip(command commandType, gt *gameType) {
 		st.mines = 2
 		st.torpedos = 0
 	default:
-		log.Println("must throw error")
+		return nil, errors.New("unknown ship class")
 	}
 
-	// add to ships array
-	ndx := shipAdd(st, gt)
-	log.Println(ndx)
-
-	shipDump(*gt)
+	return &st, nil
 }
 
+const testShipName1 = "nike"
+const testShipUuid1 = "ship1"
+
+// testShip1 returns test ship1
+func testShip1() *shipType {
+	ns1, _ := newShip(testShipName1, testPlayerID1)
+	ns1.uuid = testShipUuid1
+	return ns1
+}
+
+const testShipName2 = "welink"
+const testShipUuid2 = "ship2"
+
+// testShip2 returns test ship2
+func testShip2() *shipType {
+	ns2, _ := newShip(testShipName2, testPlayerID2)
+	ns2.uuid = testShipUuid2
+	return ns2
+}
+
+// shipAdd adds ship to array
+func shipAdd(st *shipType, sat *shipArrayType) int {
+	log.Printf("shipAdd:%s %s", st.shipName.string(), st.uuid)
+
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] == nil {
+			sat[ndx] = st
+			return ndx
+		}
+	}
+
+	return -1
+}
+
+// shipCensus returns population of red/blue ships
+func shipCensus(sat shipArrayType) (int, int) {
+	bluePopulation := 0
+	redPopulation := 0
+
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] != nil {
+			switch sat[ndx].team {
+			case blueTeam:
+				bluePopulation++
+			case redTeam:
+				redPopulation++
+			}
+		}
+	}
+
+	return bluePopulation, redPopulation
+}
+
+// shipDelete removes ship from array
+func shipDelete(target string, sat *shipArrayType) int {
+	log.Printf("shipDelete:%s", target)
+
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] != nil {
+			if strings.Compare(sat[ndx].uuid, target) == 0 {
+				sat[ndx] = nil
+				return ndx
+			}
+		}
+	}
+
+	return -1
+}
+
+// shipDump diagnostic
+func shipDump(sat shipArrayType) {
+	log.Println("=-=-=-= shipDump =-=-=-=")
+
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] == nil {
+			log.Printf("%d nil", ndx)
+		} else {
+			shipClass := sat[ndx].shipClass.string()
+			shipShipName := sat[ndx].shipName.string()
+			shipTeam := sat[ndx].team.string()
+			log.Printf("%d %s %s %s %s", ndx, shipShipName, shipClass, shipTeam, sat[ndx].uuid)
+		}
+	}
+
+	log.Println("=-=-=-= shipDump =-=-=-=")
+}
+
+// shipFind returns array index for ship by uuid
+func shipFind(target string, sat shipArrayType) int {
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] != nil {
+			if strings.Compare(sat[ndx].uuid, target) == 0 {
+				return ndx
+			}
+		}
+	}
+
+	return -1
+}
+
+// shipFindByName returns array index for ship by name
+func shipFindByName(target shipNameEnum, sat shipArrayType) int {
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] != nil {
+			if sat[ndx].shipName == target {
+				return ndx
+			}
+		}
+	}
+
+	return -1
+}
+
+// shipFindByOwner returns array index for ship by owner uuid
+func shipFindByOwner(target string, sat shipArrayType) int {
+	for ndx := 0; ndx < maxShips; ndx++ {
+		if sat[ndx] != nil {
+			if strings.Compare(sat[ndx].owner, target) == 0 {
+				return ndx
+			}
+		}
+	}
+
+	return -1
+}
+
+// commandShipCreate services command
+func commandShipCreate(ct commandType, gt *gameType) error {
+	st, err := newShip(ct.args[1], ct.player)
+	if err != nil {
+		return errors.New("commandShip creation failure")
+	}
+
+	singleOwner := shipFindByOwner(ct.player, gt.ships)
+	if singleOwner >= 0 {
+		return errors.New("commandShip duplicate player id")
+	}
+
+	duplicateShip := shipFindByName(st.shipName, gt.ships)
+	if duplicateShip >= 0 {
+		return errors.New("commandShip duplicate ship name")
+	}
+
+	bluePopulation, redPopulation := shipCensus(gt.ships)
+	if st.team == blueTeam {
+		if bluePopulation >= maxShipTeam {
+			return errors.New("commandShip blue team population limit")
+		}
+	} else {
+		if redPopulation >= maxShipTeam {
+			return errors.New("commandShip red team population limit")
+		}
+	}
+
+	shipAdd(st, &gt.ships)
+
+	return nil
+}
+
+// commandShipDelete services command
+func commandShipDelete(ct commandType, gt *gameType) error {
+	owner := shipFindByOwner(ct.player, gt.ships)
+	if owner < 0 {
+		return errors.New("deleteShip player id not found")
+	}
+
+	shipDelete(gt.ships[owner].uuid, &gt.ships)
+
+	return nil
+}
+
+// commandMoveShip services command
 func commandMoveShip(command commandType, gt *gameType) {
 	log.Println("move ship")
 
-	playerNdx := playerFind(command.player, gt)
-	if playerNdx < 0 {
-		log.Println("unknown player")
-		// return
-	}
+	/*
+		playerNdx := playerFind(command.player, gt)
+		if playerNdx < 0 {
+			log.Println("unknown player")
+			// return
+		}
+	*/
+	//playerNdx := 0
 
 	log.Println("player noted")
-	player := gt.players[playerNdx]
-	log.Println(player.name)
+	//player := gt.players[playerNdx]
+	//log.Println(player.shipName)
 
-	shipNdx := shipFindByOwner(command.player, gt)
-	if shipNdx < 0 {
-		log.Println("unknown ship")
-		// return
-	}
-	ship := gt.ships[shipNdx]
-	log.Println(ship)
-
+	/*
+		shipNdx := shipFindByOwner(command.player, gt)
+		if shipNdx < 0 {
+			log.Println("unknown ship")
+			// return
+		}
+		ship := gt.ships[shipNdx]
+		log.Println(ship)
+	*/
 	//	{"player":"player1uuid", "requestId":"request1uuid", "command":["move", "3", "3"]}
 }
-
-// NewShip ry
-/*
-func NewShip(name, owner string, se shipEnum, team playerTeamEnum) *shipType {
-	result := shipType{active: true, name: name, owner: owner, shipClass: se, team: team}
-	result.uuid = uuid.NewString()
-
-	result.computer = 100
-	result.lifeSupport = 100
-	result.radio = 100
-	result.shields = 100
-	result.tractorBeam = 100
-
-	result.impulseEngines = 100
-	result.warpEngines = 100
-
-	result.phasers = 100
-	result.torpedoTubes = 100
-
-	switch se {
-	case scoutShip:
-		log.Println("scout")
-		result.energy = 1
-		result.mines = 2
-		result.torpedos = 0
-	case fighterShip:
-		log.Println("fighter")
-		result.energy = 1
-		result.mines = 2
-		result.torpedos = 0
-	case minerShip:
-		log.Println("miner")
-		result.energy = 1
-		result.mines = 2
-		result.torpedos = 0
-	case flagShip:
-		log.Println("flagship")
-		result.energy = 1
-		result.mines = 2
-		result.torpedos = 0
-	default:
-		log.Println("must throw error")
-	}
-
-	return &result
-}
-*/
 
 /*
 func moveShip(ship Ship, location Location) {

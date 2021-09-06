@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: pg-credential
-type: Opaque
-data:
-  user: Y3ljbG9wcw==
-  password: d29vdHdvb3Q=

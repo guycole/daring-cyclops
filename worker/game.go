@@ -4,12 +4,6 @@ import (
 	"log"
 )
 
-const maxTeamPlayers = 5
-const maxPlayers = maxTeamPlayers * 2
-
-const maxTeamShips = 5
-const maxShips = maxTeamShips * 2
-
 const maxEventQueue = 10
 
 // gameType main game structure, only one instance per game
@@ -17,14 +11,13 @@ type gameType struct {
 	// TODO creation time
 	gameBoard gameBoardType
 
-	players [maxPlayers]playerType
-	ships   [maxShips]shipType
+	players   playerArrayType
+	ships     shipArrayType
+	starGates starGateArrayType
 
 	/*
 		Planets   map[string]planetType
 		StarGates map[string]starGateType
-
-		Ships map[string]shipType
 	*/
 
 	eventQueue    [maxEventQueue]turnEventType
@@ -153,7 +146,7 @@ func newGame(id string) *gameType {
 	boardGenerator(&gt)
 
 	boardDump(gt)
-	playerDump(gt)
+	//playerDump(gt)
 
 	return &gt
 }

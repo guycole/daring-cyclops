@@ -13,8 +13,6 @@ const (
 	buildCommand
 	captureCommand
 	//	chroniclesCommand
-	createPlayerCommand
-	createShipCommand
 	damagesCommand
 	dockCommand
 	dropCommand
@@ -31,12 +29,16 @@ const (
 	newsCommand
 	phasersCommand
 	planetsCommand
+	playerCreateCommand
+	playerDeleteCommand
 	pointsCommand
 	radioCommand
 	repairCommand
 	scanCommand
 	setCommand
 	shieldsCommand
+	shipCreateCommand
+	shipDeleteCommand
 	statusCommand
 	summaryCommand
 	targetsCommand
@@ -55,8 +57,6 @@ var legalGameCommands = [...][2]string{
 	{"build", "bu"},
 	{"capture", "ca"},
 	//	{"chronicles", ""},
-	{"createPlayer", "createPlayer"},
-	{"createShip", "createShip"},
 	{"damages", ""},
 	{"dock", ""},
 	{"drop", ""},
@@ -73,12 +73,16 @@ var legalGameCommands = [...][2]string{
 	{"news", ""},
 	{"phasers", ""},
 	{"planet", ""},
+	{"playerCreate", "playerCreate"},
+	{"playerDelete", "playerDelete"},
 	{"points", ""},
 	{"radio", ""},
 	{"repair", ""},
 	{"scan", ""},
 	{"set", ""},
 	{"shields", ""},
+	{"shipCreate", "shipCreate"},
+	{"shipDelete", "shipDelete"},
 	{"status", "st"},
 	{"summary", ""},
 	{"target", ""},
@@ -152,15 +156,21 @@ func parseJsonCommand(raw string, tc int) *commandType {
 
 func dispatchCommand(command commandType, gt *gameType) {
 	switch command.command {
-	case createPlayerCommand:
-		log.Println("create player noted")
-		commandCreatePlayer(command, gt)
-	case createShipCommand:
-		log.Println("create ship noted")
-		commandCreateShip(command, gt)
 	case moveCommand:
 		log.Println("move noted")
 		commandMoveShip(command, gt)
+	case playerCreateCommand:
+		log.Println("create player noted")
+		commandPlayerCreate(command, gt)
+	case playerDeleteCommand:
+		log.Println("delete player noted")
+		commandPlayerDelete(command, gt)
+	case shipCreateCommand:
+		log.Println("create ship noted")
+		commandShipCreate(command, gt)
+	case shipDeleteCommand:
+		log.Println("delete ship noted")
+		commandShipDelete(command, gt)
 	default:
 		log.Println("unknown command")
 	}
