@@ -147,7 +147,7 @@ func TestPlayerArray(t *testing.T) {
 		t.Errorf("playerCensus error:%d %d", bluePopulation, redPopulation)
 	}
 
-	playerDump(pat)
+	// playerDump(pat)
 
 	ndx = playerFind(testPlayerID1, pat)
 	if ndx != 0 {

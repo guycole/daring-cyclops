@@ -1,3 +1,6 @@
+// Copyright 2021 Guy Cole. All rights reserved.
+// Use of this source code is governed by a GPL-3 license that can be found
+// in the LICENSE file.
 package main
 
 import (
@@ -9,8 +12,8 @@ const maxEventQueue = 10
 // gameType main game structure, only one instance per game
 type gameType struct {
 	// TODO creation time
-	gameBoard gameBoardType
-
+	board     boardArrayType
+	boardType boardTypeEnum
 	players   playerArrayType
 	ships     shipArrayType
 	starGates starGateArrayType
@@ -137,16 +140,12 @@ func eventQueuePush(ct commandType, gt *gameType) {
 	}
 }
 
-func newGame(id string) *gameType {
-	log.Println("new game:", id)
+func newGame(id string, boardType boardTypeEnum) *gameType {
+	log.Println("new game:", id, boardType.string())
 
-	gt := gameType{uuid: id}
-
-	gt.gameBoard = newGameBoard(emptyBoard01)
+	gt := gameType{uuid: id, boardType: boardType}
+	gt.board = newBoard()
 	boardGenerator(&gt)
-
-	boardDump(gt)
-	//playerDump(gt)
 
 	return &gt
 }

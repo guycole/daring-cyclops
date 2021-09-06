@@ -8,10 +8,11 @@ const (
 	planetToken
 	shipToken
 	starGateToken
+	voidToken
 )
 
 func (bte boardTokenEnum) String() string {
-	return [...]string{"Vacant", "Mine", "Planet", "Ship", "StarGate"}[bte]
+	return [...]string{"vacant", "mine", "planet", "ship", "starGate", "void"}[bte]
 }
 
 type boardCellType struct {
@@ -22,29 +23,19 @@ type boardCellType struct {
 	planetID    string
 	ship        bool
 	shipID      string
+	star        bool
 	starGate    bool
 	starGateID  string
 
 	//position *locationType
 }
 
-func newBoardCell(position *locationType) *boardCellType {
-	//result := boardCellType{position: position}
+func newBoardCell() *boardCellType {
 	result := boardCellType{}
-
-	result.acheronVoid = false
-	result.blackHole = false
-	result.mine = false
-	result.planet = false
-	result.planetID = "bogus"
-	result.ship = false
-	result.shipID = "bogus"
-	result.starGate = false
-	result.starGateID = "bogus"
-
 	return &result
 }
 
+/*
 func setAcheronVoid(bc boardCellType) {
 	bc.acheronVoid = true
 }
@@ -61,4 +52,41 @@ func setPlanet(bc boardCellType, uuid string) {
 func setStarGate(bc *boardCellType, uuid string) {
 	bc.starGate = true
 	bc.starGateID = uuid
+}
+*/
+
+func isEmptyCell(arg boardCellType) bool {
+	return true
+}
+
+func boardCellToken(arg boardCellType) string {
+	if arg.acheronVoid {
+		return "  "
+	}
+
+	if arg.blackHole {
+		return "  "
+	}
+
+	// mine?
+
+	if arg.planet {
+		return " @"
+		// "++" or "--"
+	}
+
+	if arg.ship {
+		// find ship, return first character of name
+		return " N"
+	}
+
+	if arg.star {
+		return " *"
+	}
+
+	if arg.starGate {
+		return " X"
+	}
+
+	return " ."
 }

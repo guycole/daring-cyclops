@@ -10,7 +10,7 @@ type starGateType struct {
 	active          bool
 	damage          int
 	energy          int
-	position        locationType
+	position        *locationType
 	gateDestination [9]int
 	gateNdx         int
 	uuid            string
@@ -56,7 +56,7 @@ var starGateDestinations = [9][9]int{
 func newStarGate(ndx int) *starGateType {
 	result := starGateType{active: true, gateNdx: ndx}
 	result.energy = 100 //tweak me
-	//	result.position = newLocation(starGateLocations[ndx][0], starGateLocations[ndx][1])
+	result.position = newLocation(starGateLocations[ndx][0], starGateLocations[ndx][1])
 	result.uuid = uuid.NewString()
 
 	log.Println(starGateLocations[ndx][0])

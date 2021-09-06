@@ -21,7 +21,7 @@ func failOnError(err error, msg string) {
 func main() {
 	log.Println(banner)
 
-	game := newGame("gameId")
+	game := newGame("gameId", standardBoard)
 	log.Println(game)
 
 	for ndx := 0; ndx < 13; ndx++ {

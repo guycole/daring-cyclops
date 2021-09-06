@@ -164,7 +164,7 @@ func TestShipArray(t *testing.T) {
 		t.Errorf("shipCensus error:%d %d", bluePopulation, redPopulation)
 	}
 
-	shipDump(sat)
+	// shipDump(sat)
 
 	ndx = shipFind(testShipUuid1, sat)
 	if ndx != 0 {
@@ -229,7 +229,7 @@ func TestCreateDeleteShip(t *testing.T) {
 		t.Errorf("commandCreateShip error:%s", err)
 	}
 
-	shipDump(gt.ships)
+	// shipDump(gt.ships)
 
 	bluePopulation, redPopulation := shipCensus(gt.ships)
 	if bluePopulation != 1 && redPopulation != 0 {

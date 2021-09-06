@@ -54,6 +54,7 @@ const (
 	neutralTeam
 	blueTeam
 	redTeam
+	acheronTeam
 )
 
 // must match order for playerTeamEnum
@@ -62,11 +63,12 @@ var legalPlayerTeams = [...]string{
 	"neutral",
 	"blue",
 	"red",
+	"acheron",
 }
 
 // must match order for playerTeamEnum
 func (pte playerTeamEnum) string() string {
-	return [...]string{"unknown", "neutral", "blue", "red"}[pte]
+	return [...]string{"unknown", "neutral", "blue", "red", "acheron"}[pte]
 }
 
 func findPlayerTeam(arg string) playerTeamEnum {
