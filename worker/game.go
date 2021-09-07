@@ -16,6 +16,7 @@ type gameType struct {
 	boardType boardTypeEnum
 	players   playerArrayType
 	ships     shipArrayType
+	stars     starArrayType
 	starGates starGateArrayType
 
 	/*

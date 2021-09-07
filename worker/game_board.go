@@ -77,7 +77,7 @@ func boardGenerator(gt *gameType) {
 	case standardBoard:
 		log.Println("generating standard board")
 		//		addPlanets(gt)
-		//		addStars(gt)
+		addStars(gt)
 		addStarGates(gt)
 	case randomBoard:
 		log.Println("generating random board")
@@ -91,6 +91,11 @@ func addPlanets(gt *gameType) {
 }
 
 func addStars(gt *gameType) {
+	for ndx := 0; ndx < maxStars; ndx++ {
+		star := newStar(ndx)
+		gt.stars[ndx] = star
+		gt.board[star.position.yy][star.position.xx].star = true
+	}
 }
 
 func addStarGates(gt *gameType) {
