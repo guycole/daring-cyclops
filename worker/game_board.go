@@ -62,13 +62,6 @@ func boardDump(bat boardArrayType) {
 	log.Println("=-=-=-= boardDump =-=-=-=")
 }
 
-func randomLocation3() *locationType {
-	//xx := rand.Intn(limitX)
-	//yy := rand.Intn(limitY)
-	//return newLocation(yy, xx)
-	return nil
-}
-
 func boardGenerator(gt *gameType) {
 	switch gt.boardType {
 	case emptyBoard:

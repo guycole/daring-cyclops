@@ -5,6 +5,7 @@ package main
 
 import (
 	"math"
+	"math/rand"
 )
 
 //row column origin = 0,0 lower left corner of map
@@ -22,6 +23,12 @@ func getDistance(origin, destination *locationType) int {
 	var x = float64(origin.xx - destination.xx)
 	var y = float64(origin.yy - destination.yy)
 	return int(math.Round(math.Sqrt(x*x + y*y)))
+}
+
+func randomLocation(limitY, limitX int) *locationType {
+	xx := rand.Intn(limitX)
+	yy := rand.Intn(limitY)
+	return newLocation(yy, xx)
 }
 
 /*

@@ -71,7 +71,7 @@ func boardCellToken(arg boardCellType) string {
 	// mine?
 
 	if arg.planet {
-		return " @"
+		return "@"
 		// "++" or "--"
 	}
 
@@ -81,12 +81,12 @@ func boardCellToken(arg boardCellType) string {
 	}
 
 	if arg.star {
-		return " *"
+		return "*"
 	}
 
 	if arg.starGate {
-		return " X"
+		return "X"
 	}
 
-	return " ."
+	return "."
 }

@@ -536,32 +536,20 @@ func commandShipDelete(ct commandType, gt *gameType) error {
 }
 
 // commandMoveShip services command
-func commandMoveShip(command commandType, gt *gameType) {
+func commandMoveShip(ct commandType, gt *gameType) error {
 	log.Println("move ship")
 
-	/*
-		playerNdx := playerFind(command.player, gt)
-		if playerNdx < 0 {
-			log.Println("unknown player")
-			// return
-		}
-	*/
-	//playerNdx := 0
+	ndx := shipFindByOwner(ct.player, gt.ships)
+	if ndx < 0 {
+		return errors.New("moveShip ship not found")
+	}
 
-	log.Println("player noted")
-	//player := gt.players[playerNdx]
-	//log.Println(player.shipName)
+	ship := gt.ships[ndx]
+	log.Println(ship)
 
-	/*
-		shipNdx := shipFindByOwner(command.player, gt)
-		if shipNdx < 0 {
-			log.Println("unknown ship")
-			// return
-		}
-		ship := gt.ships[shipNdx]
-		log.Println(ship)
-	*/
 	//	{"player":"player1uuid", "requestId":"request1uuid", "command":["move", "3", "3"]}
+
+	return nil
 }
 
 /*
