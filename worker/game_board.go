@@ -5,6 +5,7 @@ package main
 
 import (
 	"log"
+	"math/rand"
 )
 
 // boardTypeEnum
@@ -13,13 +14,12 @@ type boardTypeEnum int
 const (
 	unknownBoardType boardTypeEnum = iota
 	emptyBoard                     // no mines, planets, ships, stargates, voids
-	standardBoard                  // standard game map w/planets, stargates and voids
-	randomBoard                    // standard game map w/randomly generated planets
+	standardBoard                  // standard game map w/stars, planets, stargates and voids
 )
 
 // must match order for boardTypeEnum
 func (bte boardTypeEnum) string() string {
-	return [...]string{"unknown", "empty", "standard", "random"}[bte]
+	return [...]string{"unknown", "empty", "standard"}[bte]
 }
 
 const maxBoardSideX = 75
@@ -66,28 +66,68 @@ func boardGenerator(gt *gameType) {
 	switch gt.boardType {
 	case emptyBoard:
 		log.Println("generating empty board")
-		break
 	case standardBoard:
 		log.Println("generating standard board")
-		//		addPlanets(gt)
-		addStars(gt)
 		addStarGates(gt)
-	case randomBoard:
-		log.Println("generating random board")
-	//	addRandomPlanets(gt)
+		addStars(gt)
+		addPlanets(gt)
 	default:
 		log.Println("unsupported boardType in boardGenerator")
 	}
 }
 
+// return a random location for stars and planets
+func randomCelestialLocation(gt *gameType) *locationType {
+	for ndx := 0; ndx < 100; ndx++ {
+		position := randomLocation(maxBoardSideY, maxBoardSideX)
+
+		// cannot have celestial objects adjacent to stargates
+		_, locNdx := starGateAdjacent(position)
+		if locNdx >= 0 {
+			//log.Printf("stargate adjacent:%d %d %d", gateNdx, locNdx, ndx)
+			continue
+		}
+
+		boardCell := gt.board[position.yy][position.xx]
+		if !testForCelestial(*boardCell) {
+			return position
+		}
+	}
+
+	log.Println("unable to generate random celestial location")
+
+	return nil
+}
+
 func addPlanets(gt *gameType) {
+	quarter := int(maxPlanets / 4)
+	planetPopulation := 3*quarter + rand.Intn(quarter)
+	log.Printf("planetPopulation:%d", planetPopulation)
+	for ndx := 0; ndx < planetPopulation; ndx++ {
+		position := randomCelestialLocation(gt)
+		if position == nil {
+			log.Println("skipping nil position for planet")
+		} else {
+			planet := newPlanet(position)
+			gt.planets[ndx] = planet
+			setPlanet(gt.board[planet.position.yy][planet.position.xx], planet.uuid)
+		}
+	}
 }
 
 func addStars(gt *gameType) {
-	for ndx := 0; ndx < maxStars; ndx++ {
-		star := newStar(ndx)
-		gt.stars[ndx] = star
-		gt.board[star.position.yy][star.position.xx].star = true
+	quarter := int(maxStars / 4)
+	starPopulation := 3*quarter + rand.Intn(quarter)
+	log.Printf("starPopulation:%d", starPopulation)
+	for ndx := 0; ndx < starPopulation; ndx++ {
+		position := randomCelestialLocation(gt)
+		if position == nil {
+			log.Println("skipping nil position for star")
+		} else {
+			star := newStar(position)
+			gt.stars[ndx] = star
+			setStar(gt.board[star.position.yy][star.position.xx], star.uuid)
+		}
 	}
 }
 
@@ -95,11 +135,6 @@ func addStarGates(gt *gameType) {
 	for ndx := 0; ndx < maxStarGates; ndx++ {
 		sg := newStarGate(ndx)
 		gt.starGates[ndx] = sg
-		gt.board[sg.position.yy][sg.position.xx].starGate = true
-		gt.board[sg.position.yy][sg.position.xx].starGateID = sg.uuid
+		setStarGate(gt.board[sg.position.yy][sg.position.xx], sg.uuid)
 	}
-}
-
-func addRandomPlanets(gt *gameType) {
-
 }

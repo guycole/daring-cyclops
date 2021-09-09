@@ -5,6 +5,8 @@ package main
 
 import (
 	"log"
+	"math/rand"
+	"time"
 )
 
 const maxEventQueue = 10
@@ -14,15 +16,11 @@ type gameType struct {
 	// TODO creation time
 	board     boardArrayType
 	boardType boardTypeEnum
+	planets   planetArrayType
 	players   playerArrayType
 	ships     shipArrayType
 	stars     starArrayType
 	starGates starGateArrayType
-
-	/*
-		Planets   map[string]planetType
-		StarGates map[string]starGateType
-	*/
 
 	eventQueue    [maxEventQueue]turnEventType
 	eventQueueNdx int // current queue index
@@ -143,6 +141,8 @@ func eventQueuePush(ct commandType, gt *gameType) {
 
 func newGame(id string, boardType boardTypeEnum) *gameType {
 	log.Println("new game:", id, boardType.string())
+
+	rand.Seed(time.Now().UnixNano())
 
 	gt := gameType{uuid: id, boardType: boardType}
 	gt.board = newBoard()

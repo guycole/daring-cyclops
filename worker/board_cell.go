@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 type boardTokenEnum int
 
 const (
@@ -16,18 +18,18 @@ func (bte boardTokenEnum) String() string {
 }
 
 type boardCellType struct {
+	// celestial objects
 	acheronVoid bool
 	blackHole   bool
-	mine        bool
 	planet      bool
-	planetID    string
-	ship        bool
-	shipID      string
 	star        bool
 	starGate    bool
-	starGateID  string
+	celestialID string // uuid
 
-	//position *locationType
+	// player objects
+	mine   bool
+	ship   bool
+	shipID string
 }
 
 func newBoardCell() *boardCellType {
@@ -43,20 +45,45 @@ func setAcheronVoid(bc boardCellType) {
 func setBlackHole(bc boardCellType) {
 	bc.blackHole = true
 }
+*/
 
-func setPlanet(bc boardCellType, uuid string) {
+func setPlanet(bc *boardCellType, uuid string) {
+	if testForCelestial(*bc) {
+		log.Println("unable to set planet because cell is occupied")
+		return
+	}
+
 	bc.planet = true
-	bc.planetID = uuid
+	bc.celestialID = uuid
+}
+
+func setStar(bc *boardCellType, uuid string) {
+	if testForCelestial(*bc) {
+		log.Println("unable to set star because cell is occupied")
+		return
+	}
+
+	bc.star = true
+	bc.celestialID = uuid
 }
 
 func setStarGate(bc *boardCellType, uuid string) {
-	bc.starGate = true
-	bc.starGateID = uuid
-}
-*/
+	if testForCelestial(*bc) {
+		log.Println("unable to set starGate because cell is occupied")
+		return
+	}
 
-func isEmptyCell(arg boardCellType) bool {
-	return true
+	bc.starGate = true
+	bc.celestialID = uuid
+}
+
+// return true if cell contains celestial object
+func testForCelestial(arg boardCellType) bool {
+	if arg.acheronVoid || arg.blackHole || arg.planet || arg.star || arg.starGate {
+		return true
+	}
+
+	return false
 }
 
 func boardCellToken(arg boardCellType) string {

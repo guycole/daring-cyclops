@@ -7,17 +7,17 @@ import (
 	"github.com/google/uuid"
 )
 
-type starType struct {
+type planetType struct {
 	position *locationType
 	uuid     string
 }
 
-const maxStars = 255
+const maxPlanets = 255
 
-type starArrayType [maxStars]*starType
+type planetArrayType [maxStars]*planetType
 
-func newStar(position *locationType) *starType {
-	result := starType{position: position}
+func newPlanet(position *locationType) *planetType {
+	result := planetType{position: position}
 	result.uuid = uuid.NewString()
 	return &result
 }

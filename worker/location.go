@@ -38,47 +38,44 @@ func randomLocation(limitY, limitX int) *locationType {
    3 4 5
    6 7 8
 */
-
-// starGateAdjacent discover if next to a SG.  Returns index into starGateDestinations
-func starGateAdjacent(shipPosition, starGatePosition *locationType) int {
+// return index of test location relative to reference location
+func testForAdjacency(refPos, testPos *locationType) int {
 	var x, y int
 
 	for ndx := 0; ndx < 9; ndx++ {
 		switch ndx {
 		case 0:
-			x = starGatePosition.xx - 1
-			y = starGatePosition.yy + 1
+			x = refPos.xx - 1
+			y = refPos.yy + 1
 		case 1:
-			x = starGatePosition.xx
-			y = starGatePosition.yy + 1
+			x = refPos.xx
+			y = refPos.yy + 1
 		case 2:
-			x = starGatePosition.xx + 1
-			y = starGatePosition.yy + 1
+			x = refPos.xx + 1
+			y = refPos.yy + 1
 		case 3:
-			x = starGatePosition.xx - 1
-			y = starGatePosition.yy
+			x = refPos.xx - 1
+			y = refPos.yy
 		case 4: // should never match
-			x = starGatePosition.xx
-			y = starGatePosition.yy
+			x = refPos.xx
+			y = refPos.yy
 		case 5:
-			x = starGatePosition.xx + 1
-			y = starGatePosition.yy
+			x = refPos.xx + 1
+			y = refPos.yy
 		case 6:
-			x = starGatePosition.xx - 1
-			y = starGatePosition.yy - 1
+			x = refPos.xx - 1
+			y = refPos.yy - 1
 		case 7:
-			x = starGatePosition.xx
-			y = starGatePosition.yy - 1
+			x = refPos.xx
+			y = refPos.yy - 1
 		case 8:
-			x = starGatePosition.xx + 1
-			y = starGatePosition.yy - 1
+			x = refPos.xx + 1
+			y = refPos.yy - 1
 		}
 
-		temp := newLocation(y, x)
-		if temp.xx == shipPosition.xx && temp.yy == shipPosition.yy {
+		if x == testPos.xx && y == testPos.yy {
 			return ndx
 		}
-
 	}
 
 	return -1

@@ -66,3 +66,22 @@ func newStarGate(ndx int) *starGateType {
 
 	return &result
 }
+
+/*
+   map origin lower left 1, 1
+
+   0 1 2  (gate indices and relative locations)
+   3 4 5
+   6 7 8
+*/
+func starGateAdjacent(candidate *locationType) (gateNdx, locNdx int) {
+	for sg := 0; sg < maxStarGates; sg++ {
+		current := newLocation(starGateLocations[sg][0], starGateLocations[sg][1])
+		ndx := testForAdjacency(current, candidate)
+		if ndx >= 0 {
+			return sg, ndx
+		}
+	}
+
+	return -1, -1
+}
