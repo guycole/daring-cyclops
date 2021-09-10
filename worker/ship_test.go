@@ -45,7 +45,7 @@ func TestShipClassTeam(t *testing.T) {
 	tests := []struct {
 		candidate  shipNameEnum
 		shipClass  shipClassEnum
-		playerTeam playerTeamEnum
+		playerTeam teamEnum
 	}{
 		{lazorShipName, scoutShip, blueTeam},
 		{welinkShipName, flagShip, redTeam},
@@ -62,7 +62,9 @@ func TestShipClassTeam(t *testing.T) {
 }
 
 func TestNewOkShip(t *testing.T) {
-	result, err := newShip("nike", testPlayerID1)
+	gt := newGame("testGame", emptyBoard)
+
+	result, err := newShip("nike", testPlayerID1, gt)
 	if err != nil {
 		t.Errorf("newShip error:%s", err)
 	}
@@ -97,7 +99,9 @@ func TestNewOkShip(t *testing.T) {
 }
 
 func TestNewBadShip01(t *testing.T) {
-	result, err := newShip("", testPlayerID2)
+	gt := newGame("testGame", emptyBoard)
+
+	result, err := newShip("", testPlayerID2, gt)
 	if err == nil {
 		t.Error("newShip error:expecting bad shipName")
 	}
@@ -108,7 +112,9 @@ func TestNewBadShip01(t *testing.T) {
 }
 
 func TestNewBadShip02(t *testing.T) {
-	result, err := newShip("nike", "")
+	gt := newGame("testGame", emptyBoard)
+
+	result, err := newShip("nike", "", gt)
 	if err == nil {
 		t.Error("newShipq error:expecting bad player ID")
 	}
@@ -119,7 +125,9 @@ func TestNewBadShip02(t *testing.T) {
 }
 
 func TestNewBadShip03(t *testing.T) {
-	result, err := newShip("bogus", testPlayerID2)
+	gt := newGame("testGame", emptyBoard)
+
+	result, err := newShip("bogus", testPlayerID2, gt)
 	if err == nil {
 		t.Error("newShip error:expecting bad shipName")
 	}
@@ -137,12 +145,14 @@ func TestShipArray(t *testing.T) {
 		t.Errorf("shipCensus error:%d %d", bluePopulation, redPopulation)
 	}
 
-	ns1 := testShip1()
+	gt := newGame("testGame", emptyBoard)
+
+	ns1 := testShip1(gt)
 	if ns1 == nil {
 		t.Error("testShip1 returns nil")
 	}
 
-	ns2 := testShip2()
+	ns2 := testShip2(gt)
 	if ns2 == nil {
 		t.Error("testShip2 returns nil")
 	}
@@ -222,9 +232,9 @@ func TestCreateDeleteShip(t *testing.T) {
 	ct.args = []string{"shipCreate", "nimrod"}
 	ct.command = shipCreateCommand
 
-	gt := gameType{uuid: "gameId"}
+	gt := newGame("testGame", emptyBoard)
 
-	err := commandShipCreate(ct, &gt)
+	err := commandShipCreate(ct, gt)
 	if err != nil {
 		t.Errorf("commandCreateShip error:%s", err)
 	}
@@ -236,7 +246,7 @@ func TestCreateDeleteShip(t *testing.T) {
 		t.Errorf("shipCensus error:%d %d", bluePopulation, redPopulation)
 	}
 
-	err = commandShipCreate(ct, &gt)
+	err = commandShipCreate(ct, gt)
 	if err == nil {
 		t.Errorf("commandShipCreate should have duplicate error")
 	}
@@ -247,7 +257,7 @@ func TestCreateDeleteShip(t *testing.T) {
 	ct.args = []string{"shipDelete"}
 	ct.command = shipDeleteCommand
 
-	commandShipDelete(ct, &gt)
+	commandShipDelete(ct, gt)
 
 	//shipDump(gt.ships)
 }

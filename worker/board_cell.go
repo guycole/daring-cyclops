@@ -18,18 +18,24 @@ func (bte boardTokenEnum) String() string {
 }
 
 type boardCellType struct {
-	// celestial objects
+	// celestial objects without uuid
 	acheronVoid bool
 	blackHole   bool
+
+	// celestial objects with uuid
 	planet      bool
 	star        bool
 	starGate    bool
 	celestialID string // uuid
 
-	// player objects
-	mine   bool
-	ship   bool
-	shipID string
+	// player object without uuid
+	mine bool
+
+	// player object with uuid
+	ship       bool
+	shipSymbol string
+
+	tokenID string
 }
 
 func newBoardCell() *boardCellType {
@@ -55,6 +61,17 @@ func setPlanet(bc *boardCellType, uuid string) {
 
 	bc.planet = true
 	bc.celestialID = uuid
+}
+
+func setShip(bc *boardCellType, symbol, uuid string) {
+	if !testForEmpty(*bc) {
+		log.Println("unable to set ship because cell is occupied")
+		return
+	}
+
+	bc.ship = true
+	bc.shipSymbol = symbol
+	bc.tokenID = uuid
 }
 
 func setStar(bc *boardCellType, uuid string) {
@@ -86,16 +103,32 @@ func testForCelestial(arg boardCellType) bool {
 	return false
 }
 
+// return true if empty cell
+func testForEmpty(arg boardCellType) bool {
+	if testForCelestial(arg) {
+		return false
+	}
+
+	if arg.mine || arg.ship {
+		return false
+	}
+
+	return true
+}
+
 func boardCellToken(arg boardCellType) string {
 	if arg.acheronVoid {
-		return "  "
+		return " "
 	}
 
 	if arg.blackHole {
-		return "  "
+		return " "
 	}
 
-	// mine?
+	// mine
+	if arg.mine {
+		return "#"
+	}
 
 	if arg.planet {
 		return "@"
@@ -103,8 +136,7 @@ func boardCellToken(arg boardCellType) string {
 	}
 
 	if arg.ship {
-		// find ship, return first character of name
-		return " N"
+		return arg.shipSymbol
 	}
 
 	if arg.star {

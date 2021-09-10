@@ -10,16 +10,16 @@ import (
 func TestPlayerRank(t *testing.T) {
 	tests := []struct {
 		candidate string
-		answer    playerRankEnum
+		answer    rankEnum
 	}{
 		{"cadet", cadetRank},
 		{"admiral", admiralRank},
 		{"bogus", unknownRank},
 	}
 	for _, ndx := range tests {
-		result := findPlayerRank(ndx.candidate)
+		result := findRank(ndx.candidate)
 		if result != ndx.answer {
-			t.Errorf("findPlayerRank(%s) failure", ndx.candidate)
+			t.Errorf("findRank(%s) failure", ndx.candidate)
 		}
 	}
 }
@@ -27,16 +27,16 @@ func TestPlayerRank(t *testing.T) {
 func TestPlayerTeam(t *testing.T) {
 	tests := []struct {
 		candidate string
-		answer    playerTeamEnum
+		answer    teamEnum
 	}{
 		{"neutral", neutralTeam},
 		{"red", redTeam},
 		{"bogus", unknownTeam},
 	}
 	for _, ndx := range tests {
-		result := findPlayerTeam(ndx.candidate)
+		result := findTeam(ndx.candidate)
 		if result != ndx.answer {
-			t.Errorf("findPlayerTeam(%s) failure", ndx.candidate)
+			t.Errorf("findTeam(%s) failure", ndx.candidate)
 		}
 	}
 }

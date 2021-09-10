@@ -4,7 +4,7 @@
 package main
 
 import (
-	"log"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -56,14 +56,12 @@ var starGateDestinations = [9][9]int{
 
 //type gateIndicesArray[maxGateIndices] int
 
+// newStarGate convenience function to populate struct
 func newStarGate(ndx int) *starGateType {
 	result := starGateType{active: true, gateNdx: ndx}
 	result.energy = 100 //tweak me
 	result.position = newLocation(starGateLocations[ndx][0], starGateLocations[ndx][1])
 	result.uuid = uuid.NewString()
-
-	log.Println(starGateLocations[ndx][0])
-
 	return &result
 }
 
@@ -84,4 +82,26 @@ func starGateAdjacent(candidate *locationType) (gateNdx, locNdx int) {
 	}
 
 	return -1, -1
+}
+
+// generate all stargates
+func starGatesAdd(gt *gameType) {
+	for ndx := 0; ndx < maxStarGates; ndx++ {
+		sg := newStarGate(ndx)
+		gt.starGates[ndx] = sg
+		setStarGate(gt.board[sg.position.yy][sg.position.xx], sg.uuid)
+	}
+}
+
+// starGateFind returns array index for planet by uuid
+func starGateFind(target string, sat starGateArrayType) int {
+	for ndx := 0; ndx < maxStarGates; ndx++ {
+		if sat[ndx] != nil {
+			if strings.Compare(sat[ndx].uuid, target) == 0 {
+				return ndx
+			}
+		}
+	}
+
+	return -1
 }

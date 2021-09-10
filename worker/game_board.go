@@ -5,7 +5,6 @@ package main
 
 import (
 	"log"
-	"math/rand"
 )
 
 // boardTypeEnum
@@ -68,73 +67,10 @@ func boardGenerator(gt *gameType) {
 		log.Println("generating empty board")
 	case standardBoard:
 		log.Println("generating standard board")
-		addStarGates(gt)
-		addStars(gt)
-		addPlanets(gt)
+		starGatesAdd(gt)
+		starsAdd(gt)
+		planetsAdd(gt)
 	default:
 		log.Println("unsupported boardType in boardGenerator")
-	}
-}
-
-// return a random location for stars and planets
-func randomCelestialLocation(gt *gameType) *locationType {
-	for ndx := 0; ndx < 100; ndx++ {
-		position := randomLocation(maxBoardSideY, maxBoardSideX)
-
-		// cannot have celestial objects adjacent to stargates
-		_, locNdx := starGateAdjacent(position)
-		if locNdx >= 0 {
-			//log.Printf("stargate adjacent:%d %d %d", gateNdx, locNdx, ndx)
-			continue
-		}
-
-		boardCell := gt.board[position.yy][position.xx]
-		if !testForCelestial(*boardCell) {
-			return position
-		}
-	}
-
-	log.Println("unable to generate random celestial location")
-
-	return nil
-}
-
-func addPlanets(gt *gameType) {
-	quarter := int(maxPlanets / 4)
-	planetPopulation := 3*quarter + rand.Intn(quarter)
-	log.Printf("planetPopulation:%d", planetPopulation)
-	for ndx := 0; ndx < planetPopulation; ndx++ {
-		position := randomCelestialLocation(gt)
-		if position == nil {
-			log.Println("skipping nil position for planet")
-		} else {
-			planet := newPlanet(position)
-			gt.planets[ndx] = planet
-			setPlanet(gt.board[planet.position.yy][planet.position.xx], planet.uuid)
-		}
-	}
-}
-
-func addStars(gt *gameType) {
-	quarter := int(maxStars / 4)
-	starPopulation := 3*quarter + rand.Intn(quarter)
-	log.Printf("starPopulation:%d", starPopulation)
-	for ndx := 0; ndx < starPopulation; ndx++ {
-		position := randomCelestialLocation(gt)
-		if position == nil {
-			log.Println("skipping nil position for star")
-		} else {
-			star := newStar(position)
-			gt.stars[ndx] = star
-			setStar(gt.board[star.position.yy][star.position.xx], star.uuid)
-		}
-	}
-}
-
-func addStarGates(gt *gameType) {
-	for ndx := 0; ndx < maxStarGates; ndx++ {
-		sg := newStarGate(ndx)
-		gt.starGates[ndx] = sg
-		setStarGate(gt.board[sg.position.yy][sg.position.xx], sg.uuid)
 	}
 }

@@ -4,6 +4,7 @@
 package main
 
 import (
+	"log"
 	"math"
 	"math/rand"
 )
@@ -29,6 +30,44 @@ func randomLocation(limitY, limitX int) *locationType {
 	xx := rand.Intn(limitX)
 	yy := rand.Intn(limitY)
 	return newLocation(yy, xx)
+}
+
+// return a random location for stars and planets
+func randomCelestialLocation(gt *gameType) *locationType {
+	for ndx := 0; ndx < 100; ndx++ {
+		position := randomLocation(maxBoardSideY, maxBoardSideX)
+
+		// cannot have celestial objects adjacent to stargates
+		_, locNdx := starGateAdjacent(position)
+		if locNdx >= 0 {
+			//log.Printf("stargate adjacent:%d %d %d", gateNdx, locNdx, ndx)
+			continue
+		}
+
+		boardCell := gt.board[position.yy][position.xx]
+		if !testForCelestial(*boardCell) {
+			return position
+		}
+	}
+
+	log.Println("unable to generate random celestial location")
+
+	return nil
+}
+
+// return a random location for ships
+func randomShipLocation(gt *gameType) *locationType {
+	for ndx := 0; ndx < 100; ndx++ {
+		position := randomLocation(maxBoardSideY, maxBoardSideX)
+		boardCell := gt.board[position.yy][position.xx]
+		if testForEmpty(*boardCell) {
+			return position
+		}
+	}
+
+	log.Println("unable to generate random ship location")
+
+	return nil
 }
 
 /*

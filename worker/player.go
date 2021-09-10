@@ -9,20 +9,20 @@ import (
 	"strings"
 )
 
-// playerRankEnum
-type playerRankEnum int
+// rankEnum
+type rankEnum int
 
-// must match order for legalPlayerRanks
+// must match order for legalRanks
 const (
-	unknownRank playerRankEnum = iota
+	unknownRank rankEnum = iota
 	cadetRank
 	lieutenantRank
 	captainRank
 	admiralRank
 )
 
-// must match order for playerRankEnum
-var legalPlayerRanks = [...]string{
+// must match order for rankEnum
+var legalRanks = [...]string{
 	"unknown",
 	"cadet",
 	"lieutenant",
@@ -30,35 +30,35 @@ var legalPlayerRanks = [...]string{
 	"admiral",
 }
 
-// must match order for playerRankEnum
-func (pre playerRankEnum) string() string {
-	return [...]string{"unknown", "cadet", "lieutenant", "captain", "admiral"}[pre]
+// must match order for rankEnum
+func (re rankEnum) string() string {
+	return [...]string{"unknown", "cadet", "lieutenant", "captain", "admiral"}[re]
 }
 
-func findPlayerRank(arg string) playerRankEnum {
-	for ndx := 0; ndx < len(legalPlayerRanks); ndx++ {
-		if legalPlayerRanks[ndx] == arg {
-			return playerRankEnum(ndx)
+func findRank(arg string) rankEnum {
+	for ndx := 0; ndx < len(legalRanks); ndx++ {
+		if legalRanks[ndx] == arg {
+			return rankEnum(ndx)
 		}
 	}
 
-	return playerRankEnum(unknownRank)
+	return rankEnum(unknownRank)
 }
 
-// playerTeamEnum
-type playerTeamEnum int
+// teamEnum
+type teamEnum int
 
-// must match order for legalPlayerTeams
+// must match order for legalTeams
 const (
-	unknownTeam playerTeamEnum = iota
+	unknownTeam teamEnum = iota
 	neutralTeam
 	blueTeam
 	redTeam
 	acheronTeam
 )
 
-// must match order for playerTeamEnum
-var legalPlayerTeams = [...]string{
+// must match order for teamEnum
+var legalTeams = [...]string{
 	"unknown",
 	"neutral",
 	"blue",
@@ -66,25 +66,25 @@ var legalPlayerTeams = [...]string{
 	"acheron",
 }
 
-// must match order for playerTeamEnum
-func (pte playerTeamEnum) string() string {
-	return [...]string{"unknown", "neutral", "blue", "red", "acheron"}[pte]
+// must match order for teamEnum
+func (te teamEnum) string() string {
+	return [...]string{"unknown", "neutral", "blue", "red", "acheron"}[te]
 }
 
-func findPlayerTeam(arg string) playerTeamEnum {
-	for ndx := 0; ndx < len(legalPlayerTeams); ndx++ {
-		if legalPlayerTeams[ndx] == arg {
-			return playerTeamEnum(ndx)
+func findTeam(arg string) teamEnum {
+	for ndx := 0; ndx < len(legalTeams); ndx++ {
+		if legalTeams[ndx] == arg {
+			return teamEnum(ndx)
 		}
 	}
 
-	return playerTeamEnum(unknownTeam)
+	return teamEnum(unknownTeam)
 }
 
 type playerType struct {
 	name string
-	rank playerRankEnum
-	team playerTeamEnum
+	rank rankEnum
+	team teamEnum
 	uuid string
 }
 
@@ -105,14 +105,14 @@ func newPlayer(name, id string, rank string, team string) (*playerType, error) {
 	}
 
 	result := playerType{name: name, uuid: id}
-	playerRank := findPlayerRank(rank)
+	playerRank := findRank(rank)
 	if playerRank == unknownRank {
 		return nil, errors.New("unknown rank")
 	}
 
 	result.rank = playerRank
 
-	playerTeam := findPlayerTeam(team)
+	playerTeam := findTeam(team)
 	if playerTeam == unknownTeam {
 		return nil, errors.New("unknown team")
 	}

@@ -176,7 +176,7 @@ func findShipName(arg string) shipNameEnum {
 	return shipNameEnum(unknownShipName)
 }
 
-func findShipClassTeam(arg shipNameEnum) (shipClassEnum, playerTeamEnum) {
+func findShipClassTeam(arg shipNameEnum) (shipClassEnum, teamEnum) {
 	switch arg {
 	case lazorShipName:
 		fallthrough
@@ -267,10 +267,10 @@ type shipType struct {
 	condition shipConditionEnum
 	docked    bool
 	shipName  shipNameEnum
-	position  locationType
+	position  *locationType
 	owner     string // player UUID
 	shipClass shipClassEnum
-	team      playerTeamEnum
+	team      teamEnum
 	uuid      string // ship UUID
 
 	// ship systems as percentage operational (values 100 to 0)
@@ -303,7 +303,7 @@ const maxShips = maxShipTeam * 2
 type shipArrayType [maxShips]*shipType
 
 // newShip convenience function to populate struct
-func newShip(shipName, shipOwner string) (*shipType, error) {
+func newShip(shipName, shipOwner string, gt *gameType) (*shipType, error) {
 	if len(shipName) < 1 {
 		return nil, errors.New("empty ship name")
 	}
@@ -320,8 +320,11 @@ func newShip(shipName, shipOwner string) (*shipType, error) {
 	shipClass, playerTeam := findShipClassTeam(shipName2)
 
 	st := shipType{condition: greenCondition, shipName: shipName2, owner: shipOwner, shipClass: shipClass, team: playerTeam}
-	// FIXME st.position = randomLocation()
+	st.position = randomShipLocation(gt)
 	st.uuid = uuid.NewString()
+
+	// FIXME, should be somewhere else?
+	setShip(gt.board[st.position.yy][st.position.xx], "A", st.uuid)
 
 	st.computer = 100
 	st.lifeSupport = 100
@@ -368,8 +371,8 @@ const testShipName1 = "nike"
 const testShipUuid1 = "ship1"
 
 // testShip1 returns test ship1
-func testShip1() *shipType {
-	ns1, _ := newShip(testShipName1, testPlayerID1)
+func testShip1(gt *gameType) *shipType {
+	ns1, _ := newShip(testShipName1, testPlayerID1, gt)
 	ns1.uuid = testShipUuid1
 	return ns1
 }
@@ -378,8 +381,8 @@ const testShipName2 = "welink"
 const testShipUuid2 = "ship2"
 
 // testShip2 returns test ship2
-func testShip2() *shipType {
-	ns2, _ := newShip(testShipName2, testPlayerID2)
+func testShip2(gt *gameType) *shipType {
+	ns2, _ := newShip(testShipName2, testPlayerID2, gt)
 	ns2.uuid = testShipUuid2
 	return ns2
 }
@@ -492,7 +495,7 @@ func shipFindByOwner(target string, sat shipArrayType) int {
 
 // commandShipCreate services command
 func commandShipCreate(ct commandType, gt *gameType) error {
-	st, err := newShip(ct.args[1], ct.player)
+	st, err := newShip(ct.args[1], ct.player, gt)
 	if err != nil {
 		return errors.New("commandShip creation failure")
 	}
