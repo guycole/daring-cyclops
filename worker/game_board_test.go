@@ -9,11 +9,7 @@ import (
 )
 
 func TestGameBoard1(t *testing.T) {
-	gt := newGame("testGame", standardBoard)
-
-	//for ndx := 0; ndx < maxStarGates; ndx++ {
-	//	log.Println(gt.starGates[ndx])
-	//}
+	gt := newGame("testGame", emptyBoard)
 
 	//planetDump(gt.planets)
 	//starDump(gt.stars)
@@ -23,15 +19,25 @@ func TestGameBoard1(t *testing.T) {
 		t.Error("testShip1 returns nil")
 	}
 
+	shipAdd(ns1, &gt.ships, &gt.board)
+
 	ns2 := testShip2(gt)
 	if ns2 == nil {
 		t.Error("testShip2 returns nil")
 	}
 
+	shipAdd(ns2, &gt.ships, &gt.board)
+
 	log.Println("------------")
 	log.Println(ns1.position)
 	log.Println(ns2.position)
 	log.Println("------------")
+
+	newLoc := newLocation(5, 5)
+	shipMove(testShipUuid1, *newLoc, &gt.ships, &gt.board)
+
+	newLoc = newLocation(3, 3)
+	shipMove(testShipUuid1, *newLoc, &gt.ships, &gt.board)
 
 	boardDump(gt.board)
 }

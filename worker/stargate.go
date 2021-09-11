@@ -84,12 +84,14 @@ func starGateAdjacent(candidate *locationType) (gateNdx, locNdx int) {
 	return -1, -1
 }
 
+// planetsAdd(pat *planetArrayType, bat *boardArrayType) {
+
 // generate all stargates
-func starGatesAdd(gt *gameType) {
+func starGatesAdd(sat *starGateArrayType, bat *boardArrayType) {
 	for ndx := 0; ndx < maxStarGates; ndx++ {
 		sg := newStarGate(ndx)
-		gt.starGates[ndx] = sg
-		setStarGate(gt.board[sg.position.yy][sg.position.xx], sg.uuid)
+		sat[ndx] = sg
+		setStarGate(bat[sg.position.yy][sg.position.xx], sg.uuid)
 	}
 }
 

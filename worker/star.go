@@ -31,29 +31,33 @@ func newStar(position *locationType) *starType {
 }
 
 // generate all stars
-func starsAdd(gt *gameType) {
+func starsAdd(sat *starArrayType, bat *boardArrayType) {
 	quarter := int(maxStars / 4)
 	starPopulation := 3*quarter + rand.Intn(quarter)
 	log.Printf("starPopulation:%d", starPopulation)
 	for ndx := 0; ndx < starPopulation; ndx++ {
-		position := randomCelestialLocation(gt)
+		position := randomCelestialLocation(*bat)
 		if position == nil {
 			log.Println("skipping nil position for star")
 		} else {
 			star := newStar(position)
-			gt.stars[ndx] = star
-			setStar(gt.board[star.position.yy][star.position.xx], star.uuid)
+			sat[ndx] = star
+			setStar(bat[star.position.yy][star.position.xx], star.uuid)
 		}
 	}
 }
 
-// starDelete removes planet from array
-func starDelete(target string, sat *starArrayType) int {
+// starDelete changes star to black hole
+func starDelete(target string, sat *starArrayType, bat *boardArrayType) int {
 	log.Printf("starDelete:%s", target)
 
 	for ndx := 0; ndx < maxStars; ndx++ {
 		if sat[ndx] != nil {
 			if strings.Compare(sat[ndx].uuid, target) == 0 {
+				// convert to black hole
+				bc := bat[sat[ndx].position.yy][sat[ndx].position.xx]
+				starToBlackHole(bc)
+				// remove from star array
 				sat[ndx] = nil
 				return ndx
 			}

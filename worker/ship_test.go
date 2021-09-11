@@ -50,6 +50,7 @@ func TestShipClassTeam(t *testing.T) {
 		{lazorShipName, scoutShip, blueTeam},
 		{welinkShipName, flagShip, redTeam},
 	}
+
 	for _, ndx := range tests {
 		shipClass, playerTeam := findShipClassTeam(ndx.candidate)
 		if shipClass != ndx.shipClass {
@@ -64,7 +65,9 @@ func TestShipClassTeam(t *testing.T) {
 func TestNewOkShip(t *testing.T) {
 	gt := newGame("testGame", emptyBoard)
 
-	result, err := newShip("nike", testPlayerID1, gt)
+	position := randomShipLocation(gt.board)
+
+	result, err := newShip("nike", testPlayerID1, position)
 	if err != nil {
 		t.Errorf("newShip error:%s", err)
 	}
@@ -101,7 +104,9 @@ func TestNewOkShip(t *testing.T) {
 func TestNewBadShip01(t *testing.T) {
 	gt := newGame("testGame", emptyBoard)
 
-	result, err := newShip("", testPlayerID2, gt)
+	position := randomShipLocation(gt.board)
+
+	result, err := newShip("", testPlayerID2, position)
 	if err == nil {
 		t.Error("newShip error:expecting bad shipName")
 	}
@@ -114,7 +119,9 @@ func TestNewBadShip01(t *testing.T) {
 func TestNewBadShip02(t *testing.T) {
 	gt := newGame("testGame", emptyBoard)
 
-	result, err := newShip("nike", "", gt)
+	position := randomShipLocation(gt.board)
+
+	result, err := newShip("nike", "", position)
 	if err == nil {
 		t.Error("newShipq error:expecting bad player ID")
 	}
@@ -127,7 +134,9 @@ func TestNewBadShip02(t *testing.T) {
 func TestNewBadShip03(t *testing.T) {
 	gt := newGame("testGame", emptyBoard)
 
-	result, err := newShip("bogus", testPlayerID2, gt)
+	position := randomShipLocation(gt.board)
+
+	result, err := newShip("bogus", testPlayerID2, position)
 	if err == nil {
 		t.Error("newShip error:expecting bad shipName")
 	}
@@ -138,14 +147,12 @@ func TestNewBadShip03(t *testing.T) {
 }
 
 func TestShipArray(t *testing.T) {
-	var sat shipArrayType
+	gt := newGame("testGame", emptyBoard)
 
-	bluePopulation, redPopulation := shipCensus(sat)
+	bluePopulation, redPopulation := shipCensus(gt.ships)
 	if bluePopulation != 0 && redPopulation != 0 {
 		t.Errorf("shipCensus error:%d %d", bluePopulation, redPopulation)
 	}
-
-	gt := newGame("testGame", emptyBoard)
 
 	ns1 := testShip1(gt)
 	if ns1 == nil {
@@ -158,70 +165,70 @@ func TestShipArray(t *testing.T) {
 	}
 
 	// add ship to ship array, should be first array element
-	ndx := shipAdd(ns1, &sat)
+	ndx := shipAdd(ns1, &gt.ships, &gt.board)
 	if ndx != 0 {
 		t.Errorf("shipAdd returns wrong index %d", ndx)
 	}
 
 	// add ship to ship array, should be second array element
-	ndx = shipAdd(ns2, &sat)
+	ndx = shipAdd(ns2, &gt.ships, &gt.board)
 	if ndx != 1 {
 		t.Errorf("shipAddAdd returns wrong index %d", ndx)
 	}
 
-	bluePopulation, redPopulation = shipCensus(sat)
+	bluePopulation, redPopulation = shipCensus(gt.ships)
 	if bluePopulation != 1 && redPopulation != 1 {
 		t.Errorf("shipCensus error:%d %d", bluePopulation, redPopulation)
 	}
 
 	// shipDump(sat)
 
-	ndx = shipFind(testShipUuid1, sat)
+	ndx = shipFind(testShipUuid1, gt.ships)
 	if ndx != 0 {
 		t.Errorf("shipFind returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByName(nikeShipName, sat)
+	ndx = shipFindByName(nikeShipName, gt.ships)
 	if ndx != 0 {
 		t.Errorf("shipFindByName returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByOwner(testPlayerID1, sat)
+	ndx = shipFindByOwner(testPlayerID1, gt.ships)
 	if ndx != 0 {
 		t.Errorf("shipFindByOwner returns wrong index %d", ndx)
 	}
 
-	ndx = shipFind(testShipUuid2, sat)
+	ndx = shipFind(testShipUuid2, gt.ships)
 	if ndx != 1 {
 		t.Errorf("shipFind returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByName(welinkShipName, sat)
+	ndx = shipFindByName(welinkShipName, gt.ships)
 	if ndx != 1 {
 		t.Errorf("shipFindByName returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByOwner(testPlayerID2, sat)
+	ndx = shipFindByOwner(testPlayerID2, gt.ships)
 	if ndx != 1 {
 		t.Errorf("shipFindByOwner returns wrong index %d", ndx)
 	}
 
-	ndx = shipFind("bogus", sat)
+	ndx = shipFind("bogus", gt.ships)
 	if ndx >= 0 {
 		t.Errorf("shipFind returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByOwner("bogus", sat)
+	ndx = shipFindByOwner("bogus", gt.ships)
 	if ndx >= 0 {
 		t.Errorf("shipFindByOwner returns wrong index %d", ndx)
 	}
 
-	ndx = shipDelete(testShipUuid1, &sat)
+	ndx = shipDelete(testShipUuid1, &gt.ships, &gt.board)
 	if ndx != 0 {
 		t.Errorf("shipDelete returns wrong index %d", ndx)
 	}
 
-	bluePopulation, redPopulation = shipCensus(sat)
+	bluePopulation, redPopulation = shipCensus(gt.ships)
 	if bluePopulation != 0 && redPopulation != 1 {
 		t.Errorf("shipCensus error:%d %d", bluePopulation, redPopulation)
 	}

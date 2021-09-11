@@ -33,7 +33,7 @@ func randomLocation(limitY, limitX int) *locationType {
 }
 
 // return a random location for stars and planets
-func randomCelestialLocation(gt *gameType) *locationType {
+func randomCelestialLocation(bat boardArrayType) *locationType {
 	for ndx := 0; ndx < 100; ndx++ {
 		position := randomLocation(maxBoardSideY, maxBoardSideX)
 
@@ -44,7 +44,7 @@ func randomCelestialLocation(gt *gameType) *locationType {
 			continue
 		}
 
-		boardCell := gt.board[position.yy][position.xx]
+		boardCell := bat[position.yy][position.xx]
 		if !testForCelestial(*boardCell) {
 			return position
 		}
@@ -56,10 +56,10 @@ func randomCelestialLocation(gt *gameType) *locationType {
 }
 
 // return a random location for ships
-func randomShipLocation(gt *gameType) *locationType {
+func randomShipLocation(bat boardArrayType) *locationType {
 	for ndx := 0; ndx < 100; ndx++ {
 		position := randomLocation(maxBoardSideY, maxBoardSideX)
-		boardCell := gt.board[position.yy][position.xx]
+		boardCell := bat[position.yy][position.xx]
 		if testForEmpty(*boardCell) {
 			return position
 		}

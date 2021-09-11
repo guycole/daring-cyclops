@@ -49,7 +49,7 @@ func boardDump(bat boardArrayType) {
 
 		for xx := 0; xx < maxBoardSideX; xx++ {
 			if bat[yy][xx] == nil {
-				buffer += "oo"
+				buffer += "o"
 			} else {
 				buffer += boardCellToken(*bat[yy][xx])
 			}
@@ -67,9 +67,9 @@ func boardGenerator(gt *gameType) {
 		log.Println("generating empty board")
 	case standardBoard:
 		log.Println("generating standard board")
-		starGatesAdd(gt)
-		starsAdd(gt)
-		planetsAdd(gt)
+		starGatesAdd(&gt.starGates, &gt.board)
+		starsAdd(&gt.stars, &gt.board)
+		planetsAdd(&gt.planets, &gt.board)
 	default:
 		log.Println("unsupported boardType in boardGenerator")
 	}

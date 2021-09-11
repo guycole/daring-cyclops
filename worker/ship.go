@@ -156,14 +156,14 @@ var legalShipNames = [...]string{
 // must match order for shipNameEnum
 func (sne shipNameEnum) string() string {
 	return [...]string{"unknown",
-		"lazor", "nike", "rapier", "saber", "vanir",
-		"levant", "nimrod", "ronin", "scorpion", "viper",
-		"lynx", "napier", "rigel", "spartan", "voyager",
-		"lotus", "nemesis", "reliant", "shogun", "vega",
-		"dirk", "griffin", "hornet", "talon", "wasp",
-		"demon", "gargoyle", "hunter", "triton", "wolf",
-		"delphos", "gibbet", "hansen", "tirade", "wight",
-		"dagon", "gordon", "hydra", "tendril", "welink"}[sne]
+		"Lazor", "Nike", "Rapier", "Saber", "Vanir",
+		"Levant", "Nimrod", "Ronin", "Scorpion", "Viper",
+		"Lynx", "Napier", "Rigel", "Spartan", "Voyager",
+		"Lotus", "Nemesis", "Reliant", "Shogun", "Vega",
+		"Dirk", "Griffin", "Hornet", "Talon", "Wasp",
+		"Demon", "Gargoyle", "Hunter", "Triton", "Wolf",
+		"Delphos", "Gibbet", "Hansen", "Tirade", "Wight",
+		"Dagon", "Gordon", "Hydra", "Tendril", "Welink"}[sne]
 }
 
 func findShipName(arg string) shipNameEnum {
@@ -303,7 +303,11 @@ const maxShips = maxShipTeam * 2
 type shipArrayType [maxShips]*shipType
 
 // newShip convenience function to populate struct
-func newShip(shipName, shipOwner string, gt *gameType) (*shipType, error) {
+func newShip(shipName, shipOwner string, position *locationType) (*shipType, error) {
+	if position == nil {
+		return nil, errors.New("nil position")
+	}
+
 	if len(shipName) < 1 {
 		return nil, errors.New("empty ship name")
 	}
@@ -319,12 +323,8 @@ func newShip(shipName, shipOwner string, gt *gameType) (*shipType, error) {
 
 	shipClass, playerTeam := findShipClassTeam(shipName2)
 
-	st := shipType{condition: greenCondition, shipName: shipName2, owner: shipOwner, shipClass: shipClass, team: playerTeam}
-	st.position = randomShipLocation(gt)
+	st := shipType{condition: greenCondition, shipName: shipName2, owner: shipOwner, shipClass: shipClass, position: position, team: playerTeam}
 	st.uuid = uuid.NewString()
-
-	// FIXME, should be somewhere else?
-	setShip(gt.board[st.position.yy][st.position.xx], "A", st.uuid)
 
 	st.computer = 100
 	st.lifeSupport = 100
@@ -368,31 +368,36 @@ func newShip(shipName, shipOwner string, gt *gameType) (*shipType, error) {
 }
 
 const testShipName1 = "nike"
-const testShipUuid1 = "ship1"
+const testShipUuid1 = "ship1uuid"
 
 // testShip1 returns test ship1
 func testShip1(gt *gameType) *shipType {
-	ns1, _ := newShip(testShipName1, testPlayerID1, gt)
+	position := randomShipLocation(gt.board)
+	ns1, _ := newShip(testShipName1, testPlayerID1, position)
 	ns1.uuid = testShipUuid1
 	return ns1
 }
 
 const testShipName2 = "welink"
-const testShipUuid2 = "ship2"
+const testShipUuid2 = "ship2uuid"
 
 // testShip2 returns test ship2
 func testShip2(gt *gameType) *shipType {
-	ns2, _ := newShip(testShipName2, testPlayerID2, gt)
+	position := randomShipLocation(gt.board)
+	ns2, _ := newShip(testShipName2, testPlayerID2, position)
 	ns2.uuid = testShipUuid2
 	return ns2
 }
 
 // shipAdd adds ship to array
-func shipAdd(st *shipType, sat *shipArrayType) int {
+func shipAdd(st *shipType, sat *shipArrayType, bat *boardArrayType) int {
 	log.Printf("shipAdd:%s %s", st.shipName.string(), st.uuid)
+
+	symbol := st.shipName.string()[0:1]
 
 	for ndx := 0; ndx < maxShips; ndx++ {
 		if sat[ndx] == nil {
+			setShip(bat[st.position.yy][st.position.xx], symbol, st.uuid)
 			sat[ndx] = st
 			return ndx
 		}
@@ -421,12 +426,13 @@ func shipCensus(sat shipArrayType) (int, int) {
 }
 
 // shipDelete removes ship from array
-func shipDelete(target string, sat *shipArrayType) int {
+func shipDelete(target string, sat *shipArrayType, bat *boardArrayType) int {
 	log.Printf("shipDelete:%s", target)
 
 	for ndx := 0; ndx < maxShips; ndx++ {
 		if sat[ndx] != nil {
 			if strings.Compare(sat[ndx].uuid, target) == 0 {
+				clearShip(bat[sat[ndx].position.yy][sat[ndx].position.xx])
 				sat[ndx] = nil
 				return ndx
 			}
@@ -493,9 +499,33 @@ func shipFindByOwner(target string, sat shipArrayType) int {
 	return -1
 }
 
+// shipMove
+func shipMove(shipID string, newLoc locationType, sat *shipArrayType, bat *boardArrayType) error {
+	log.Printf("shipMove:%s", shipID)
+
+	ndx := shipFind(shipID, *sat)
+	if ndx < 0 {
+		return errors.New("moveShip ship not found")
+	}
+
+	log.Println(sat[ndx])
+
+	clearShip(bat[sat[ndx].position.yy][sat[ndx].position.xx])
+
+	// need collision logic
+
+	sat[ndx].position = &newLoc
+	symbol := sat[ndx].shipName.string()[0:1]
+
+	setShip(bat[sat[ndx].position.yy][sat[ndx].position.xx], symbol, sat[ndx].uuid)
+
+	return nil
+}
+
 // commandShipCreate services command
 func commandShipCreate(ct commandType, gt *gameType) error {
-	st, err := newShip(ct.args[1], ct.player, gt)
+	position := randomShipLocation(gt.board)
+	st, err := newShip(ct.args[1], ct.player, position)
 	if err != nil {
 		return errors.New("commandShip creation failure")
 	}
@@ -521,7 +551,7 @@ func commandShipCreate(ct commandType, gt *gameType) error {
 		}
 	}
 
-	shipAdd(st, &gt.ships)
+	shipAdd(st, &gt.ships, &gt.board)
 
 	return nil
 }
@@ -533,7 +563,7 @@ func commandShipDelete(ct commandType, gt *gameType) error {
 		return errors.New("deleteShip player id not found")
 	}
 
-	shipDelete(gt.ships[owner].uuid, &gt.ships)
+	shipDelete(gt.ships[owner].uuid, &gt.ships, &gt.board)
 
 	return nil
 }

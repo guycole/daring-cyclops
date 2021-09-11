@@ -32,18 +32,18 @@ func newPlanet(position *locationType) *planetType {
 }
 
 // generate all planets
-func planetsAdd(gt *gameType) {
+func planetsAdd(pat *planetArrayType, bat *boardArrayType) {
 	quarter := int(maxPlanets / 4)
 	planetPopulation := 3*quarter + rand.Intn(quarter)
 	log.Printf("planetPopulation:%d", planetPopulation)
 	for ndx := 0; ndx < planetPopulation; ndx++ {
-		position := randomCelestialLocation(gt)
+		position := randomCelestialLocation(*bat)
 		if position == nil {
 			log.Println("skipping nil position for planet")
 		} else {
 			planet := newPlanet(position)
-			gt.planets[ndx] = planet
-			setPlanet(gt.board[planet.position.yy][planet.position.xx], planet.uuid)
+			pat[ndx] = planet
+			setPlanet(bat[planet.position.yy][planet.position.xx], planet.uuid)
 		}
 	}
 }
@@ -70,13 +70,17 @@ func planetCensus(pat planetArrayType) (int, int, int) {
 	return neutralPopulation, bluePopulation, redPopulation
 }
 
-// planetDelete removes planet from array
-func planetDelete(target string, pat *planetArrayType) int {
+// planetDelete removes planet from map
+func planetDelete(target string, pat *planetArrayType, bat *boardArrayType) int {
 	log.Printf("planetDelete:%s", target)
 
 	for ndx := 0; ndx < maxPlanets; ndx++ {
 		if pat[ndx] != nil {
 			if strings.Compare(pat[ndx].uuid, target) == 0 {
+				// remove planet from map
+				bc := bat[pat[ndx].position.yy][pat[ndx].position.xx]
+				clearPlanet(bc)
+				// remove from planet array
 				pat[ndx] = nil
 				return ndx
 			}

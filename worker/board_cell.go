@@ -18,20 +18,19 @@ func (bte boardTokenEnum) String() string {
 }
 
 type boardCellType struct {
-	// celestial objects without uuid
+	// celestial objects without token uuid
 	acheronVoid bool
 	blackHole   bool
 
-	// celestial objects with uuid
-	planet      bool
-	star        bool
-	starGate    bool
-	celestialID string // uuid
+	// celestial objects with token uuid
+	planet   bool
+	star     bool
+	starGate bool
 
-	// player object without uuid
+	// player object without token uuid
 	mine bool
 
-	// player object with uuid
+	// player object with token uuid
 	ship       bool
 	shipSymbol string
 
@@ -43,15 +42,21 @@ func newBoardCell() *boardCellType {
 	return &result
 }
 
-/*
-func setAcheronVoid(bc boardCellType) {
+func setAcheronVoid(bc *boardCellType) {
 	bc.acheronVoid = true
 }
 
-func setBlackHole(bc boardCellType) {
+func setBlackHole(bc *boardCellType) {
 	bc.blackHole = true
 }
-*/
+
+func clearPlanet(bc *boardCellType) {
+	if !bc.planet {
+		log.Println("attempting to clearPlanet when none declared")
+	}
+
+	bc.planet = false
+}
 
 func setPlanet(bc *boardCellType, uuid string) {
 	if testForCelestial(*bc) {
@@ -60,7 +65,15 @@ func setPlanet(bc *boardCellType, uuid string) {
 	}
 
 	bc.planet = true
-	bc.celestialID = uuid
+	bc.tokenID = uuid
+}
+
+func clearShip(bc *boardCellType) {
+	if !bc.ship {
+		log.Println("attempting to clearShip when none declared")
+	}
+
+	bc.ship = false
 }
 
 func setShip(bc *boardCellType, symbol, uuid string) {
@@ -81,7 +94,17 @@ func setStar(bc *boardCellType, uuid string) {
 	}
 
 	bc.star = true
-	bc.celestialID = uuid
+	bc.tokenID = uuid
+}
+
+// convert a star to black hole
+func starToBlackHole(bc *boardCellType) {
+	if !bc.blackHole {
+		log.Println("attempt to convert start to black hole when none declared")
+	}
+
+	bc.blackHole = true
+	bc.star = false
 }
 
 func setStarGate(bc *boardCellType, uuid string) {
@@ -91,7 +114,7 @@ func setStarGate(bc *boardCellType, uuid string) {
 	}
 
 	bc.starGate = true
-	bc.celestialID = uuid
+	bc.tokenID = uuid
 }
 
 // return true if cell contains celestial object
