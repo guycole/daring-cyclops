@@ -268,3 +268,38 @@ func TestCreateDeleteShip(t *testing.T) {
 
 	//shipDump(gt.ships)
 }
+
+func TestCreateMoveShip(t *testing.T) {
+	gt := newGame("testGame", emptyBoard)
+
+	position1 := newLocation(36, 36)
+	position2 := newLocation(40, 33)
+
+	ns1, err := newShip("nike", testPlayerID1, position1)
+	if err != nil {
+		t.Errorf("newShip error:%s", err)
+	}
+
+	shipAdd(ns1, &gt.ships, &gt.board)
+
+	bc := gt.board[position1.yy][position1.xx]
+	if !bc.ship {
+		t.Error("board not contain ship at position1")
+	}
+
+	shipMove(ns1.uuid, *position2, &gt.ships, &gt.board)
+
+	bc = gt.board[position1.yy][position1.xx]
+	if bc.ship {
+		t.Error("board should not contain ship at position1")
+	}
+
+	bc = gt.board[position2.yy][position2.xx]
+	if !bc.ship {
+		t.Error("board not contain ship at position2")
+	}
+
+	if ns1.position.yy != position2.yy || ns1.position.xx != position2.xx {
+		t.Error("ship position not match expected position")
+	}
+}
