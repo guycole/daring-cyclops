@@ -12,7 +12,7 @@ import (
 
 var rdb *redis.Client
 
-// Banner splash message
+// banner splash message
 const banner = "Daring Cyclops Worker V0.0"
 
 // redis begin
