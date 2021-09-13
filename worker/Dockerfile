@@ -11,7 +11,7 @@ LABEL build_date="2021-09-04"
 LABEL description="daring-cyclops-worker"
 LABEL maintainer="guycole@gmail.com"
 #
-RUN apk add git
+#RUN apk add git
 #
 WORKDIR /app
 #
@@ -27,7 +27,7 @@ RUN go build -o /worker
 # This is for documentation purposes only.
 # To actually open the port, runtime parameters
 # must be supplied to the docker command.
-EXPOSE 8080
+#EXPOSE 8080
 
 # (Optional) environment variable that our dockerised
 # application can make use of. The value of environment

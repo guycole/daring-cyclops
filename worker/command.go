@@ -110,6 +110,13 @@ func findCommandDuration(arg commandGameEnum) int {
 	return 1
 }
 
+// serialized as JSON in redis
+type commandRaw struct {
+	player  string   `json:"playerId"`
+	request string   `json:"requestId"`
+	command []string `json:"command"`
+}
+
 // commandType single linked list of commands (for each event)
 type commandType struct {
 	player  string // player uuid
