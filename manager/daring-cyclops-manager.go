@@ -10,6 +10,14 @@ import (
 	redis "github.com/go-redis/redis/v8"
 )
 
+// games
+type games struct {
+	age       int
+	player    int
+	scoreBlue int
+	scoreRed  int
+}
+
 var ctx = context.Background()
 var rdb *redis.Client
 
@@ -32,6 +40,8 @@ func connectRedis() {
 	if err != nil {
 		panic(err)
 	}
+
+	// game management
 
 	/*
 		rdb = redis.NewClient(&redis.Options{
