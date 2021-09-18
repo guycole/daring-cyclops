@@ -10,6 +10,7 @@ type gameMasterType struct {
 	redScore  int
 }
 
+/*
 const maxGames = 5
-
 type masterArrayType [maxGames]*gameMasterType
+*/

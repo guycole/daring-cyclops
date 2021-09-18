@@ -4,9 +4,13 @@
 package main
 
 import (
+	"encoding/json"
+
+	"context"
 	"errors"
 	"log"
-	"strings"
+
+	redis "github.com/go-redis/redis/v8"
 )
 
 // rankEnum
@@ -82,12 +86,11 @@ func findTeam(arg string) teamEnum {
 }
 
 type playerType struct {
-	email string
-	name  string
-	rank  rankEnum
-	score int
-	team  teamEnum
-	uuid  string
+	email string   `json:"email"`
+	name  string   `json:"name"`
+	rank  rankEnum `json:"rank"`
+	score int      `json:"score"`
+	team  teamEnum `json:"team"`
 }
 
 const maxTeamPlayers = 5
@@ -97,16 +100,16 @@ const maxPlayers = maxTeamPlayers * 2
 type playerArrayType [maxPlayers]*playerType
 
 // newPlayer convenience function to populate struct
-func newPlayer(name, id string, rank string, team string) (*playerType, error) {
-	if len(id) < 1 {
-		return nil, errors.New("bad player id")
+func newPlayer(email, name string, rank string, team string) (*playerType, error) {
+	if len(email) < 1 {
+		return nil, errors.New("bad email")
 	}
 
 	if len(name) < 1 {
 		return nil, errors.New("bad player name")
 	}
 
-	result := playerType{name: name, uuid: id}
+	result := playerType{email: email, name: name}
 	playerRank := findRank(rank)
 	if playerRank == unknownRank {
 		return nil, errors.New("unknown rank")
@@ -124,142 +127,124 @@ func newPlayer(name, id string, rank string, team string) (*playerType, error) {
 	return &result, nil
 }
 
-const testPlayerID1 = "testId1"
+const testPlayerEmail1 = "test1@bogus.com"
 const testPlayerName1 = "testName1"
 
 // testPlayer1 returns test player1
 func testPlayer1() *playerType {
-	np1, _ := newPlayer(testPlayerName1, testPlayerID1, "cadet", "blue")
+	np1, _ := newPlayer(testPlayerEmail1, testPlayerName1, "cadet", "blue")
 	return np1
 }
 
-const testPlayerID2 = "testId2"
+const testPlayerEmail2 = "test2@bogus.com"
 const testPlayerName2 = "testName2"
 
 // testPlayer2 returns test player2
 func testPlayer2() *playerType {
-	np2, _ := newPlayer(testPlayerName2, testPlayerID2, "admiral", "red")
+	np2, _ := newPlayer(testPlayerEmail2, testPlayerName2, "admiral", "red")
 	return np2
 }
 
-// playerAdd adds player to array
-func playerAdd(pt *playerType, pat *playerArrayType) int {
-	log.Printf("playerAdd:%s %s", pt.name, pt.uuid)
+/////////////////////////
 
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if pat[ndx] == nil {
-			pat[ndx] = pt
-			return ndx
-		}
-	}
-
-	return -1
+func (obj *playerType) marshalBinary() ([]byte, error) {
+	return json.Marshal(obj)
 }
 
-// playerCensus returns population of red/blue players
-func playerCensus(pat playerArrayType) (int, int) {
-	bluePopulation := 0
-	redPopulation := 0
-
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if pat[ndx] != nil {
-			switch pat[ndx].team {
-			case blueTeam:
-				bluePopulation++
-			case redTeam:
-				redPopulation++
-			}
-		}
+// UnmarshalBinary -
+func (obj *playerType) unmarshalBinary(data []byte) error {
+	if err := json.Unmarshal(data, &obj); err != nil {
+		log.Println("choke choke")
+		return err
 	}
-
-	return bluePopulation, redPopulation
-}
-
-// playerDelete removes player from array
-func playerDelete(target string, pat *playerArrayType) int {
-	log.Printf("playerDelete:%s", target)
-
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if pat[ndx] != nil {
-			if strings.Compare(pat[ndx].uuid, target) == 0 {
-				pat[ndx] = nil
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-
-// playerDump diagnostic
-func playerDump(pat playerArrayType) {
-	log.Println("=-=-=-= playerDump =-=-=-=")
-
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if pat[ndx] == nil {
-			log.Printf("%d nil", ndx)
-		} else {
-			rank := pat[ndx].rank.string()
-			team := pat[ndx].team.string()
-
-			log.Printf("%d %s %s %s %s", ndx, pat[ndx].name, rank, team, pat[ndx].uuid)
-		}
-	}
-
-	log.Println("=-=-=-= playerDump =-=-=-=")
-}
-
-// playerFind returns array index for player by uuid
-func playerFind(target string, pat playerArrayType) int {
-	for ndx := 0; ndx < maxPlayers; ndx++ {
-		if pat[ndx] != nil {
-			if strings.Compare(pat[ndx].uuid, target) == 0 {
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-
-/*
-// commandPlayerCreate services command
-func commandPlayerCreate(ct commandType, gt *gameType) error {
-	duplicate := playerFind(ct.player, gt.players)
-	if duplicate >= 0 {
-		return errors.New("duplicate player id")
-	}
-
-	// TODO test for max players per side
-
-	np, err := newPlayer(ct.args[1], ct.player, ct.args[2], ct.args[3])
-	if err != nil {
-		return errors.New("newPlayer creation failure")
-	}
-
-	if np == nil {
-		return errors.New("newPlayer returns nil")
-	}
-
-	playerAdd(np, &gt.players)
 
 	return nil
 }
-*/
 
-/*
-// commandPlayerDelete services command
-func commandPlayerDelete(ct commandType, gt *gameType) {
-	// TODO delete ship
-	playerDelete(ct.player, &gt.players)
+/////////////////////////
+
+func getPlayer(rdb *redis.Client, key string) *playerType {
+	log.Println("getPlayer")
+	log.Println(key)
+
+	p := rdb.Get(context.Background(), key)
+	log.Println("xoxoxoxoxoxo")
+	log.Println(p)
+
+	/*
+		pong, err := rdb.Ping(context.Background()).Result()
+		if err == nil {
+			log.Println(pong)
+		} else {
+			log.Println(err)
+		}
+	*/
+
+	return nil
 }
-*/
+
+func setPlayer(rdb *redis.Client, pt *playerType) {
+	message4 := `{"email":"email2", "name":"name2", "rank":1, "score":123, "team":2}`
+
+	var obj playerType
+	err3 := obj.unmarshalBinary([]byte(message4))
+	log.Println(err3)
+	log.Println(obj)
+
+	log.Println("-x--x-x-x-x-x-x")
+
+	log.Println("setPlayer")
+	log.Println(pt)
+
+	jpt, err2 := pt.marshalBinary()
+	log.Println(jpt)
+	log.Println(err2)
+
+	key := pt.name
+
+	err := rdb.Set(context.Background(), key, jpt, 0).Err()
+	if err != nil {
+		log.Println(err)
+		//		log.Error(err)
+	}
+
+	log.Println("select")
+
+	p, _ := rdb.Get(context.Background(), key).Result()
+	log.Println(p)
+
+	/*
+		cacheData, err := rdb.Get(ctx, ipaddress).Result()
+		if err != nil {
+			return nil, err
+		}
+
+		var obj IPStackResponseSuccess
+		err = obj.UnmarshalBinary([]byte(cacheData))
+		if err != nil {
+			return nil, err
+		}
+
+		return &obj, nil
+	*/
+
+	log.Println("exit exit")
+}
 
 /*
-	//store in redis
-	err = rdb.Set(ctx, ipaddress, &ipStackResponseSuccess, time.Hour*24).Err()
-	if err != nil {
-		log.Error(err)
-	}
-	return &ipStackResponseSuccess, nil
+func setPlayer(c *RedisClient, key string, value interface{}) error {
+    p, err := json.Marshal(value)
+    if err != nil {
+       return err
+    }
+    return c.Set(key, p)
+}
+
+func get(c *RedisClient, key string, dest interface{}) error {
+    p, err := c.Get(key)
+    if err != nil {
+       return err
+    }
+    return json.Unmarshal(p, dest)
+}
 */

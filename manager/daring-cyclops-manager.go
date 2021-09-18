@@ -5,34 +5,28 @@ package main
 import (
 	"context"
 	"log"
+	"math/rand"
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
 )
 
-// games
-type games struct {
-	age       int
-	player    int
-	scoreBlue int
-	scoreRed  int
+// gameManagerType, only one instance
+type gameManagerType struct {
+	games gameArrayType
+	rdb   *redis.Client
 }
 
 var ctx = context.Background()
-var rdb *redis.Client
+
+//var rdb *redis.Client
 
 // banner splash message
 const banner = "Daring Cyclops Manager V0.0"
 
 // redis begin
-func connectRedis() {
+func connectRedis(rdb *redis.Client) {
 	// FIXME should be config map
-
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
 
 	log.Println(ctx)
 
@@ -53,7 +47,7 @@ func connectRedis() {
 
 	pong, err := rdb.Ping(ctx).Result()
 	if err == nil {
-		log.Println(pong, err)
+		log.Println(pong)
 	} else {
 		log.Println(err)
 	}
@@ -62,13 +56,31 @@ func connectRedis() {
 
 // redis end
 
+func newManager() *gameManagerType {
+	log.Println("new manager")
+
+	rand.Seed(time.Now().UnixNano())
+
+	gmt := gameManagerType{}
+
+	gmt.rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	return &gmt
+}
+
 func main() {
 	log.Println(banner)
+
+	manager := newManager()
+	connectRedis(manager.rdb)
 
 	for {
 		log.Println("sleeping...")
 		time.Sleep(8 * time.Second)
-		connectRedis()
+		connectRedis(manager.rdb)
 	}
-
 }
