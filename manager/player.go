@@ -85,22 +85,16 @@ func findTeam(arg string) teamEnum {
 	return teamEnum(unknownTeam)
 }
 
-type playerType struct {
-	email string   `json:"email"`
-	name  string   `json:"name"`
-	rank  rankEnum `json:"rank"`
-	score int      `json:"score"`
-	team  teamEnum `json:"team"`
+type PlayerType struct {
+	Email string
+	Name  string
+	Rank  rankEnum
+	Score int
+	Team  teamEnum
 }
 
-const maxTeamPlayers = 5
-const maxPlayers = maxTeamPlayers * 2
-
-// playerArrayType contains all active players
-type playerArrayType [maxPlayers]*playerType
-
 // newPlayer convenience function to populate struct
-func newPlayer(email, name string, rank string, team string) (*playerType, error) {
+func newPlayer(email, name string, rank string, team string) (*PlayerType, error) {
 	if len(email) < 1 {
 		return nil, errors.New("bad email")
 	}
@@ -109,29 +103,46 @@ func newPlayer(email, name string, rank string, team string) (*playerType, error
 		return nil, errors.New("bad player name")
 	}
 
-	result := playerType{email: email, name: name}
+	result := PlayerType{Email: email, Name: name}
 	playerRank := findRank(rank)
 	if playerRank == unknownRank {
 		return nil, errors.New("unknown rank")
 	}
 
-	result.rank = playerRank
+	result.Rank = playerRank
 
 	playerTeam := findTeam(team)
 	if playerTeam == unknownTeam {
 		return nil, errors.New("unknown team")
 	}
 
-	result.team = playerTeam
+	result.Team = playerTeam
 
 	return &result, nil
+}
+
+func rankChange(pt *PlayerType, newRank rankEnum) {
+	// TODO issue 16
+	// test for consecutive rank
+	pt.Rank = newRank
+}
+
+func rankPromotion(pt *PlayerType) {
+	// TODO issue 16
+	// test score for rank promotion
+}
+
+func teamChange(pt *PlayerType, newTeam teamEnum) {
+	// TODO issue 17
+	// ensure only red/blue team selection
+	pt.Team = newTeam
 }
 
 const testPlayerEmail1 = "test1@bogus.com"
 const testPlayerName1 = "testName1"
 
 // testPlayer1 returns test player1
-func testPlayer1() *playerType {
+func testPlayer1() *PlayerType {
 	np1, _ := newPlayer(testPlayerEmail1, testPlayerName1, "cadet", "blue")
 	return np1
 }
@@ -140,111 +151,42 @@ const testPlayerEmail2 = "test2@bogus.com"
 const testPlayerName2 = "testName2"
 
 // testPlayer2 returns test player2
-func testPlayer2() *playerType {
+func testPlayer2() *PlayerType {
 	np2, _ := newPlayer(testPlayerEmail2, testPlayerName2, "admiral", "red")
 	return np2
 }
 
-/////////////////////////
+func getPlayer(rdb *redis.Client, key string) *PlayerType {
+	log.Printf("getPlayer:%s", key)
 
-func (obj *playerType) marshalBinary() ([]byte, error) {
-	return json.Marshal(obj)
-}
-
-// UnmarshalBinary -
-func (obj *playerType) unmarshalBinary(data []byte) error {
-	if err := json.Unmarshal(data, &obj); err != nil {
-		log.Println("choke choke")
-		return err
-	}
-
-	return nil
-}
-
-/////////////////////////
-
-func getPlayer(rdb *redis.Client, key string) *playerType {
-	log.Println("getPlayer")
-	log.Println(key)
-
-	p := rdb.Get(context.Background(), key)
-	log.Println("xoxoxoxoxoxo")
-	log.Println(p)
-
-	/*
-		pong, err := rdb.Ping(context.Background()).Result()
-		if err == nil {
-			log.Println(pong)
-		} else {
-			log.Println(err)
-		}
-	*/
-
-	return nil
-}
-
-func setPlayer(rdb *redis.Client, pt *playerType) {
-	message4 := `{"email":"email2", "name":"name2", "rank":1, "score":123, "team":2}`
-
-	var obj playerType
-	err3 := obj.unmarshalBinary([]byte(message4))
-	log.Println(err3)
-	log.Println(obj)
-
-	log.Println("-x--x-x-x-x-x-x")
-
-	log.Println("setPlayer")
-	log.Println(pt)
-
-	jpt, err2 := pt.marshalBinary()
-	log.Println(jpt)
-	log.Println(err2)
-
-	key := pt.name
-
-	err := rdb.Set(context.Background(), key, jpt, 0).Err()
+	rawJson, err := rdb.Get(context.Background(), key).Result()
 	if err != nil {
 		log.Println(err)
-		//		log.Error(err)
+		return nil
 	}
 
-	log.Println("select")
+	var pt PlayerType
+	err = json.Unmarshal([]byte(rawJson), &pt)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
 
-	p, _ := rdb.Get(context.Background(), key).Result()
-	log.Println(p)
-
-	/*
-		cacheData, err := rdb.Get(ctx, ipaddress).Result()
-		if err != nil {
-			return nil, err
-		}
-
-		var obj IPStackResponseSuccess
-		err = obj.UnmarshalBinary([]byte(cacheData))
-		if err != nil {
-			return nil, err
-		}
-
-		return &obj, nil
-	*/
-
-	log.Println("exit exit")
+	return &pt
 }
 
-/*
-func setPlayer(c *RedisClient, key string, value interface{}) error {
-    p, err := json.Marshal(value)
-    if err != nil {
-       return err
-    }
-    return c.Set(key, p)
-}
+func setPlayer(rdb *redis.Client, pt *PlayerType) {
+	log.Printf("setPlayer:%s", pt.Name)
 
-func get(c *RedisClient, key string, dest interface{}) error {
-    p, err := c.Get(key)
-    if err != nil {
-       return err
-    }
-    return json.Unmarshal(p, dest)
+	payload, err := json.Marshal(pt)
+	if err != nil {
+		log.Println(err)
+	}
+
+	key := pt.Name
+
+	err = rdb.Set(context.Background(), key, payload, 0).Err()
+	if err != nil {
+		log.Println(err)
+	}
 }
-*/

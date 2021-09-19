@@ -9,9 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
+const maxTeamPlayers = 5
+const maxPlayers = maxTeamPlayers * 2
+
+type playerArrayType [maxTeamPlayers]string
+
 // gameWorkerType, one for each game
 type gameWorkerType struct {
-	uuid string // game identifier
+	blueTeam playerArrayType
+	redTeam  playerArrayType
+	uuid     string // game identifier
 }
 
 const maxGames = 5
@@ -63,7 +70,8 @@ func gameDump(gat gameArrayType) {
 		if gat[ndx] == nil {
 			log.Printf("%d nil", ndx)
 		} else {
-			log.Printf("%d %s", ndx, gat[ndx].uuid)
+			bluePopulation, redPopulation := gamePlayerCensus(*gat[ndx])
+			log.Printf("%d %d %d %s", ndx, bluePopulation, redPopulation, gat[ndx].uuid)
 		}
 	}
 
@@ -81,4 +89,61 @@ func gameFind(target string, gat gameArrayType) int {
 	}
 
 	return -1
+}
+
+func gamePlayerCensus(gwt gameWorkerType) (int, int) {
+	bluePopulation := 0
+	redPopulation := 0
+
+	for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+		if len(gwt.blueTeam[ndx]) > 0 {
+			bluePopulation++
+		}
+
+		if len(gwt.redTeam[ndx]) > 0 {
+			redPopulation++
+		}
+	}
+
+	return bluePopulation, redPopulation
+}
+
+func gamePlayerAdd(player PlayerType, blueArray *playerArrayType, redArray *playerArrayType) {
+	// TODO issue 19 enforce team size limits
+
+	switch player.Team {
+	case blueTeam:
+		for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+			if len(blueArray[ndx]) < 1 {
+				blueArray[ndx] = player.Name
+				return
+			}
+		}
+	case redTeam:
+		for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+			if len(redArray[ndx]) < 1 {
+				redArray[ndx] = player.Name
+				return
+			}
+		}
+	}
+}
+
+func gamePlayerDelete(player PlayerType, blueArray *playerArrayType, redArray *playerArrayType) {
+	switch player.Team {
+	case blueTeam:
+		for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+			if strings.Compare(blueArray[ndx], player.Name) == 0 {
+				blueArray[ndx] = ""
+				return
+			}
+		}
+	case redTeam:
+		for ndx := 0; ndx < maxTeamPlayers; ndx++ {
+			if strings.Compare(redArray[ndx], player.Name) == 0 {
+				redArray[ndx] = ""
+				return
+			}
+		}
+	}
 }

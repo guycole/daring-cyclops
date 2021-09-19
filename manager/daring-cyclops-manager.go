@@ -19,42 +19,8 @@ type gameManagerType struct {
 
 var ctx = context.Background()
 
-//var rdb *redis.Client
-
 // banner splash message
 const banner = "Daring Cyclops Manager V0.0"
-
-// redis begin
-func connectRedis(rdb *redis.Client) {
-	// FIXME should be config map
-
-	log.Println(ctx)
-
-	err := rdb.Set(ctx, "key", "value", 0).Err()
-	if err != nil {
-		panic(err)
-	}
-
-	// game management
-
-	/*
-		rdb = redis.NewClient(&redis.Options{
-			Addr:     os.Getenv("REDIS_URL"),
-			Password: os.Getenv("REDIS_PASSWORD"), // no password set
-			DB:       0,                           // use default DB
-		})
-	*/
-
-	pong, err := rdb.Ping(ctx).Result()
-	if err == nil {
-		log.Println(pong)
-	} else {
-		log.Println(err)
-	}
-
-}
-
-// redis end
 
 func newManager() *gameManagerType {
 	log.Println("new manager")
@@ -76,11 +42,29 @@ func main() {
 	log.Println(banner)
 
 	manager := newManager()
-	connectRedis(manager.rdb)
+	log.Println(manager)
 
-	for {
-		log.Println("sleeping...")
-		time.Sleep(8 * time.Second)
-		connectRedis(manager.rdb)
-	}
+	// known to redis
+	setPlayer(manager.rdb, testPlayer1())
+	setPlayer(manager.rdb, testPlayer2())
+
+	gwt := newGame()
+	gameAdd(gwt, &manager.games)
+
+	gamePlayerAdd(*(testPlayer1()), &gwt.blueTeam, &gwt.redTeam)
+	gamePlayerAdd(*(testPlayer2()), &gwt.blueTeam, &gwt.redTeam)
+
+	bluePopulation, redPopulation := gamePlayerCensus(*gwt)
+	log.Printf("%d %d", bluePopulation, redPopulation)
+
+	//log.Println(manager)
+
+	gameDump(manager.games)
+
+	/*
+		for {
+			log.Println("sleeping...")
+			time.Sleep(8 * time.Second)
+		}
+	*/
 }

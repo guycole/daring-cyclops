@@ -49,19 +49,19 @@ func TestNewOkPlayer(t *testing.T) {
 	}
 
 	if result != nil {
-		if result.email != testPlayerEmail1 {
+		if result.Email != testPlayerEmail1 {
 			t.Error("newPlayer email failure")
 		}
 
-		if result.name != testPlayerName1 {
+		if result.Name != testPlayerName1 {
 			t.Error("newPlayer name failure")
 		}
 
-		if result.rank != cadetRank {
+		if result.Rank != cadetRank {
 			t.Error("newPlayer rank failure")
 		}
 
-		if result.team != blueTeam {
+		if result.Team != blueTeam {
 			t.Error("newPlayer team failure")
 		}
 	} else {
@@ -117,26 +117,43 @@ func TestNewBadPlayer05(t *testing.T) {
 	}
 }
 
+func TestNewRank(t *testing.T) {
+	tp1 := testPlayer1()
+	rankChange(tp1, captainRank)
+	if tp1.Rank != captainRank {
+		t.Error("bad rank")
+	}
+}
+
+func TestNewTeam(t *testing.T) {
+	tp1 := testPlayer1()
+	teamChange(tp1, blueTeam)
+	if tp1.Team != blueTeam {
+		t.Error("bad team")
+	}
+}
+
 func TestRedis01(t *testing.T) {
 	gmt := newManager()
 	log.Println(gmt)
 
-	/*
-		setPlayer(gmt.rdb)
-		//log.Println(xx)
-	*/
-
 	tp1 := testPlayer1()
 	setPlayer(gmt.rdb, tp1)
 
-	xxxx := getPlayer(gmt.rdb, testPlayerName1)
-	log.Println(xxxx)
+	tp2 := testPlayer2()
+	setPlayer(gmt.rdb, tp2)
 
-	/*
-		key := testPlayerName1
-		log.Println(key)
+	selected1 := getPlayer(gmt.rdb, testPlayerName1)
+	log.Println(selected1)
 
-		p := rdb.Get(context.Background(), key)
-		log.Println(p)
-	*/
+	if selected1.Name != testPlayerName1 {
+		t.Error("selected1 player name failure")
+	}
+
+	selected2 := getPlayer(gmt.rdb, testPlayerName2)
+	log.Println(selected2)
+
+	if selected2.Name != testPlayerName2 {
+		t.Error("selected2 player name failure")
+	}
 }
