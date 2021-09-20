@@ -14,11 +14,13 @@ const maxPlayers = maxTeamPlayers * 2
 
 type playerArrayType [maxTeamPlayers]string
 
+const testGame0 = "testGame0"
+
 // gameWorkerType, one for each game
 type gameWorkerType struct {
 	blueTeam playerArrayType
 	redTeam  playerArrayType
-	uuid     string // game identifier
+	gameId   string
 }
 
 const maxGames = 5
@@ -26,15 +28,21 @@ const maxGames = 5
 // gameArrayType contains all games
 type gameArrayType [maxGames]*gameWorkerType
 
-func newGame() *gameWorkerType {
+func newGame(gameId string) *gameWorkerType {
 	result := gameWorkerType{}
-	result.uuid = uuid.NewString()
+
+	if len(gameId) > 0 {
+		result.gameId = gameId
+	} else {
+		result.gameId = uuid.NewString()
+	}
+
 	return &result
 }
 
 // gameAdd
 func gameAdd(wt *gameWorkerType, gat *gameArrayType) int {
-	log.Printf("gameAdd:%s", wt.uuid)
+	log.Printf("gameAdd:%s", wt.gameId)
 
 	for ndx := 0; ndx < maxGames; ndx++ {
 		if gat[ndx] == nil {
@@ -52,7 +60,7 @@ func gameDelete(target string, gat *gameArrayType) int {
 
 	for ndx := 0; ndx < maxGames; ndx++ {
 		if gat[ndx] != nil {
-			if strings.Compare(gat[ndx].uuid, target) == 0 {
+			if strings.Compare(gat[ndx].gameId, target) == 0 {
 				gat[ndx] = nil
 				return ndx
 			}
@@ -71,7 +79,7 @@ func gameDump(gat gameArrayType) {
 			log.Printf("%d nil", ndx)
 		} else {
 			bluePopulation, redPopulation := gamePlayerCensus(*gat[ndx])
-			log.Printf("%d %d %d %s", ndx, bluePopulation, redPopulation, gat[ndx].uuid)
+			log.Printf("%d %d %d %s", ndx, bluePopulation, redPopulation, gat[ndx].gameId)
 		}
 	}
 
@@ -82,7 +90,7 @@ func gameDump(gat gameArrayType) {
 func gameFind(target string, gat gameArrayType) int {
 	for ndx := 0; ndx < maxGames; ndx++ {
 		if gat[ndx] != nil {
-			if strings.Compare(gat[ndx].uuid, target) == 0 {
+			if strings.Compare(gat[ndx].gameId, target) == 0 {
 				return ndx
 			}
 		}

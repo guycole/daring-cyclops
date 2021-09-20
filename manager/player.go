@@ -156,6 +156,7 @@ func testPlayer2() *PlayerType {
 	return np2
 }
 
+// getPlayer reads from redis
 func getPlayer(rdb *redis.Client, key string) *PlayerType {
 	log.Printf("getPlayer:%s", key)
 
@@ -175,6 +176,7 @@ func getPlayer(rdb *redis.Client, key string) *PlayerType {
 	return &pt
 }
 
+// setPlayer writes to redis
 func setPlayer(rdb *redis.Client, pt *PlayerType) {
 	log.Printf("setPlayer:%s", pt.Name)
 

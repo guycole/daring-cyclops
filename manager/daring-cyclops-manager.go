@@ -1,3 +1,7 @@
+// Copyright 2021 Guy Cole. All rights reserved.
+// Use of this source code is governed by a GPL-3 license that can be found
+// in the LICENSE file.
+
 // go mod init github.com/guycole/daring-cyclops/manager
 
 package main
@@ -48,14 +52,23 @@ func main() {
 	setPlayer(manager.rdb, testPlayer1())
 	setPlayer(manager.rdb, testPlayer2())
 
-	gwt := newGame()
-	gameAdd(gwt, &manager.games)
+	gwt := newGame(testGame0)
+	ndx := gameAdd(gwt, &manager.games)
+	if ndx < 0 {
+		log.Fatalf("unable to add game")
+	}
+
+	newPing(gwt.gameId, testPlayerName1, manager.rdb)
 
 	gamePlayerAdd(*(testPlayer1()), &gwt.blueTeam, &gwt.redTeam)
 	gamePlayerAdd(*(testPlayer2()), &gwt.blueTeam, &gwt.redTeam)
 
 	bluePopulation, redPopulation := gamePlayerCensus(*gwt)
 	log.Printf("%d %d", bluePopulation, redPopulation)
+
+	////////////
+	// now start worker and write commands
+	////////////
 
 	//log.Println(manager)
 
