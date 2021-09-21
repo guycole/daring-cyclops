@@ -3,25 +3,23 @@
 package main
 
 import (
+	"context"
 	"log"
-	"os"
 	"time"
-
-	redis "github.com/go-redis/redis/v8"
 )
-
-var rdb *redis.Client
 
 // banner splash message
 const banner = "Daring Cyclops Worker V0.0"
 
 // redis begin
 func connectToRedis() {
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_URL"),
-		Password: os.Getenv("REDIS_PASSWORD"), // no password set
-		DB:       0,                           // use default DB
-	})
+	/*
+		rdb = redis.NewClient(&redis.Options{
+			Addr:     os.Getenv("REDIS_URL"),
+			Password: os.Getenv("REDIS_PASSWORD"), // no password set
+			DB:       0,                           // use default DB
+		})
+	*/
 
 	/*
 		pong, err := rdb.Ping(ctx).Result()
@@ -58,26 +56,39 @@ func testClient(gameId string) {
 func main() {
 	log.Println(banner)
 
-	gameId := os.Getenv("gameId")
-	if len(gameId) > 0 {
-		log.Printf("gameId:%s", gameId)
-	} else {
-		log.Fatalf("missing gameId")
-	}
+	/*
+		gameId := os.Getenv("gameId")
+		if len(gameId) > 0 {
+			log.Printf("gameId:%s", gameId)
+		} else {
+			log.Fatalf("missing gameId")
+		}
+	*/
+
+	var gameId = "testGame0"
 
 	game := newGame(gameId, standardBoard)
 	//log.Println(game)
 
-	for ndx := 0; ndx < 13; ndx++ {
-		start := time.Now()
+	topic := game.rdb.Subscribe(context.Background(), "testGame0m")
+	channel := topic.Channel()
 
-		turnManager(game)
-
-		elapsed := time.Since(start)
-		log.Printf("turn took %s", elapsed)
-
-		time.Sleep(time.Second)
+	for msg := range channel {
+		log.Println(msg)
 	}
+
+	/*
+		for ndx := 0; ndx < 13; ndx++ {
+			start := time.Now()
+
+			turnManager(game)
+
+			elapsed := time.Since(start)
+			log.Printf("turn took %s", elapsed)
+
+			time.Sleep(time.Second)
+		}
+	*/
 
 	/*
 		if len(os.Getenv("rabbit")) > 0 {

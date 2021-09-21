@@ -7,6 +7,8 @@ import (
 	"log"
 	"math/rand"
 	"time"
+
+	redis "github.com/go-redis/redis/v8"
 )
 
 const maxEventQueue = 10
@@ -27,6 +29,8 @@ type gameType struct {
 	turnCounter   int // current game turn
 
 	outQueue outputType
+
+	rdb *redis.Client
 
 	uuid string // game identifier
 }
@@ -147,6 +151,12 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 	gt := gameType{uuid: id, boardType: boardType}
 	gt.board = newBoard()
 	boardGenerator(&gt)
+
+	gt.rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
 
 	return &gt
 }
