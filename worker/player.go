@@ -220,6 +220,7 @@ func playerFind(target string, pat playerArrayType) int {
 	return -1
 }
 
+/*
 // commandPlayerCreate services command
 func commandPlayerCreate(ct commandType, gt *gameType) error {
 	duplicate := playerFind(ct.player, gt.players)
@@ -242,9 +243,12 @@ func commandPlayerCreate(ct commandType, gt *gameType) error {
 
 	return nil
 }
+*/
 
+/*
 // commandPlayerDelete services command
 func commandPlayerDelete(ct commandType, gt *gameType) {
 	// TODO delete ship
 	playerDelete(ct.player, &gt.players)
 }
+*/

@@ -175,6 +175,7 @@ func TestPlayerArray(t *testing.T) {
 	}
 }
 
+/*
 func TestCreateDeletePlayer(t *testing.T) {
 	ct := commandType{player: testPlayerID2, request: "requestId"}
 	ct.args = []string{"playerCreate", testPlayerName1, "captain", "blue"}
@@ -209,3 +210,4 @@ func TestCreateDeletePlayer(t *testing.T) {
 
 	// playerDump(gt.players)
 }
+*/

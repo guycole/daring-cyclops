@@ -234,6 +234,7 @@ func TestShipArray(t *testing.T) {
 	}
 }
 
+/*
 func TestCreateDeleteShip(t *testing.T) {
 	ct := commandType{player: testPlayerID2, request: "requestId"}
 	ct.args = []string{"shipCreate", "nimrod"}
@@ -268,6 +269,7 @@ func TestCreateDeleteShip(t *testing.T) {
 
 	//shipDump(gt.ships)
 }
+*/
 
 func TestCreateMoveShip(t *testing.T) {
 	gt := newGame("testGame", emptyBoard)

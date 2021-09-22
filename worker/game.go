@@ -24,17 +24,18 @@ type gameType struct {
 	stars     starArrayType
 	starGates starGateArrayType
 
-	eventQueue    [maxEventQueue]turnEventType
+	//eventQueue    [maxEventQueue]turnEventType
 	eventQueueNdx int // current queue index
 	turnCounter   int // current game turn
 
-	outQueue outputType
+	//outQueue outputType
 
 	rdb *redis.Client
 
 	uuid string // game identifier
 }
 
+/*
 type turnEventType struct {
 	payload *commandType // single linked list of commands in execution order
 }
@@ -47,7 +48,9 @@ type outputType struct {
 
 	next *outputType
 }
+*/
 
+/*
 func eventQueueSimulator(gt *gameType) {
 	log.Println("simulator")
 
@@ -93,28 +96,32 @@ func eventQueueSimulator(gt *gameType) {
 		eventQueuePush(*temp6, gt)
 	}
 }
+*/
 
 // eventQueueDump writes event queue to stdout
 func eventQueueDump(gt gameType) {
 	log.Println("=-=-=-= eventQueueDump =-=-=-=")
 
-	for ndx := 0; ndx < maxEventQueue; ndx++ {
-		temp := gt.eventQueue[ndx].payload
+	/*
+		for ndx := 0; ndx < maxEventQueue; ndx++ {
+			temp := gt.eventQueue[ndx].payload
 
-		for {
-			if temp == nil {
-				log.Printf("%d %d nil", ndx, gt.eventQueueNdx)
-				break
-			} else {
-				log.Printf("%d %d %s %s", ndx, gt.eventQueueNdx, temp.player, temp.raw)
-				temp = temp.next
+			for {
+				if temp == nil {
+					log.Printf("%d %d nil", ndx, gt.eventQueueNdx)
+					break
+				} else {
+					log.Printf("%d %d %s %s", ndx, gt.eventQueueNdx, temp.player, temp.raw)
+					temp = temp.next
+				}
 			}
 		}
-	}
+	*/
 
 	log.Println("=-=-=-= eventQueueDump =-=-=-=")
 }
 
+/*
 // eventQueuePop consume event from queue
 func eventQueuePop(gt *gameType) *commandType {
 	payload := gt.eventQueue[gt.eventQueueNdx].payload
@@ -124,7 +131,9 @@ func eventQueuePop(gt *gameType) *commandType {
 
 	return payload
 }
+*/
 
+/*
 // eventQueuePush add event to queue
 func eventQueuePush(ct commandType, gt *gameType) {
 	ndx := ct.turn % maxEventQueue
@@ -142,6 +151,7 @@ func eventQueuePush(ct commandType, gt *gameType) {
 		current.next = &ct
 	}
 }
+*/
 
 func newGame(id string, boardType boardTypeEnum) *gameType {
 	log.Println("new game:", id, boardType.string())
@@ -167,13 +177,16 @@ func turnManager(gt *gameType) {
 	gt.eventQueueNdx = gt.turnCounter % maxEventQueue
 	log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
 
-	serviceInboundQueue(gt)
-	serviceEventQueue(gt)
-	serviceOutboundQueue(gt)
+	/*
+		serviceInboundQueue(gt)
+		serviceEventQueue(gt)
+		serviceOutboundQueue(gt)
+	*/
 
 	log.Printf("ending turn:%d", gt.turnCounter)
 }
 
+/*
 // serviceInboundQueue read from RabbitMQ and add to event queue
 func serviceInboundQueue(gt *gameType) {
 	log.Printf("serviceInboundQueue:%d", gt.turnCounter)
@@ -183,19 +196,21 @@ func serviceInboundQueue(gt *gameType) {
 		eventQueueDump(*gt)
 	}
 }
+*/
 
 // serviceEventQueue dispatch events
 func serviceEventQueue(gt *gameType) {
 	log.Printf("serviceEventQueue:%d", gt.turnCounter)
-
-	for {
-		current := eventQueuePop(gt)
-		if current == nil {
-			break
-		} else {
-			dispatchCommand(*current, gt)
+	/*
+		for {
+			current := eventQueuePop(gt)
+			if current == nil {
+				break
+			} else {
+				dispatchCommand(*current, gt)
+			}
 		}
-	}
+	*/
 }
 
 // serviceOutboundQueue by writing all pending traffic to manager

@@ -3,7 +3,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"time"
 )
@@ -67,28 +66,23 @@ func main() {
 
 	var gameId = "testGame0"
 
-	game := newGame(gameId, standardBoard)
+	//game := newGame(gameId, standardBoard)
 	//log.Println(game)
 
-	topic := game.rdb.Subscribe(context.Background(), "testGame0m")
-	channel := topic.Channel()
+	newGame(gameId, standardBoard)
 
-	for msg := range channel {
-		log.Println(msg)
+	go commandFromManager(gameId + "m")
+
+	for ndx := 0; ndx < 13; ndx++ {
+		start := time.Now()
+
+		//	turnManager(game)
+
+		elapsed := time.Since(start)
+		log.Printf("turn took %s", elapsed)
+
+		time.Sleep(time.Second)
 	}
-
-	/*
-		for ndx := 0; ndx < 13; ndx++ {
-			start := time.Now()
-
-			turnManager(game)
-
-			elapsed := time.Since(start)
-			log.Printf("turn took %s", elapsed)
-
-			time.Sleep(time.Second)
-		}
-	*/
 
 	/*
 		if len(os.Getenv("rabbit")) > 0 {

@@ -1,8 +1,11 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
+
+	redis "github.com/go-redis/redis/v8"
 )
 
 type commandGameEnum int
@@ -110,13 +113,60 @@ func findCommandDuration(arg commandGameEnum) int {
 	return 1
 }
 
-// serialized as JSON in redis
-type commandRaw struct {
-	player  string   `json:"playerId"`
-	request string   `json:"requestId"`
-	command []string `json:"command"`
+///////////////
+// command from manager
+///////////////
+
+const maxCommandArguments = 5
+
+type commandArrayType [maxCommandArguments]string
+
+type CommandType struct {
+	Name        string
+	RequestId   string
+	CommandSize int
+	Commands    commandArrayType
 }
 
+func commandFromManager(channelName string) {
+	log.Println("commandFromManager entry")
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	topic := rdb.Subscribe(context.Background(), channelName)
+
+	for {
+		msg, err := topic.ReceiveMessage(context.Background())
+		if err != nil {
+			log.Println(err)
+		}
+
+		var ct CommandType
+		err = json.Unmarshal([]byte(msg.Payload), &ct)
+		if err != nil {
+			log.Println(err)
+		}
+
+		log.Println(ct)
+	}
+
+	log.Println("commandFromManager exit")
+
+	/*
+		channel := topic.Channel()
+
+		for msg := range channel {
+			log.Println(msg)
+
+		}
+	*/
+}
+
+/*
 // commandType single linked list of commands (for each event)
 type commandType struct {
 	player  string // player uuid
@@ -131,7 +181,9 @@ type commandType struct {
 
 	next *commandType
 }
+*/
 
+/*
 // parseJsonCommand parse fresh command
 func parseJsonCommand(raw string, tc int) *commandType {
 	var jsonMap map[string]interface{}
@@ -160,7 +212,9 @@ func parseJsonCommand(raw string, tc int) *commandType {
 
 	return &result
 }
+*/
 
+/*
 func dispatchCommand(command commandType, gt *gameType) {
 	switch command.command {
 	case moveCommand:
@@ -182,3 +236,4 @@ func dispatchCommand(command commandType, gt *gameType) {
 		log.Println("unknown command")
 	}
 }
+*/

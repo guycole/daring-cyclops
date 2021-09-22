@@ -522,6 +522,7 @@ func shipMove(shipID string, newLoc locationType, sat *shipArrayType, bat *board
 	return nil
 }
 
+/*
 // commandShipCreate services command
 func commandShipCreate(ct commandType, gt *gameType) error {
 	position := randomShipLocation(gt.board)
@@ -555,7 +556,9 @@ func commandShipCreate(ct commandType, gt *gameType) error {
 
 	return nil
 }
+*/
 
+/*
 // commandShipDelete services command
 func commandShipDelete(ct commandType, gt *gameType) error {
 	owner := shipFindByOwner(ct.player, gt.ships)
@@ -567,7 +570,9 @@ func commandShipDelete(ct commandType, gt *gameType) error {
 
 	return nil
 }
+*/
 
+/*
 // commandMoveShip services command
 func commandMoveShip(ct commandType, gt *gameType) error {
 	log.Println("move ship")
@@ -584,6 +589,7 @@ func commandMoveShip(ct commandType, gt *gameType) error {
 
 	return nil
 }
+*/
 
 /*
 func moveShip(ship Ship, location Location) {
