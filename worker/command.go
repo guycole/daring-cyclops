@@ -117,6 +117,14 @@ func findCommandDuration(arg commandGameEnum) int {
 // command from manager
 ///////////////
 
+func eventQueueAdapter(ct CommandType) {
+	log.Println(ct)
+}
+
+///////////////
+// command from manager
+///////////////
+
 const maxCommandArguments = 5
 
 type commandArrayType [maxCommandArguments]string
@@ -140,30 +148,26 @@ func commandFromManager(channelName string) {
 	topic := rdb.Subscribe(context.Background(), channelName)
 
 	for {
+		// blocking read
 		msg, err := topic.ReceiveMessage(context.Background())
 		if err != nil {
+			log.Println("err err err err")
 			log.Println(err)
+			continue
 		}
 
 		var ct CommandType
 		err = json.Unmarshal([]byte(msg.Payload), &ct)
 		if err != nil {
+			log.Println("err err err err 222")
 			log.Println(err)
+			continue
 		}
 
-		log.Println(ct)
+		eventQueueAdapter(ct)
 	}
 
 	log.Println("commandFromManager exit")
-
-	/*
-		channel := topic.Channel()
-
-		for msg := range channel {
-			log.Println(msg)
-
-		}
-	*/
 }
 
 /*

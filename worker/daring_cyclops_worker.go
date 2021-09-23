@@ -79,7 +79,7 @@ func main() {
 		//	turnManager(game)
 
 		elapsed := time.Since(start)
-		log.Printf("turn took %s", elapsed)
+		log.Printf("turn %d took %s", ndx, elapsed)
 
 		time.Sleep(time.Second)
 	}
