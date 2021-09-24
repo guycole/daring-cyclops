@@ -114,11 +114,37 @@ func findCommandDuration(arg commandGameEnum) int {
 }
 
 ///////////////
-// command from manager
+// process fresh command
 ///////////////
+
+type eventType struct {
+	name    string // player name
+	request string // request uuid
+
+	duration int // command duration (in turns)
+	turn     int // turn counter for command execution
+
+	commands commandArrayType
+
+	command commandGameEnum
+
+	next *eventType
+}
+
+func newEvent(ct CommandType) (*eventType, error) {
+	result := eventType{name: ct.Name, request: ct.RequestId}
+
+	return &result, nil
+}
 
 func eventQueueAdapter(ct CommandType) {
 	log.Println(ct)
+	et, err := newEvent(ct)
+	if err != nil {
+		log.Println("err err err err 333")
+		log.Println(err)
+	}
+	log.Println(et)
 }
 
 ///////////////
