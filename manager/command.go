@@ -34,7 +34,7 @@ func newPing(gameId, name string, rdb *redis.Client) {
 	channel := gameId + "m"
 
 	var commands commandArrayType
-	commands[0] = "ping"
+	commands[0] = "pingCommand"
 
 	ct := newCommand(name, 1, commands)
 	log.Println(ct)

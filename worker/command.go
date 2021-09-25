@@ -31,10 +31,12 @@ const (
 	moveCommand
 	newsCommand
 	phasersCommand
+	pingCommand
 	planetsCommand
 	playerCreateCommand
 	playerDeleteCommand
 	pointsCommand
+	pongCommand
 	radioCommand
 	repairCommand
 	scanCommand
@@ -75,10 +77,12 @@ var legalGameCommands = [...][2]string{
 	{"move", "m"},
 	{"news", ""},
 	{"phasers", ""},
+	{"pingCommand", ""},
 	{"planet", ""},
 	{"playerCreate", "playerCreate"},
 	{"playerDelete", "playerDelete"},
 	{"points", ""},
+	{"pongCommand", ""},
 	{"radio", ""},
 	{"repair", ""},
 	{"scan", ""},
@@ -133,6 +137,15 @@ type eventType struct {
 
 func newEvent(ct CommandType) (*eventType, error) {
 	result := eventType{name: ct.Name, request: ct.RequestId}
+	result.command = findGameCommand(ct.Commands[0])
+	result.duration = findCommandDuration(result.command)
+	log.Printf("result:%d", result.command)
+
+	if result.command == unknownCommand {
+		log.Println("unknown unknown")
+	} else {
+		log.Println("not unknown")
+	}
 
 	return &result, nil
 }
