@@ -15,13 +15,13 @@ type gameType struct {
 	// TODO creation time
 	board     boardArrayType
 	boardType boardTypeEnum
-	planets   planetArrayType
-	players   playerArrayType
-	ships     shipArrayType
-	stars     starArrayType
-	starGates starGateArrayType
+	//	planets   planetArrayType
+	players playerArrayType
+	ships   shipArrayType
+	//	stars     starArrayType
+	//	starGates starGateArrayType
 
-	commandStack *commandStackType
+	commandQueue *commandQueueType
 
 	turnEventQueue turnEventQueueType
 	eventQueueNdx  int // current queue index
@@ -40,7 +40,7 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 	rand.Seed(time.Now().UnixNano())
 
 	gt := gameType{uuid: id, boardType: boardType}
-	gt.commandStack = newCommandStack()
+	gt.commandQueue = newCommandQueue()
 	gt.rdb = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
@@ -48,47 +48,93 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 	})
 
 	gt.board = newBoard()
-	boardGenerator(&gt)
+	gt.boardGenerator()
 
 	return &gt
 }
 
-func (gt *gameType) serviceCommandStack() {
-	for {
-		// process fresh messages from manager
-		temp := gt.commandStack.pop()
-		if temp == nil {
-			break
-		} else {
-			newEvent := newTurnEvent(temp)
-			if newEvent == nil {
-				log.Println("skipping bad event:", temp)
-			} else {
-				log.Println("must schedule:", newEvent)
-				turnEventQueuePush(newEvent, gt.turnEventQueue)
-			}
-		}
+func (gt *gameType) boardGenerator() {
+	switch gt.boardType {
+	case emptyBoard:
+		log.Println("generating empty board")
+	case standardBoard:
+		log.Println("generating standard board")
+		//		starGatesAdd(&gt.starGates, &gt.board)
+		//		starsAdd(&gt.stars, &gt.board)
+		//		planetsAdd(&gt.planets, &gt.board)
+	default:
+		log.Println("unsupported boardType in boardGenerator")
 	}
 }
 
-// turnManager schedules game play
+func (gt *gameType) testShip1() *shipType {
+	position := randomShipLocation(gt.board)
+	ns1, _ := newShip(testShipName1, testPlayerName1, position)
+	ns1.uuid = testShipUuid1
+	return ns1
+}
+
+func (gt *gameType) testShip2() *shipType {
+	position := randomShipLocation(gt.board)
+	ns2, _ := newShip(testShipName2, testPlayerName2, position)
+	ns2.uuid = testShipUuid2
+	return ns2
+}
+
+func (gt *gameType) scheduleTurnEvent(tet *turnEventType) {
+	playerNdx := gt.players.playerFind(tet.name)
+	if playerNdx < 0 {
+		log.Println("skipping command w/unknown player")
+		return
+	}
+	//FIXME
+	// must discover future event and append
+}
+
+func (gt *gameType) serviceCommandStack() {
+	/*
+		for {
+			// process fresh messages from manager
+			temp := gt.commandStack.pop()
+			if temp == nil {
+				break
+			} else {
+				newEvent := newTurnEvent(temp)
+				if newEvent == nil {
+					log.Println("skipping bad event:", temp)
+				}
+
+				// process admin commands immediately
+				switch newEvent.command {
+				case playerCreateCommand:
+					commandPlayerCreate(newEvent, &gt.players)
+				case playerDeleteCommand:
+					commandPlayerDelete(newEvent, &gt.players)
+				case shipCreateCommand:
+					log.Println("ship create")
+				case shipDeleteCommand:
+					log.Println("ship delete")
+				}
+
+				// schedule player commands for future execution
+				log.Println("must schedule:", newEvent)
+				gt.scheduleTurnEvent(newEvent)
+			}
+		}
+	*/
+}
+
+func (gt *gameType) serviceEventQueue() {
+	// FIXME commands for this turn
+}
+
 func (gt *gameType) turnManager() {
 	gt.turnCounter++
 	gt.eventQueueNdx = gt.turnCounter % maxTurnEventQueue
 	log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
 
 	gt.serviceCommandStack()
-
-	/*
-		serviceEventQueue(gt)
-	*/
-
-	serviceOutboundQueue(gt)
+	gt.serviceEventQueue()
 
 	log.Printf("ending turn:%d", gt.turnCounter)
-}
-
-// serviceOutboundQueue by writing all pending traffic to manager
-func serviceOutboundQueue(gt *gameType) {
-	log.Printf("serviceOutboundQueue:%d", gt.turnCounter)
 }

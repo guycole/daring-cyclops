@@ -106,7 +106,7 @@ func findGameCommand(arg string) commandGameEnum {
 	return commandGameEnum(unknownCommand)
 }
 
-func findCommandDuration(arg commandGameEnum) int {
+func findGameCommandDuration(arg commandGameEnum) int {
 	// TODO
 	return 1
 }

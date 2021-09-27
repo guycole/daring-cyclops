@@ -19,34 +19,87 @@ func newLocation(y, x int) *locationType {
 	return &result
 }
 
-func getDistance(origin, destination *locationType) int {
-	var x = float64(origin.xx - destination.xx)
-	var y = float64(origin.yy - destination.yy)
-	return int(math.Round(math.Sqrt(x*x + y*y)))
-}
-
 func randomLocation(limitY, limitX int) *locationType {
 	xx := rand.Intn(limitX)
 	yy := rand.Intn(limitY)
 	return newLocation(yy, xx)
 }
 
+func (origin *locationType) getDistance(destination *locationType) int {
+	dx := float64(destination.xx - origin.xx)
+	dy := float64(destination.yy - origin.yy)
+	result := math.Hypot(dx, dy)
+	return int(result)
+}
+
+/*
+   map origin lower left 1, 1
+
+   0 1 2  (gate indices and relative locations)
+   3 4 5
+   6 7 8
+*/
+// return index of target location relative to origin location
+func (origin *locationType) testForAdjacency(target *locationType) int {
+	var x, y int
+
+	for ndx := 0; ndx < 9; ndx++ {
+		switch ndx {
+		case 0:
+			x = origin.xx - 1
+			y = origin.yy + 1
+		case 1:
+			x = origin.xx
+			y = origin.yy + 1
+		case 2:
+			x = origin.xx + 1
+			y = origin.yy + 1
+		case 3:
+			x = origin.xx - 1
+			y = origin.yy
+		case 4:
+			// should never match
+			continue
+		case 5:
+			x = origin.xx + 1
+			y = origin.yy
+		case 6:
+			x = origin.xx - 1
+			y = origin.yy - 1
+		case 7:
+			x = origin.xx
+			y = origin.yy - 1
+		case 8:
+			x = origin.xx + 1
+			y = origin.yy - 1
+		}
+
+		if x == target.xx && y == target.yy {
+			return ndx
+		}
+	}
+
+	return -1
+}
+
 // return a random location for stars and planets
 func randomCelestialLocation(bat boardArrayType) *locationType {
 	for ndx := 0; ndx < 100; ndx++ {
-		position := randomLocation(maxBoardSideY, maxBoardSideX)
+		/*
+			position := randomLocation(maxBoardSideY, maxBoardSideX)
 
-		// cannot have celestial objects adjacent to stargates
-		_, locNdx := starGateAdjacent(position)
-		if locNdx >= 0 {
-			//log.Printf("stargate adjacent:%d %d %d", gateNdx, locNdx, ndx)
-			continue
-		}
+				// cannot have celestial objects adjacent to stargates
+				_, locNdx := starGateAdjacent(position)
+				if locNdx >= 0 {
+					//log.Printf("stargate adjacent:%d %d %d", gateNdx, locNdx, ndx)
+					continue
+				}
 
-		boardCell := bat[position.yy][position.xx]
-		if !testForCelestial(*boardCell) {
-			return position
-		}
+				boardCell := bat[position.yy][position.xx]
+				if !testForCelestial(*boardCell) {
+					return position
+				}
+		*/
 	}
 
 	log.Println("unable to generate random celestial location")
@@ -67,54 +120,4 @@ func randomShipLocation(bat boardArrayType) *locationType {
 	log.Println("unable to generate random ship location")
 
 	return nil
-}
-
-/*
-   map origin lower left 1, 1
-
-   0 1 2  (gate indices and relative locations)
-   3 4 5
-   6 7 8
-*/
-// return index of test location relative to reference location
-func testForAdjacency(refPos, testPos *locationType) int {
-	var x, y int
-
-	for ndx := 0; ndx < 9; ndx++ {
-		switch ndx {
-		case 0:
-			x = refPos.xx - 1
-			y = refPos.yy + 1
-		case 1:
-			x = refPos.xx
-			y = refPos.yy + 1
-		case 2:
-			x = refPos.xx + 1
-			y = refPos.yy + 1
-		case 3:
-			x = refPos.xx - 1
-			y = refPos.yy
-		case 4: // should never match
-			x = refPos.xx
-			y = refPos.yy
-		case 5:
-			x = refPos.xx + 1
-			y = refPos.yy
-		case 6:
-			x = refPos.xx - 1
-			y = refPos.yy - 1
-		case 7:
-			x = refPos.xx
-			y = refPos.yy - 1
-		case 8:
-			x = refPos.xx + 1
-			y = refPos.yy - 1
-		}
-
-		if x == testPos.xx && y == testPos.yy {
-			return ndx
-		}
-	}
-
-	return -1
 }

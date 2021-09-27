@@ -267,7 +267,7 @@ type shipType struct {
 	docked    bool
 	shipName  shipNameEnum
 	position  *locationType
-	owner     string // player UUID
+	owner     string
 	shipClass shipClassEnum
 	team      teamEnum
 	uuid      string // ship UUID
@@ -295,8 +295,8 @@ type shipType struct {
 	energy int
 }
 
-const maxShipTeam = 5
-const maxShips = maxShipTeam * 2
+const maxTeamShips = maxTeamPlayers
+const maxShips = maxTeamShips * 2
 
 // shipArrayType contains all active ships
 type shipArrayType [maxShips]*shipType
@@ -366,41 +366,21 @@ func newShip(shipName, shipOwner string, position *locationType) (*shipType, err
 	return &st, nil
 }
 
-const testShipName1 = "nike"
-const testShipUuid1 = "ship1uuid"
-
-// testShip1 returns test ship1
-func testShip1(gt *gameType) *shipType {
-	position := randomShipLocation(gt.board)
-	ns1, _ := newShip(testShipName1, testPlayerID1, position)
-	ns1.uuid = testShipUuid1
-	return ns1
-}
-
-const testShipName2 = "welink"
-const testShipUuid2 = "ship2uuid"
-
-// testShip2 returns test ship2
-func testShip2(gt *gameType) *shipType {
-	position := randomShipLocation(gt.board)
-	ns2, _ := newShip(testShipName2, testPlayerID2, position)
-	ns2.uuid = testShipUuid2
-	return ns2
-}
-
 // shipAdd adds ship to array
 func shipAdd(st *shipType, sat *shipArrayType, bat *boardArrayType) int {
 	log.Printf("shipAdd:%s %s", st.shipName.string(), st.uuid)
 
-	symbol := st.shipName.string()[0:1]
+	//symbol := st.shipName.string()[0:1]
 
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] == nil {
-			setShip(bat[st.position.yy][st.position.xx], symbol, st.uuid)
-			sat[ndx] = st
-			return ndx
+	/*
+		for ndx := 0; ndx < maxShips; ndx++ {
+			if sat[ndx] == nil {
+				setShip(bat[st.position.yy][st.position.xx], symbol, st.uuid)
+				sat[ndx] = st
+				return ndx
+			}
 		}
-	}
+	*/
 
 	return -1
 }
@@ -428,15 +408,17 @@ func shipCensus(sat shipArrayType) (int, int) {
 func shipDelete(target string, sat *shipArrayType, bat *boardArrayType) int {
 	log.Printf("shipDelete:%s", target)
 
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] != nil {
-			if strings.Compare(sat[ndx].uuid, target) == 0 {
-				clearShip(bat[sat[ndx].position.yy][sat[ndx].position.xx])
-				sat[ndx] = nil
-				return ndx
+	/*
+		for ndx := 0; ndx < maxShips; ndx++ {
+			if sat[ndx] != nil {
+				if strings.Compare(sat[ndx].uuid, target) == 0 {
+					clearShip(bat[sat[ndx].position.yy][sat[ndx].position.xx])
+					sat[ndx] = nil
+					return ndx
+				}
 			}
 		}
-	}
+	*/
 
 	return -1
 }
@@ -509,14 +491,14 @@ func shipMove(shipID string, newLoc locationType, sat *shipArrayType, bat *board
 
 	log.Println(sat[ndx])
 
-	clearShip(bat[sat[ndx].position.yy][sat[ndx].position.xx])
+	//clearShip(bat[sat[ndx].position.yy][sat[ndx].position.xx])
 
 	// need collision logic
 
 	sat[ndx].position = &newLoc
-	symbol := sat[ndx].shipName.string()[0:1]
+	//symbol := sat[ndx].shipName.string()[0:1]
 
-	setShip(bat[sat[ndx].position.yy][sat[ndx].position.xx], symbol, sat[ndx].uuid)
+	//setShip(bat[sat[ndx].position.yy][sat[ndx].position.xx], symbol, sat[ndx].uuid)
 
 	return nil
 }

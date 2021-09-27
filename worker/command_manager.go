@@ -22,16 +22,12 @@ type CommandType struct {
 }
 
 // newCommand convenience function to populate struct
-func newCommand(name, id string) *CommandType {
-	var commands commandArrayType
-	commands[0] = "stubCommand"
-
-	result := CommandType{Name: name, RequestId: id, CommandSize: 1, Commands: commands}
-
+func newCommand(name, id string, size int, commands commandArrayType) *CommandType {
+	result := CommandType{Name: name, RequestId: id, CommandSize: size, Commands: commands}
 	return &result
 }
 
-func commandFromManager(channelName string, stackRoot *commandStackType) {
+func commandFromManager(channelName string, stackQueue *commandQueueType) {
 	log.Println("commandFromManager entry")
 
 	rdb := redis.NewClient(&redis.Options{
@@ -59,7 +55,7 @@ func commandFromManager(channelName string, stackRoot *commandStackType) {
 			continue
 		}
 
-		stackRoot.push(&ct)
+		// FIXME stackRoot.push(&ct)
 	}
 
 	log.Println("commandFromManager exit")

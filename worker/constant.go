@@ -3,8 +3,12 @@
 package main
 
 const (
-	player1 = "88265291-fcf5-47e6-ad41-e20fa712e0f7"
-	player2 = "88265291-fcf5-47e6-ad41-e20fa712e0f8"
+	testShipName1 = "nike"
+	testShipUuid1 = "ship1uuid"
 
-	amqp_connection = "amqp://guest:guest@localhost:5672/"
+	testShipName2 = "welink"
+	testShipUuid2 = "ship2uuid"
+
+	testPlayerName1 = "testName1"
+	testPlayerName2 = "testName2"
 )

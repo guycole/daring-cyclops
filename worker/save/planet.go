@@ -36,16 +36,18 @@ func planetsAdd(pat *planetArrayType, bat *boardArrayType) {
 	quarter := int(maxPlanets / 4)
 	planetPopulation := 3*quarter + rand.Intn(quarter)
 	log.Printf("planetPopulation:%d", planetPopulation)
-	for ndx := 0; ndx < planetPopulation; ndx++ {
-		position := randomCelestialLocation(*bat)
-		if position == nil {
-			log.Println("skipping nil position for planet")
-		} else {
-			planet := newPlanet(position)
-			pat[ndx] = planet
-			setPlanet(bat[planet.position.yy][planet.position.xx], planet.uuid)
+	/*
+		for ndx := 0; ndx < planetPopulation; ndx++ {
+			position := randomCelestialLocation(*bat)
+			if position == nil {
+				log.Println("skipping nil position for planet")
+			} else {
+				planet := newPlanet(position)
+				pat[ndx] = planet
+				setPlanet(bat[planet.position.yy][planet.position.xx], planet.uuid)
+			}
 		}
-	}
+	*/
 }
 
 // return current planet census
@@ -74,18 +76,20 @@ func planetCensus(pat planetArrayType) (int, int, int) {
 func planetDelete(target string, pat *planetArrayType, bat *boardArrayType) int {
 	log.Printf("planetDelete:%s", target)
 
-	for ndx := 0; ndx < maxPlanets; ndx++ {
-		if pat[ndx] != nil {
-			if strings.Compare(pat[ndx].uuid, target) == 0 {
-				// remove planet from map
-				bc := bat[pat[ndx].position.yy][pat[ndx].position.xx]
-				clearPlanet(bc)
-				// remove from planet array
-				pat[ndx] = nil
-				return ndx
+	/*
+		for ndx := 0; ndx < maxPlanets; ndx++ {
+			if pat[ndx] != nil {
+				if strings.Compare(pat[ndx].uuid, target) == 0 {
+					// remove planet from map
+					bc := bat[pat[ndx].position.yy][pat[ndx].position.xx]
+					clearPlanet(bc)
+					// remove from planet array
+					pat[ndx] = nil
+					return ndx
+				}
 			}
 		}
-	}
+	*/
 
 	return -1
 }

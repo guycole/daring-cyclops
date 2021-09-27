@@ -7,69 +7,80 @@ import (
 	"testing"
 )
 
-func TestCommandStackEmpty(t *testing.T) {
-	root := newCommandStack()
+func TestCommandQueueEmpty(t *testing.T) {
+	cq := newCommandQueue()
 
-	flag := root.isEmpty()
+	flag := cq.isEmpty()
 	if !flag {
-		t.Error("stack should be reported empty")
+		t.Error("queue should be reported empty")
 	}
 
-	ct := root.pop()
+	ct := cq.dequeue()
 	if ct != nil {
-		t.Error("pop should return nil")
+		t.Error("dequeue should return nil")
 	}
 }
-func TestCommandStackNotEmpty(t *testing.T) {
-	command := newCommand(testPlayerName1, "reqId1")
 
-	root := newCommandStack()
+func TestCommandQueueNotEmpty(t *testing.T) {
+	var commands commandArrayType
+	commands[0] = "stubCommand"
 
-	root.push(command)
+	command := newCommand(testPlayerName1, "reqId1", 1, commands)
 
-	flag := root.isEmpty()
+	cq := newCommandQueue()
+
+	cq.enqueue(command)
+
+	flag := cq.isEmpty()
 	if flag {
 		t.Error("stack should NOT be reported empty")
 	}
 
-	ct := root.pop()
-	if ct != nil {
-		t.Error("pop should NOT return nil")
+	ct := cq.dequeue()
+	if ct == nil {
+		t.Error("dequeue should NOT return nil")
 	}
 }
 
-func TestCommandStackOps(t *testing.T) {
+func TestCommandQueueOps(t *testing.T) {
 	log.Println("xoxoxoxoxoxoxoxoxo")
 
-	command1 := newCommand(testPlayerName1, "reqId1")
-	command2 := newCommand(testPlayerName1, "reqId2")
-	command3 := newCommand(testPlayerName1, "reqId3")
+	var commands commandArrayType
+	commands[0] = "stubCommand"
 
-	root := newCommandStack()
+	command1 := newCommand(testPlayerName1, "reqId1", 1, commands)
+	command2 := newCommand(testPlayerName1, "reqId2", 1, commands)
+	command3 := newCommand(testPlayerName1, "reqId3", 1, commands)
 
-	root.push(command1)
-	root.push(command2)
-	root.push(command3)
+	cq := newCommandQueue()
 
-	root.dump()
+	cq.enqueue(command1)
+	cq.enqueue(command2)
+	cq.enqueue(command3)
 
-	temp1 := root.pop()
-	if temp1.RequestId != "reqId3" {
-		t.Error("pop returns bad value")
+	cq.dump()
+
+	if cq.size != 3 {
+		t.Error("size returns bad value")
 	}
 
-	temp2 := root.pop()
+	temp1 := cq.dequeue()
+	if temp1.RequestId != "reqId1" {
+		t.Error("dq returns bad value")
+	}
+
+	temp2 := cq.dequeue()
 	if temp2.RequestId != "reqId2" {
-		t.Error("pop returns bad value")
+		t.Error("dq returns bad value")
 	}
 
-	temp3 := root.pop()
-	if temp3.RequestId != "reqId1" {
-		t.Error("pop returns bad value")
+	temp3 := cq.dequeue()
+	if temp3.RequestId != "reqId3" {
+		t.Error("dq returns bad value")
 	}
 
-	temp4 := root.pop()
+	temp4 := cq.dequeue()
 	if temp4 != nil {
-		t.Error("pop did not return nil")
+		t.Error("dq did not return nil")
 	}
 }

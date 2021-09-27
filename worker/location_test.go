@@ -15,6 +15,7 @@ func TestFreshLocation(t *testing.T) {
 		{-3, 3},
 		{-3, -3},
 	}
+
 	for _, ndx := range tests {
 		result := newLocation(ndx.yy, ndx.xx)
 		if result.xx != ndx.xx {
@@ -35,12 +36,39 @@ func TestDistance(t *testing.T) {
 		{0, 0, -3, -3, 4},
 		{0, 0, -3, 3, 4},
 	}
+
 	for _, ndx := range tests {
 		loc1 := newLocation(ndx.y1, ndx.x1)
 		loc2 := newLocation(ndx.y2, ndx.x2)
-		result := getDistance(loc1, loc2)
+		result := loc1.getDistance(loc2)
 		if result != ndx.target {
 			t.Errorf("getDistance(%d, %d) failure expect %d got %d", ndx.y1, ndx.x1, ndx.target, result)
+		}
+	}
+}
+
+func TestAdjacency(t *testing.T) {
+	origin := newLocation(4, 5)
+
+	tests := []struct {
+		y, x, target int
+	}{
+		{5, 4, 0},
+		{5, 5, 1},
+		{5, 6, 2},
+		{4, 4, 3},
+		{4, 6, 5},
+		{3, 4, 6},
+		{3, 5, 7},
+		{3, 6, 8},
+		{7, 7, -1},
+	}
+
+	for _, ndx := range tests {
+		newLoc := newLocation(ndx.y, ndx.x)
+		result := origin.testForAdjacency(newLoc)
+		if result != ndx.target {
+			t.Errorf("adjancency(%d, %d) failure expect %d got %d", ndx.y, ndx.x, ndx.target, result)
 		}
 	}
 }

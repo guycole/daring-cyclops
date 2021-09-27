@@ -30,7 +30,7 @@ func main() {
 
 	game := newGame(gameId, standardBoard)
 
-	go commandFromManager(gameId+"m", game.commandStack)
+	go commandFromManager(gameId+"m", game.commandQueue)
 
 	for ndx := 0; ndx < 13; ndx++ {
 		start := time.Now()
@@ -43,5 +43,5 @@ func main() {
 		time.Sleep(1 * time.Second)
 	}
 
-	game.commandStack.dump()
+	game.commandQueue.dump()
 }

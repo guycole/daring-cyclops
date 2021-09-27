@@ -6,7 +6,6 @@ import (
 	"log"
 )
 
-// boardTypeEnum
 type boardTypeEnum int
 
 const (
@@ -38,7 +37,7 @@ func newBoard() boardArrayType {
 	return bat
 }
 
-func boardDump(bat boardArrayType) {
+func (bat boardArrayType) boardDump() {
 	log.Println("=-=-=-= boardDump =-=-=-=")
 
 	var buffer string
@@ -58,18 +57,4 @@ func boardDump(bat boardArrayType) {
 	}
 
 	log.Println("=-=-=-= boardDump =-=-=-=")
-}
-
-func boardGenerator(gt *gameType) {
-	switch gt.boardType {
-	case emptyBoard:
-		log.Println("generating empty board")
-	case standardBoard:
-		log.Println("generating standard board")
-		starGatesAdd(&gt.starGates, &gt.board)
-		starsAdd(&gt.stars, &gt.board)
-		planetsAdd(&gt.planets, &gt.board)
-	default:
-		log.Println("unsupported boardType in boardGenerator")
-	}
 }

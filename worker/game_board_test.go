@@ -13,14 +13,14 @@ func TestGameBoard1(t *testing.T) {
 	//planetDump(gt.planets)
 	//starDump(gt.stars)
 
-	ns1 := testShip1(gt)
+	ns1 := gt.testShip1()
 	if ns1 == nil {
 		t.Error("testShip1 returns nil")
 	}
 
 	shipAdd(ns1, &gt.ships, &gt.board)
 
-	ns2 := testShip2(gt)
+	ns2 := gt.testShip2()
 	if ns2 == nil {
 		t.Error("testShip2 returns nil")
 	}
@@ -38,5 +38,5 @@ func TestGameBoard1(t *testing.T) {
 	newLoc = newLocation(3, 3)
 	shipMove(testShipUuid1, *newLoc, &gt.ships, &gt.board)
 
-	boardDump(gt.board)
+	gt.board.boardDump()
 }

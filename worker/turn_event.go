@@ -11,7 +11,8 @@ type turnEventType struct {
 	duration int // command duration (in turns)
 	turn     int // turn counter for command execution
 
-	commands commandArrayType
+	commandSize int
+	commands    commandArrayType
 
 	command commandGameEnum
 
@@ -23,11 +24,10 @@ const maxTurnEventQueue = 10
 type turnEventQueueType [maxTurnEventQueue]*turnEventType
 
 func newTurnEvent(ct *CommandType) *turnEventType {
-	result := turnEventType{name: ct.Name, request: ct.RequestId}
+	result := turnEventType{name: ct.Name, request: ct.RequestId, commandSize: ct.CommandSize, commands: ct.Commands}
 
 	result.command = findGameCommand(ct.Commands[0])
-	result.duration = findCommandDuration(result.command)
-	log.Printf("result:%d", result.command)
+	result.duration = findGameCommandDuration(result.command)
 
 	if result.command == unknownCommand {
 		log.Println("unknown unknown")

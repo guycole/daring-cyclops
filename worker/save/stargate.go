@@ -90,7 +90,7 @@ func starGatesAdd(sat *starGateArrayType, bat *boardArrayType) {
 	for ndx := 0; ndx < maxStarGates; ndx++ {
 		sg := newStarGate(ndx)
 		sat[ndx] = sg
-		setStarGate(bat[sg.position.yy][sg.position.xx], sg.uuid)
+		//setStarGate(bat[sg.position.yy][sg.position.xx], sg.uuid)
 	}
 }
 

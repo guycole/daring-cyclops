@@ -66,7 +66,7 @@ func TestNewOkShip(t *testing.T) {
 
 	position := randomShipLocation(gt.board)
 
-	result, err := newShip("nike", testPlayerID1, position)
+	result, err := newShip("nike", testPlayerName1, position)
 	if err != nil {
 		t.Errorf("newShip error:%s", err)
 	}
@@ -92,7 +92,7 @@ func TestNewOkShip(t *testing.T) {
 			t.Error("newShip team failure")
 		}
 
-		if result.owner != testPlayerID1 {
+		if result.owner != testPlayerName1 {
 			t.Error("newShip owner failure")
 		}
 	} else {
@@ -105,7 +105,7 @@ func TestNewBadShip01(t *testing.T) {
 
 	position := randomShipLocation(gt.board)
 
-	result, err := newShip("", testPlayerID2, position)
+	result, err := newShip("", testPlayerName2, position)
 	if err == nil {
 		t.Error("newShip error:expecting bad shipName")
 	}
@@ -122,7 +122,7 @@ func TestNewBadShip02(t *testing.T) {
 
 	result, err := newShip("nike", "", position)
 	if err == nil {
-		t.Error("newShipq error:expecting bad player ID")
+		t.Error("newShipq error:expecting bad player name")
 	}
 
 	if result != nil {
@@ -135,7 +135,7 @@ func TestNewBadShip03(t *testing.T) {
 
 	position := randomShipLocation(gt.board)
 
-	result, err := newShip("bogus", testPlayerID2, position)
+	result, err := newShip("bogus", testPlayerName2, position)
 	if err == nil {
 		t.Error("newShip error:expecting bad shipName")
 	}
@@ -192,7 +192,7 @@ func TestShipArray(t *testing.T) {
 		t.Errorf("shipFindByName returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByOwner(testPlayerID1, gt.ships)
+	ndx = shipFindByOwner(testPlayerName1, gt.ships)
 	if ndx != 0 {
 		t.Errorf("shipFindByOwner returns wrong index %d", ndx)
 	}
@@ -207,7 +207,7 @@ func TestShipArray(t *testing.T) {
 		t.Errorf("shipFindByName returns wrong index %d", ndx)
 	}
 
-	ndx = shipFindByOwner(testPlayerID2, gt.ships)
+	ndx = shipFindByOwner(testPlayerName2, gt.ships)
 	if ndx != 1 {
 		t.Errorf("shipFindByOwner returns wrong index %d", ndx)
 	}
@@ -276,7 +276,7 @@ func TestCreateMoveShip(t *testing.T) {
 	position1 := newLocation(36, 36)
 	position2 := newLocation(40, 33)
 
-	ns1, err := newShip("nike", testPlayerID1, position1)
+	ns1, err := newShip("nike", testPlayerName1, position1)
 	if err != nil {
 		t.Errorf("newShip error:%s", err)
 	}

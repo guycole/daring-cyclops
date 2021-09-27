@@ -44,15 +44,15 @@ func newBoardCell() *boardCellType {
 	return &result
 }
 
-func setAcheronVoid(bc *boardCellType) {
+func (bc *boardCellType) setAcheronVoid() {
 	bc.acheronVoid = true
 }
 
-func setBlackHole(bc *boardCellType) {
+func (bc *boardCellType) setBlackHole() {
 	bc.blackHole = true
 }
 
-func clearPlanet(bc *boardCellType) {
+func (bc *boardCellType) clearPlanet() {
 	if !bc.planet {
 		log.Println("attempting to clearPlanet when none declared")
 	}
@@ -60,7 +60,7 @@ func clearPlanet(bc *boardCellType) {
 	bc.planet = false
 }
 
-func setPlanet(bc *boardCellType, uuid string) {
+func (bc *boardCellType) setPlanet(uuid string) {
 	if testForCelestial(*bc) {
 		log.Println("unable to set planet because cell is occupied")
 		return
@@ -70,7 +70,7 @@ func setPlanet(bc *boardCellType, uuid string) {
 	bc.tokenID = uuid
 }
 
-func clearShip(bc *boardCellType) {
+func (bc *boardCellType) clearShip() {
 	if !bc.ship {
 		log.Println("attempting to clearShip when none declared")
 	}
@@ -78,7 +78,7 @@ func clearShip(bc *boardCellType) {
 	bc.ship = false
 }
 
-func setShip(bc *boardCellType, symbol, uuid string) {
+func (bc *boardCellType) setShip(symbol, uuid string) {
 	if !testForEmpty(*bc) {
 		log.Println("unable to set ship because cell is occupied")
 		return
@@ -89,7 +89,7 @@ func setShip(bc *boardCellType, symbol, uuid string) {
 	bc.tokenID = uuid
 }
 
-func setStar(bc *boardCellType, uuid string) {
+func (bc *boardCellType) setStar(uuid string) {
 	if testForCelestial(*bc) {
 		log.Println("unable to set star because cell is occupied")
 		return
@@ -100,7 +100,7 @@ func setStar(bc *boardCellType, uuid string) {
 }
 
 // convert a star to black hole
-func starToBlackHole(bc *boardCellType) {
+func (bc *boardCellType) starToBlackHole() {
 	if !bc.blackHole {
 		log.Println("attempt to convert start to black hole when none declared")
 	}
@@ -109,7 +109,7 @@ func starToBlackHole(bc *boardCellType) {
 	bc.star = false
 }
 
-func setStarGate(bc *boardCellType, uuid string) {
+func (bc *boardCellType) setStarGate(uuid string) {
 	if testForCelestial(*bc) {
 		log.Println("unable to set starGate because cell is occupied")
 		return

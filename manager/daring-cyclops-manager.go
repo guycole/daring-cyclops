@@ -58,6 +58,9 @@ func main() {
 		log.Fatalf("unable to add game")
 	}
 
+	newShip2(gwt.gameId, testPlayerName1, manager.rdb)
+	newPlayer2(gwt.gameId, testPlayerName1, manager.rdb)
+
 	newPing(gwt.gameId, testPlayerName1, manager.rdb)
 
 	gamePlayerAdd(*(testPlayer1()), &gwt.blueTeam, &gwt.redTeam)
