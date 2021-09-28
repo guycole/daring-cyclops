@@ -92,36 +92,34 @@ func (gt *gameType) scheduleTurnEvent(tet *turnEventType) {
 }
 
 func (gt *gameType) serviceCommandStack() {
-	/*
-		for {
-			// process fresh messages from manager
-			temp := gt.commandStack.pop()
-			if temp == nil {
-				break
-			} else {
-				newEvent := newTurnEvent(temp)
-				if newEvent == nil {
-					log.Println("skipping bad event:", temp)
-				}
-
-				// process admin commands immediately
-				switch newEvent.command {
-				case playerCreateCommand:
-					commandPlayerCreate(newEvent, &gt.players)
-				case playerDeleteCommand:
-					commandPlayerDelete(newEvent, &gt.players)
-				case shipCreateCommand:
-					log.Println("ship create")
-				case shipDeleteCommand:
-					log.Println("ship delete")
-				}
-
-				// schedule player commands for future execution
-				log.Println("must schedule:", newEvent)
-				gt.scheduleTurnEvent(newEvent)
+	for {
+		// process fresh messages from manager
+		temp := gt.commandQueue.dequeue()
+		if temp == nil {
+			break
+		} else {
+			newEvent := newTurnEvent(temp)
+			if newEvent == nil {
+				log.Println("skipping bad event:", temp)
 			}
+
+			// process admin commands immediately
+			switch newEvent.command {
+			case playerCreateCommand:
+				commandPlayerCreate(newEvent, &gt.players)
+			case playerDeleteCommand:
+				commandPlayerDelete(newEvent, &gt.players)
+			case shipCreateCommand:
+				log.Println("ship create")
+			case shipDeleteCommand:
+				log.Println("ship delete")
+			}
+
+			// schedule player commands for future execution
+			log.Println("must schedule:", newEvent)
+			gt.scheduleTurnEvent(newEvent)
 		}
-	*/
+	}
 }
 
 func (gt *gameType) serviceEventQueue() {

@@ -55,7 +55,7 @@ func commandFromManager(channelName string, stackQueue *commandQueueType) {
 			continue
 		}
 
-		// FIXME stackRoot.push(&ct)
+		stackQueue.enqueue(&ct)
 	}
 
 	log.Println("commandFromManager exit")
