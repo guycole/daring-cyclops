@@ -84,6 +84,9 @@ type playerType struct {
 	name string
 	rank rankEnum
 	team teamEnum
+
+	turnQueueNdx int
+	turnQueue    turnQueueArrayType
 }
 
 const maxTeamPlayers = 5
@@ -201,21 +204,19 @@ func (pat playerArrayType) playerFind(target string) int {
 	return -1
 }
 
-func commandPlayerCreate(tet *turnEventType, pat *playerArrayType) {
+func commandPlayerCreate(tnt *turnNodeType, pat *playerArrayType) {
 	log.Println("commandPlayerCreate")
-	log.Println(tet)
 
-	rawName := tet.commands[1]
-	rawRank := tet.commands[2]
-	rawTeam := tet.commands[3]
+	rawRank := tnt.commands[1]
+	rawTeam := tnt.commands[2]
 
-	np, err := newPlayer(rawName, rawRank, rawTeam)
+	np, err := newPlayer(tnt.name, rawRank, rawTeam)
 	if err != nil {
 		log.Println("skipping commandPlayerCreate w/newPlayer error")
 		return
 	}
 
-	duplicate := pat.playerFind(rawName)
+	duplicate := pat.playerFind(tnt.name)
 	if duplicate >= 0 {
 		log.Println("skipping commandPlayerCreate w/duplicate player")
 		return
@@ -242,12 +243,10 @@ func commandPlayerCreate(tet *turnEventType, pat *playerArrayType) {
 	pat.playerAdd(np)
 }
 
-func commandPlayerDelete(tet *turnEventType, pat *playerArrayType) {
+func commandPlayerDelete(tnt *turnNodeType, pat *playerArrayType) {
 	log.Println("commandPlayerDelete")
-
-	rawName := tet.commands[1]
 
 	// FIXME delete ship if any
 
-	pat.playerDelete(rawName)
+	pat.playerDelete(tnt.name)
 }

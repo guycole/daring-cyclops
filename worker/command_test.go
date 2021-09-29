@@ -3,7 +3,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 )
 
@@ -43,8 +42,6 @@ func TestCommandQueueNotEmpty(t *testing.T) {
 }
 
 func TestCommandQueueOps(t *testing.T) {
-	log.Println("xoxoxoxoxoxoxoxoxo")
-
 	var commands commandArrayType
 	commands[0] = "stubCommand"
 

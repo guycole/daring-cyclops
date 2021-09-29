@@ -23,9 +23,9 @@ type gameType struct {
 
 	commandQueue *commandQueueType
 
-	turnEventQueue turnEventQueueType
-	eventQueueNdx  int // current queue index
-	turnCounter    int // current game turn
+	//turnEventQueue turnEventQueueType
+	//eventQueueNdx  int // current queue index
+	turnCounter int // current game turn
 
 	//outQueue outputType
 
@@ -81,34 +81,43 @@ func (gt *gameType) testShip2() *shipType {
 	return ns2
 }
 
-func (gt *gameType) scheduleTurnEvent(tet *turnEventType) {
-	playerNdx := gt.players.playerFind(tet.name)
+func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
+	playerNdx := gt.players.playerFind(tnt.name)
 	if playerNdx < 0 {
 		log.Println("skipping command w/unknown player")
 		return
 	}
-	//FIXME
-	// must discover future event and append
+
+	// schedule event for now
+	tqn := gt.turnCounter
+
+	if gt.players[playerNdx].turnQueueNdx >= gt.turnCounter {
+		// schedle event for later
+		tqn = gt.turnCounter + gt.players[playerNdx].turnQueueNdx
+	}
+
+	ndx := tqn % maxTurnQueueArray
+
+	gt.players[playerNdx].turnQueue[ndx].enqueue(tnt)
+
+	gt.players[playerNdx].turnQueueNdx = tqn + tnt.duration
 }
 
 func (gt *gameType) serviceCommandStack() {
 	for {
 		// process fresh messages from manager
-		temp := gt.commandQueue.dequeue()
-		if temp == nil {
+		ct := gt.commandQueue.dequeue()
+		if ct == nil {
 			break
 		} else {
-			newEvent := newTurnEvent(temp)
-			if newEvent == nil {
-				log.Println("skipping bad event:", temp)
-			}
+			tnt := newTurnNode(ct)
 
 			// process admin commands immediately
-			switch newEvent.command {
+			switch tnt.command {
 			case playerCreateCommand:
-				commandPlayerCreate(newEvent, &gt.players)
+				commandPlayerCreate(tnt, &gt.players)
 			case playerDeleteCommand:
-				commandPlayerDelete(newEvent, &gt.players)
+				commandPlayerDelete(tnt, &gt.players)
 			case shipCreateCommand:
 				log.Println("ship create")
 			case shipDeleteCommand:
@@ -116,8 +125,7 @@ func (gt *gameType) serviceCommandStack() {
 			}
 
 			// schedule player commands for future execution
-			log.Println("must schedule:", newEvent)
-			gt.scheduleTurnEvent(newEvent)
+			gt.scheduleTurnEvent(tnt)
 		}
 	}
 }
@@ -128,8 +136,8 @@ func (gt *gameType) serviceEventQueue() {
 
 func (gt *gameType) turnManager() {
 	gt.turnCounter++
-	gt.eventQueueNdx = gt.turnCounter % maxTurnEventQueue
-	log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
+	//gt.eventQueueNdx = gt.turnCounter % maxTurnEventQueue
+	//log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
 
 	gt.serviceCommandStack()
 	gt.serviceEventQueue()

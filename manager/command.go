@@ -35,9 +35,8 @@ func newPlayer2(gameId, name string, rdb *redis.Client) {
 
 	var commands commandArrayType
 	commands[0] = "playerCreate"
-	commands[1] = name
-	commands[2] = "captain"
-	commands[3] = "blue"
+	commands[1] = "captain"
+	commands[2] = "blue"
 
 	ct := newCommand(name, 1, commands)
 	log.Println(ct)
@@ -59,7 +58,6 @@ func newShip2(gameId, name string, rdb *redis.Client) {
 	var commands commandArrayType
 	commands[0] = "shipCreate"
 	commands[1] = "nike"
-	commands[2] = name
 
 	ct := newCommand(name, 3, commands)
 	log.Println(ct)

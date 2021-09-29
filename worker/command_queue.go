@@ -9,6 +9,10 @@ type commandNodeType struct {
 	next    *commandNodeType
 }
 
+func newCommandNode(ct *CommandType) *commandNodeType {
+	return &commandNodeType{payload: ct}
+}
+
 type commandQueueType struct {
 	head *commandNodeType
 	tail *commandNodeType
@@ -57,15 +61,15 @@ func (cqt *commandQueueType) dequeue() *CommandType {
 }
 
 func (cqt *commandQueueType) enqueue(payload *CommandType) {
-	node := commandNodeType{payload: payload}
+	node := newCommandNode(payload)
 
 	if cqt.size <= 0 {
-		cqt.head = &node
-		cqt.tail = &node
+		cqt.head = node
+		cqt.tail = node
 		cqt.size = 1
 	} else {
-		cqt.tail.next = &node
-		cqt.tail = &node
+		cqt.tail.next = node
+		cqt.tail = node
 		cqt.size++
 	}
 }
