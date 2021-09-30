@@ -23,13 +23,7 @@ func newTurnNode(ct *CommandType) *turnNodeType {
 	result := turnNodeType{name: ct.Name, request: ct.RequestId, commandSize: ct.CommandSize, commands: ct.Commands}
 
 	result.command = findGameCommand(ct.Commands[0])
-	result.duration = findGameCommandDuration(result.command)
-
-	if result.command == unknownCommand {
-		log.Println("unknown unknown")
-	} else {
-		log.Println("not unknown")
-	}
+	result.duration = legalGameCommands[result.command].duration
 
 	return &result
 }

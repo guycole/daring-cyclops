@@ -27,7 +27,7 @@ func newCommand(name, id string, size int, commands commandArrayType) *CommandTy
 	return &result
 }
 
-func commandFromManager(channelName string, stackQueue *commandQueueType) {
+func commandFromManager(channelName string, commandQueue *commandQueueType) {
 	log.Println("commandFromManager entry")
 
 	rdb := redis.NewClient(&redis.Options{
@@ -55,7 +55,7 @@ func commandFromManager(channelName string, stackQueue *commandQueueType) {
 			continue
 		}
 
-		stackQueue.enqueue(&ct)
+		commandQueue.enqueue(&ct)
 	}
 
 	log.Println("commandFromManager exit")

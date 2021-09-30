@@ -82,7 +82,7 @@ func (gt *gameType) testShip2() *shipType {
 }
 
 func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
-	playerNdx := gt.players.playerFind(tnt.name)
+	playerNdx := gt.players.find(tnt.name)
 	if playerNdx < 0 {
 		log.Println("skipping command w/unknown player")
 		return
@@ -103,7 +103,7 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 	gt.players[playerNdx].turnQueueNdx = tqn + tnt.duration
 }
 
-func (gt *gameType) serviceCommandStack() {
+func (gt *gameType) serviceCommandQueue() {
 	for {
 		// process fresh messages from manager
 		ct := gt.commandQueue.dequeue()
@@ -116,12 +116,16 @@ func (gt *gameType) serviceCommandStack() {
 			switch tnt.command {
 			case playerCreateCommand:
 				commandPlayerCreate(tnt, &gt.players)
+				continue
 			case playerDeleteCommand:
-				commandPlayerDelete(tnt, &gt.players)
+				commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
+				continue
 			case shipCreateCommand:
-				log.Println("ship create")
+				commandShipCreate(tnt, &gt.board, &gt.ships)
+				continue
 			case shipDeleteCommand:
-				log.Println("ship delete")
+				commandShipDelete(tnt, &gt.board, &gt.ships)
+				continue
 			}
 
 			// schedule player commands for future execution
@@ -139,7 +143,7 @@ func (gt *gameType) turnManager() {
 	//gt.eventQueueNdx = gt.turnCounter % maxTurnEventQueue
 	//log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
 
-	gt.serviceCommandStack()
+	gt.serviceCommandQueue()
 	gt.serviceEventQueue()
 
 	log.Printf("ending turn:%d", gt.turnCounter)

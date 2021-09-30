@@ -50,65 +50,65 @@ const (
 	usersCommand
 )
 
-// must match order for commandGameEnum
-var legalGameCommands = [...][2]string{
-	{"bases", "ba"},
-	{"build", "bu"},
-	{"capture", "ca"},
+type legalGameCommandType struct {
+	longName  string
+	shortName string
+	duration  int
+}
+
+var legalGameCommands = [...]legalGameCommandType{
+	{"bases", "ba", 1},
+	{"build", "bu", 1},
+	{"capture", "ca", 1},
 	//	{"chronicles", ""},
-	{"damages", ""},
-	{"dock", ""},
-	{"drop", ""},
-	{"energy", ""},
-	{"exit", ""},
-	{"gate", ""},
-	{"gripe", ""},
-	{"help", ""},
-	{"history", ""},
+	{"damages", "", 1},
+	{"dock", "", 1},
+	{"drop", "", 1},
+	{"energy", "", 1},
+	{"exit", "", 1},
+	{"gate", "", 1},
+	{"gripe", "", 1},
+	{"help", "", 1},
+	{"history", "", 1},
 	//	{"honor", ""},
-	{"impulse", ""},
-	{"list", ""},
-	{"move", "m"},
-	{"news", ""},
-	{"phasers", ""},
-	{"pingCommand", ""},
-	{"planet", ""},
-	{"playerCreate", "playerCreate"},
-	{"playerDelete", "playerDelete"},
-	{"points", ""},
-	{"pongCommand", ""},
-	{"radio", ""},
-	{"repair", ""},
-	{"scan", ""},
-	{"set", ""},
-	{"shields", ""},
-	{"shipCreate", "shipCreate"},
-	{"shipDelete", "shipDelete"},
-	{"status", "st"},
-	{"summary", ""},
-	{"target", ""},
-	{"tell", ""},
-	{"time", ""},
-	{"torpedo", ""},
-	{"tractor", ""},
-	{"type", ""},
-	{"unknownCommand", "unknownCommand"},
-	{"users", ""},
+	{"impulse", "", 1},
+	{"list", "", 1},
+	{"move", "m", 1},
+	{"news", "", 1},
+	{"phasers", "", 1},
+	{"pingCommand", "", 1},
+	{"planet", "", 1},
+	{"playerCreate", "playerCreate", 0},
+	{"playerDelete", "playerDelete", 0},
+	{"points", "", 1},
+	{"pongCommand", "", 1},
+	{"radio", "", 1},
+	{"repair", "", 1},
+	{"scan", "", 1},
+	{"set", "", 1},
+	{"shields", "", 1},
+	{"shipCreate", "shipCreate", 0},
+	{"shipDelete", "shipDelete", 0},
+	{"status", "st", 1},
+	{"summary", "", 1},
+	{"target", "", 1},
+	{"tell", "", 1},
+	{"time", "", 1},
+	{"torpedo", "", 1},
+	{"tractor", "", 1},
+	{"type", "", 1},
+	{"unknownCommand", "unknownCommand", 1},
+	{"users", "", 1},
 }
 
 func findGameCommand(arg string) commandGameEnum {
 	for ndx := 0; ndx < len(legalGameCommands); ndx++ {
-		if legalGameCommands[ndx][0] == arg || legalGameCommands[ndx][1] == arg {
+		if legalGameCommands[ndx].longName == arg || legalGameCommands[ndx].shortName == arg {
 			return commandGameEnum(ndx)
 		}
 	}
 
 	return commandGameEnum(unknownCommand)
-}
-
-func findGameCommandDuration(arg commandGameEnum) int {
-	// TODO
-	return 1
 }
 
 ///////////////

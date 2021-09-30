@@ -6,6 +6,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"strconv"
 )
 
 //row column origin = 0,0 lower left corner of map
@@ -23,6 +24,17 @@ func randomLocation(limitY, limitX int) *locationType {
 	xx := rand.Intn(limitX)
 	yy := rand.Intn(limitY)
 	return newLocation(yy, xx)
+}
+
+func stringLocation(y, x string) *locationType {
+	yy, err1 := strconv.Atoi(y)
+	xx, err2 := strconv.Atoi(x)
+
+	if err1 == nil && err2 == nil {
+		return newLocation(yy, xx)
+	}
+
+	return nil
 }
 
 func (origin *locationType) getDistance(destination *locationType) int {

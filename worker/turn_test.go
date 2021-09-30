@@ -40,7 +40,7 @@ func TestTurnQueueNotEmpty(t *testing.T) {
 	}
 }
 
-func TestTurnQueueOps(t *testing.T) {
+func TestTurnQueueSimpleOps(t *testing.T) {
 	var commands commandArrayType
 	commands[0] = "pingCommand"
 
@@ -81,4 +81,52 @@ func TestTurnQueueOps(t *testing.T) {
 	if temp4 != nil {
 		t.Error("dq did not return nil")
 	}
+}
+
+func seedTestShips() (*CommandType, *CommandType) {
+	var commands commandArrayType
+	commands[0] = "shipCreate"
+	commands[1] = "nike"
+
+	ct1 := newCommand(testPlayerName1, "reqId3", 2, commands)
+
+	commands[0] = "shipCreate"
+	commands[1] = "triton"
+
+	ct2 := newCommand(testPlayerName2, "reqId4", 2, commands)
+
+	return ct1, ct2
+}
+
+func seedTestUsers() (*CommandType, *CommandType) {
+	var commands commandArrayType
+	commands[0] = "playerCreate"
+	commands[1] = "captain"
+	commands[2] = "blue"
+
+	ct1 := newCommand(testPlayerName1, "reqId1", 3, commands)
+
+	commands[0] = "playerCreate"
+	commands[1] = "admiral"
+	commands[2] = "red"
+
+	ct2 := newCommand(testPlayerName2, "reqId2", 3, commands)
+
+	return ct1, ct2
+}
+
+func TestTurnQueueOps(t *testing.T) {
+	gt := newGame("testGame", emptyBoard)
+
+	ct1, ct2 := seedTestUsers()
+	gt.commandQueue.enqueue(ct1)
+	gt.commandQueue.enqueue(ct2)
+
+	ct3, ct4 := seedTestShips()
+	gt.commandQueue.enqueue(ct3)
+	gt.commandQueue.enqueue(ct4)
+
+	gt.commandQueue.dump()
+
+	gt.serviceCommandQueue()
 }

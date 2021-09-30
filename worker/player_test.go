@@ -4,6 +4,8 @@ package main
 
 import (
 	"log"
+	"strings"
+
 	//"strings"
 	"testing"
 )
@@ -101,7 +103,7 @@ func TestNewBadPlayer03(t *testing.T) {
 func TestPlayerArray(t *testing.T) {
 	var pat playerArrayType
 
-	bluePopulation, redPopulation := pat.playerCensus()
+	bluePopulation, redPopulation := pat.census()
 	if bluePopulation != 0 && redPopulation != 0 {
 		t.Errorf("playerCensus error:%d %d", bluePopulation, redPopulation)
 	}
@@ -117,45 +119,45 @@ func TestPlayerArray(t *testing.T) {
 	}
 
 	// add player to player array, should be first array element
-	ndx := pat.playerAdd(np1)
+	ndx := pat.add(np1)
 	if ndx != 0 {
 		t.Errorf("playerAdd returns wrong index %d", ndx)
 	}
 
 	// add player to player array, should be second array element
-	ndx = pat.playerAdd(np2)
+	ndx = pat.add(np2)
 	if ndx != 1 {
 		t.Errorf("playerAdd returns wrong index %d", ndx)
 	}
 
-	bluePopulation, redPopulation = pat.playerCensus()
+	bluePopulation, redPopulation = pat.census()
 	if bluePopulation != 1 && redPopulation != 1 {
 		t.Errorf("playerCensus error:%d %d", bluePopulation, redPopulation)
 	}
 
-	pat.playerDump()
+	pat.dump()
 
-	ndx = pat.playerFind(testPlayerName1)
+	ndx = pat.find(testPlayerName1)
 	if ndx != 0 {
 		t.Errorf("playerFind returns wrong index %d", ndx)
 	}
 
-	ndx = pat.playerFind(testPlayerName2)
+	ndx = pat.find(testPlayerName2)
 	if ndx != 1 {
 		t.Errorf("playerFind returns wrong index %d", ndx)
 	}
 
-	ndx = pat.playerFind("bogus")
+	ndx = pat.find("bogus")
 	if ndx >= 0 {
 		t.Errorf("playerFind returns wrong index %d", ndx)
 	}
 
-	ndx = pat.playerDelete(testPlayerName1)
+	ndx = pat.delete(testPlayerName1)
 	if ndx != 0 {
 		t.Errorf("playerDelete returns wrong index %d", ndx)
 	}
 
-	bluePopulation, redPopulation = pat.playerCensus()
+	bluePopulation, redPopulation = pat.census()
 	if bluePopulation != 0 && redPopulation != 1 {
 		t.Errorf("playerCensus error:%d %d", bluePopulation, redPopulation)
 	}
@@ -165,47 +167,44 @@ func TestCommandCreateDeletePlayer(t *testing.T) {
 	// create player
 	var commands1 commandArrayType
 	commands1[0] = "playerCreate"
-	commands1[1] = testPlayerName1
-	commands1[2] = "captain"
-	commands1[3] = "blue"
+	commands1[1] = "captain"
+	commands1[2] = "blue"
 
-	nc1 := newCommand(testPlayerName1, "reqId1", 4, commands1)
+	nc1 := newCommand(testPlayerName1, "reqId1", 3, commands1)
 	log.Println(nc1)
-	/*
-		// load command
-		gt := newGame("testGame", emptyBoard)
-		gt.commandStack.push(nc1)
 
-		// run command
-		gt.serviceCommandStack()
+	// load command
+	gt := newGame("testGame", emptyBoard)
+	gt.commandQueue.enqueue(nc1)
 
-		// test for player add
-		ndx := gt.players.playerFind(testPlayerName1)
-		if ndx < 0 {
-			t.Errorf("playerFind returns bad ndx:%d", ndx)
-		}
+	// run command
+	gt.serviceCommandQueue()
 
-		// verify existance in player array
-		if strings.Compare(gt.players[ndx].name, testPlayerName1) != 0 {
-			t.Error("missing player")
-		}
+	// test for player add
+	ndx := gt.players.find(testPlayerName1)
+	if ndx < 0 {
+		t.Errorf("playerFind returns bad ndx:%d", ndx)
+	}
 
-		// delete
-		var commands2 commandArrayType
-		commands2[0] = "playerDelete"
-		commands2[1] = testPlayerName1
+	// verify existance in player array
+	if strings.Compare(gt.players[ndx].name, testPlayerName1) != 0 {
+		t.Error("missing player")
+	}
 
-		nc2 := newCommand(testPlayerName1, "reqId2", 2, commands2)
-		log.Println(nc2)
+	// delete
+	var commands2 commandArrayType
+	commands2[0] = "playerDelete"
 
-		// load and run command
-		gt.commandStack.push(nc2)
-		gt.serviceCommandStack()
+	nc2 := newCommand(testPlayerName1, "reqId2", 1, commands2)
+	log.Println(nc2)
 
-		// test for player delete
-		ndx = gt.players.playerFind(testPlayerName1)
-		if ndx >= 0 {
-			t.Errorf("playerFind returns bad ndx:%d", ndx)
-		}
-	*/
+	// load and run command
+	gt.commandQueue.enqueue(nc2)
+	gt.serviceCommandQueue()
+
+	// test for player delete
+	ndx = gt.players.find(testPlayerName1)
+	if ndx >= 0 {
+		t.Errorf("playerFind returns bad ndx:%d", ndx)
+	}
 }

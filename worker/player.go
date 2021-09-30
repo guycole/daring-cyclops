@@ -36,7 +36,7 @@ func (re rankEnum) string() string {
 
 func findRank(arg string) rankEnum {
 	for ndx := 0; ndx < len(legalRanks); ndx++ {
-		if legalRanks[ndx] == arg {
+		if strings.Compare(legalRanks[ndx], arg) == 0 {
 			return rankEnum(ndx)
 		}
 	}
@@ -72,7 +72,7 @@ func (te teamEnum) string() string {
 
 func findTeam(arg string) teamEnum {
 	for ndx := 0; ndx < len(legalTeams); ndx++ {
-		if legalTeams[ndx] == arg {
+		if strings.Compare(legalTeams[ndx], arg) == 0 {
 			return teamEnum(ndx)
 		}
 	}
@@ -129,7 +129,7 @@ func testPlayer2() *playerType {
 	return np2
 }
 
-func (pat *playerArrayType) playerAdd(pt *playerType) int {
+func (pat *playerArrayType) add(pt *playerType) int {
 	log.Printf("playerAdd:%s", pt.name)
 
 	for ndx := 0; ndx < maxPlayers; ndx++ {
@@ -142,7 +142,7 @@ func (pat *playerArrayType) playerAdd(pt *playerType) int {
 	return -1
 }
 
-func (pat playerArrayType) playerCensus() (int, int) {
+func (pat playerArrayType) census() (int, int) {
 	bluePopulation := 0
 	redPopulation := 0
 
@@ -160,7 +160,7 @@ func (pat playerArrayType) playerCensus() (int, int) {
 	return bluePopulation, redPopulation
 }
 
-func (pat *playerArrayType) playerDelete(target string) int {
+func (pat *playerArrayType) delete(target string) int {
 	log.Printf("playerDelete:%s", target)
 
 	for ndx := 0; ndx < maxPlayers; ndx++ {
@@ -175,7 +175,7 @@ func (pat *playerArrayType) playerDelete(target string) int {
 	return -1
 }
 
-func (pat playerArrayType) playerDump() {
+func (pat playerArrayType) dump() {
 	log.Println("=-=-=-= playerDump =-=-=-=")
 
 	for ndx := 0; ndx < maxPlayers; ndx++ {
@@ -192,7 +192,7 @@ func (pat playerArrayType) playerDump() {
 	log.Println("=-=-=-= playerDump =-=-=-=")
 }
 
-func (pat playerArrayType) playerFind(target string) int {
+func (pat playerArrayType) find(target string) int {
 	for ndx := 0; ndx < maxPlayers; ndx++ {
 		if pat[ndx] != nil {
 			if strings.Compare(pat[ndx].name, target) == 0 {
@@ -216,13 +216,13 @@ func commandPlayerCreate(tnt *turnNodeType, pat *playerArrayType) {
 		return
 	}
 
-	duplicate := pat.playerFind(tnt.name)
+	duplicate := pat.find(tnt.name)
 	if duplicate >= 0 {
 		log.Println("skipping commandPlayerCreate w/duplicate player")
 		return
 	}
 
-	bluePopulation, redPopulation := pat.playerCensus()
+	bluePopulation, redPopulation := pat.census()
 
 	switch np.team {
 	case blueTeam:
@@ -240,13 +240,16 @@ func commandPlayerCreate(tnt *turnNodeType, pat *playerArrayType) {
 		return
 	}
 
-	pat.playerAdd(np)
+	pat.add(np)
 }
 
-func commandPlayerDelete(tnt *turnNodeType, pat *playerArrayType) {
+func commandPlayerDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType, pat *playerArrayType) {
 	log.Println("commandPlayerDelete")
 
-	// FIXME delete ship if any
+	ndx := sat.findByOwner(tnt.name)
+	if ndx >= 0 {
+		sat.delete(sat[ndx].uuid, bat)
+	}
 
-	pat.playerDelete(tnt.name)
+	pat.delete(tnt.name)
 }
