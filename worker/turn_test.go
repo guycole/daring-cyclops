@@ -3,6 +3,7 @@
 package main
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -129,4 +130,48 @@ func TestTurnQueueOps(t *testing.T) {
 	gt.commandQueue.dump()
 
 	gt.serviceCommandQueue()
+
+	// users and ships created
+	// now move ships to create future ops
+
+	shipNdx := gt.ships.findByOwner(testPlayerName1)
+	if shipNdx < 0 {
+		t.Error("unable to discover ship by owner")
+	}
+
+	// move ship to known location
+	newLocation := newLocation(20, 40)
+	err := gt.ships.move(gt.ships[shipNdx].uuid, newLocation, &gt.board)
+	if err != nil {
+		t.Error("unable to move ship")
+	}
+
+	// verify ship struct
+	position := gt.ships[shipNdx].position
+	if position.yy != 20 || position.xx != 40 {
+		t.Error("bad ship position")
+	}
+
+	// verify board cell
+	bc := gt.board[20][40]
+	if !bc.ship {
+		t.Error("board cell ship fail")
+	}
+
+	if strings.Compare(bc.shipSymbol, gt.ships[shipNdx].symbol) != 0 {
+		t.Error("boad cell symbol fail")
+	}
+
+	if strings.Compare(bc.tokenID, gt.ships[shipNdx].uuid) != 0 {
+		t.Error("boad cell tokenID fail")
+	}
+
+	// ship move
+	var commands commandArrayType
+	commands[0] = "move"
+	commands[1] = "25"
+	commands[2] = "45"
+
+	ct5 := newCommand(testPlayerName1, "reqId5", 3, commands)
+	gt.commandQueue.enqueue(ct5)
 }
