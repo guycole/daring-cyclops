@@ -92,14 +92,15 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 	tqn := gt.turnCounter
 
 	if gt.players[playerNdx].turnQueueNdx >= gt.turnCounter {
-		// schedle event for later
-		tqn = gt.turnCounter + gt.players[playerNdx].turnQueueNdx
+		// schedule event for later
+		tqn = gt.players[playerNdx].turnQueueNdx
 	}
 
 	ndx := tqn % maxTurnQueueArray
 
-	gt.players[playerNdx].turnQueue[ndx].enqueue(tnt)
+	log.Printf("enque event ndx %d %d", ndx, tnt.command)
 
+	gt.players[playerNdx].turnQueue[ndx].enqueue(tnt)
 	gt.players[playerNdx].turnQueueNdx = tqn + tnt.duration
 }
 

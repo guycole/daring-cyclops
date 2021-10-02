@@ -423,6 +423,19 @@ func (sat *shipArrayType) move(shipID string, newLoc *locationType, bat *boardAr
 	return nil
 }
 
+func (sat *shipArrayType) condition(shipID string) error {
+	log.Printf("condition:%s", shipID)
+
+	ndx := sat.find(shipID)
+	if ndx < 0 {
+		return errors.New("condition ship not found")
+	}
+
+	sat[ndx].condition = greenCondition
+
+	return nil
+}
+
 func commandShipCreate(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) error {
 	singleOwner := sat.findByOwner(tnt.name)
 	if singleOwner >= 0 {
@@ -480,5 +493,10 @@ func commandMoveShip(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType)
 	}
 
 	err := sat.move(sat[ndx].uuid, newLocation, bat)
+	if err != nil {
+		return err
+	}
+
+	err = sat.condition(sat[ndx].uuid)
 	return err
 }

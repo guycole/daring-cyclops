@@ -71,11 +71,14 @@ func (bc *boardCellType) setPlanet(uuid string) {
 }
 
 func (bc *boardCellType) clearShip() {
+	log.Println("clear ship clear ship")
 	if !bc.ship {
 		log.Println("attempting to clearShip when none declared")
 	}
 
 	bc.ship = false
+	bc.shipSymbol = ""
+	bc.tokenID = ""
 }
 
 func (bc *boardCellType) setShip(symbol, uuid string) {

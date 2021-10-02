@@ -73,7 +73,7 @@ var legalGameCommands = [...]legalGameCommandType{
 	//	{"honor", ""},
 	{"impulse", "", 1},
 	{"list", "", 1},
-	{"move", "m", 1},
+	{"move", "m", 3},
 	{"news", "", 1},
 	{"phasers", "", 1},
 	{"pingCommand", "", 1},

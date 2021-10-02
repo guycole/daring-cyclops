@@ -116,6 +116,10 @@ func newPlayer(name string, rank string, team string) (*playerType, error) {
 
 	result.team = playerTeam
 
+	for ndx := 0; ndx < maxTurnQueueArray; ndx++ {
+		result.turnQueue[ndx] = newTurnQueue()
+	}
+
 	return &result, nil
 }
 

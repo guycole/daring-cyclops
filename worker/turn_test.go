@@ -3,6 +3,7 @@
 package main
 
 import (
+	"log"
 	"strings"
 	"testing"
 )
@@ -127,9 +128,9 @@ func TestTurnQueueOps(t *testing.T) {
 	gt.commandQueue.enqueue(ct3)
 	gt.commandQueue.enqueue(ct4)
 
-	gt.commandQueue.dump()
-
 	gt.serviceCommandQueue()
+
+	gt.commandQueue.dump()
 
 	// users and ships created
 	// now move ships to create future ops
@@ -154,6 +155,7 @@ func TestTurnQueueOps(t *testing.T) {
 
 	// verify board cell
 	bc := gt.board[20][40]
+	log.Println(bc)
 	if !bc.ship {
 		t.Error("board cell ship fail")
 	}
@@ -174,4 +176,20 @@ func TestTurnQueueOps(t *testing.T) {
 
 	ct5 := newCommand(testPlayerName1, "reqId5", 3, commands)
 	gt.commandQueue.enqueue(ct5)
+
+	gt.serviceCommandQueue()
+
+	log.Println(gt.players[0].turnQueue)
+
+	/*
+		// verify old board cell
+		bc = gt.board[20][40]
+		log.Println("xoxoxoxoxox")
+		log.Println(bc)
+		log.Println(bc.ship)
+		if bc.ship {
+			// ship has moved, this should not happen
+			t.Error("board cell ship fail")
+		}
+	*/
 }
