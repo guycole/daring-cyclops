@@ -399,7 +399,7 @@ func (sat shipArrayType) findByOwner(target string) int {
 
 // shipMove
 func (sat *shipArrayType) move(shipID string, newLoc *locationType, bat *boardArrayType) error {
-	log.Printf("shipMove:%s", shipID)
+	log.Printf("shipMove:%s:%d:%d", shipID, newLoc.yy, newLoc.xx)
 
 	ndx := sat.find(shipID)
 	if ndx < 0 {

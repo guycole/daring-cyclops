@@ -97,12 +97,12 @@ func turnQueueArrayDump(tqat turnQueueArrayType) {
 	for ndx := 0; ndx < maxTurnQueueArray; ndx++ {
 		tqt := tqat[ndx]
 
-		for {
-			log.Printf("%d %d", ndx, tqt.size)
+		log.Printf("%d %d", ndx, tqt.size)
+		/*
 			if tqt.size > 0 {
 				tqt.dump()
 			}
-		}
+		*/
 	}
 
 	log.Println("=-=-=-= Turn Queue Array Dump =-=-=-=")

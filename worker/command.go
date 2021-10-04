@@ -110,31 +110,3 @@ func findGameCommand(arg string) commandGameEnum {
 
 	return commandGameEnum(unknownCommand)
 }
-
-///////////////
-// process fresh command
-///////////////
-
-/*
-func dispatchCommand(command commandType, gt *gameType) {
-	switch command.command {
-	case moveCommand:
-		log.Println("move noted")
-		commandMoveShip(command, gt)
-	case playerCreateCommand:
-		log.Println("create player noted")
-		commandPlayerCreate(command, gt)
-	case playerDeleteCommand:
-		log.Println("delete player noted")
-		commandPlayerDelete(command, gt)
-	case shipCreateCommand:
-		log.Println("create ship noted")
-		commandShipCreate(command, gt)
-	case shipDeleteCommand:
-		log.Println("delete ship noted")
-		commandShipDelete(command, gt)
-	default:
-		log.Println("unknown command")
-	}
-}
-*/

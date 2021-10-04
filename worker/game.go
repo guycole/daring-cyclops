@@ -90,7 +90,6 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 
 	// schedule event for now
 	tqn := gt.turnCounter
-
 	if gt.players[playerNdx].turnQueueNdx >= gt.turnCounter {
 		// schedule event for later
 		tqn = gt.players[playerNdx].turnQueueNdx
@@ -98,10 +97,25 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 
 	ndx := tqn % maxTurnQueueArray
 
-	log.Printf("enque event ndx %d %d", ndx, tnt.command)
-
 	gt.players[playerNdx].turnQueue[ndx].enqueue(tnt)
 	gt.players[playerNdx].turnQueueNdx = tqn + tnt.duration
+
+	//turnQueueArrayDump(gt.players[playerNdx].turnQueue)
+}
+
+func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
+	switch tnt.command {
+	case moveCommand:
+		commandMoveShip(tnt, &gt.board, &gt.ships)
+	case playerCreateCommand:
+		commandPlayerCreate(tnt, &gt.players)
+	case playerDeleteCommand:
+		commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
+	case shipCreateCommand:
+		commandShipCreate(tnt, &gt.board, &gt.ships)
+	case shipDeleteCommand:
+		commandShipDelete(tnt, &gt.board, &gt.ships)
+	}
 }
 
 func (gt *gameType) serviceCommandQueue() {
@@ -113,30 +127,43 @@ func (gt *gameType) serviceCommandQueue() {
 		} else {
 			tnt := newTurnNode(ct)
 
-			// process admin commands immediately
 			switch tnt.command {
 			case playerCreateCommand:
-				commandPlayerCreate(tnt, &gt.players)
-				continue
+				gt.dispatchCommand(tnt)
 			case playerDeleteCommand:
-				commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
-				continue
+				gt.dispatchCommand(tnt)
 			case shipCreateCommand:
-				commandShipCreate(tnt, &gt.board, &gt.ships)
-				continue
+				gt.dispatchCommand(tnt)
 			case shipDeleteCommand:
-				commandShipDelete(tnt, &gt.board, &gt.ships)
-				continue
+				gt.dispatchCommand(tnt)
+			default:
+				gt.scheduleTurnEvent(tnt)
 			}
-
-			// schedule player commands for future execution
-			gt.scheduleTurnEvent(tnt)
 		}
 	}
 }
 
-func (gt *gameType) serviceEventQueue() {
-	// FIXME commands for this turn
+func (gt *gameType) servicePlayerTurnQueue(playerNdx int) {
+	if gt.players[playerNdx] == nil {
+		log.Printf("skipping nil player %d", playerNdx)
+		return
+	}
+
+	ndx := gt.turnCounter % maxTurnQueueArray
+
+	log.Printf("player %d turn %d %d", playerNdx, gt.turnCounter, ndx)
+
+	if gt.players[playerNdx].turnQueue[ndx].size > 0 {
+		tnt := gt.players[playerNdx].turnQueue[ndx].dequeue()
+		log.Println(tnt.commands[0])
+		gt.dispatchCommand(tnt)
+	}
+}
+
+func (gt *gameType) serviceTurnQueue() {
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		gt.servicePlayerTurnQueue(ndx)
+	}
 }
 
 func (gt *gameType) turnManager() {
@@ -145,7 +172,8 @@ func (gt *gameType) turnManager() {
 	//log.Printf("starting turn:%d %d", gt.turnCounter, gt.eventQueueNdx)
 
 	gt.serviceCommandQueue()
-	gt.serviceEventQueue()
+
+	gt.serviceTurnQueue()
 
 	log.Printf("ending turn:%d", gt.turnCounter)
 }

@@ -117,7 +117,7 @@ func seedTestUsers() (*CommandType, *CommandType) {
 	return ct1, ct2
 }
 
-func TestTurnQueueOps(t *testing.T) {
+func TestTurnMoveOps(t *testing.T) {
 	gt := newGame("testGame", emptyBoard)
 
 	ct1, ct2 := seedTestUsers()
@@ -177,19 +177,64 @@ func TestTurnQueueOps(t *testing.T) {
 	ct5 := newCommand(testPlayerName1, "reqId5", 3, commands)
 	gt.commandQueue.enqueue(ct5)
 
+	// ship move
+	commands[0] = "move"
+	commands[1] = "30"
+	commands[2] = "50"
+
+	ct6 := newCommand(testPlayerName1, "reqId6", 3, commands)
+	gt.commandQueue.enqueue(ct6)
+
+	// ship move
+	commands[0] = "move"
+	commands[1] = "35"
+	commands[2] = "55"
+
+	ct7 := newCommand(testPlayerName1, "reqId7", 3, commands)
+	gt.commandQueue.enqueue(ct7)
+
+	// schedule commands
 	gt.serviceCommandQueue()
 
-	log.Println(gt.players[0].turnQueue)
+	// still at origin?
+	position = gt.ships[shipNdx].position
+	if position.yy != 20 || position.xx != 40 {
+		t.Error("bad ship position")
+	}
 
-	/*
-		// verify old board cell
-		bc = gt.board[20][40]
-		log.Println("xoxoxoxoxox")
-		log.Println(bc)
-		log.Println(bc.ship)
-		if bc.ship {
-			// ship has moved, this should not happen
-			t.Error("board cell ship fail")
-		}
-	*/
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	position = gt.ships[shipNdx].position
+	if position.yy != 25 || position.xx != 45 {
+		t.Error("bad ship position")
+	}
+
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	position = gt.ships[shipNdx].position
+	if position.yy != 30 || position.xx != 50 {
+		t.Error("bad ship position")
+	}
+
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	gt.serviceTurnQueue()
+	gt.turnCounter++
+
+	position = gt.ships[shipNdx].position
+	if position.yy != 35 || position.xx != 55 {
+		t.Error("bad ship position")
+	}
 }
