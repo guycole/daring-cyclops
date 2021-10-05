@@ -38,6 +38,7 @@ const (
 	shieldsCommand
 	shipCreateCommand
 	shipDeleteCommand
+	shutDownCommand
 	statusCommand
 	summaryCommand
 	targetsCommand
@@ -89,6 +90,7 @@ var legalGameCommands = [...]legalGameCommandType{
 	{"shields", "", 1},
 	{"shipCreate", "shipCreate", 0},
 	{"shipDelete", "shipDelete", 0},
+	{"shutDown", "shutDown", 0},
 	{"status", "st", 1},
 	{"summary", "", 1},
 	{"target", "", 1},

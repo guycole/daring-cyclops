@@ -25,6 +25,9 @@ func newTurnNode(ct *CommandType) *turnNodeType {
 	result.command = findGameCommand(ct.Commands[0])
 	result.duration = legalGameCommands[result.command].duration
 
+	log.Println(result)
+	log.Println(legalGameCommands[39])
+
 	return &result
 }
 

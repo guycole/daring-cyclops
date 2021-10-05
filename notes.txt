@@ -69,3 +69,5 @@ redis-cli --scan
 redis-cli 
 subscribe testGame0m
 
+publish testGame0m "{\"Name\":\"testName1\", \"RequestId\":\"reqId1\", \"CommandSize\": 3, \"Commands\":[\"playerCreate\", \"captain\", \"blue\", \"\", \"\"]}"
+publish testGame0m "{\"Name\":\"testName2\", \"RequestId\":\"reqId1\", \"CommandSize\": 3, \"Commands\":[\"playerCreate\", \"captain\", \"blue\", \"\", \"\"]}"

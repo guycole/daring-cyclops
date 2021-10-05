@@ -23,6 +23,7 @@ type gameType struct {
 
 	commandQueue *commandQueueType
 
+	shutDownFlag bool
 	//turnEventQueue turnEventQueueType
 	//eventQueueNdx  int // current queue index
 	turnCounter int // current game turn
@@ -115,6 +116,9 @@ func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
 		commandShipCreate(tnt, &gt.board, &gt.ships)
 	case shipDeleteCommand:
 		commandShipDelete(tnt, &gt.board, &gt.ships)
+	case shutDownCommand:
+		log.Println("shutdown noted")
+
 	}
 }
 
@@ -135,6 +139,8 @@ func (gt *gameType) serviceCommandQueue() {
 			case shipCreateCommand:
 				gt.dispatchCommand(tnt)
 			case shipDeleteCommand:
+				gt.dispatchCommand(tnt)
+			case shutDownCommand:
 				gt.dispatchCommand(tnt)
 			default:
 				gt.scheduleTurnEvent(tnt)
@@ -161,6 +167,7 @@ func (gt *gameType) servicePlayerTurnQueue(playerNdx int) {
 }
 
 func (gt *gameType) serviceTurnQueue() {
+	// need random option
 	for ndx := 0; ndx < maxPlayers; ndx++ {
 		gt.servicePlayerTurnQueue(ndx)
 	}

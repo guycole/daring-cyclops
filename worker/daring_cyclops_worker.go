@@ -32,16 +32,34 @@ func main() {
 
 	go commandFromManager(gameId+"m", game.commandQueue)
 
-	for ndx := 0; ndx < 13; ndx++ {
+	for {
+		if game.shutDownFlag {
+			log.Println("main loop brea")
+			break
+		}
+
 		start := time.Now()
 
 		game.turnManager()
 
 		elapsed := time.Since(start)
-		log.Printf("turn %d took %s", ndx, elapsed)
+		log.Printf("turn %d took %s", game.turnCounter, elapsed)
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
+
+	/*
+		for ndx := 0; ndx < 13; ndx++ {
+			start := time.Now()
+
+			game.turnManager()
+
+			elapsed := time.Since(start)
+			log.Printf("turn %d took %s", ndx, elapsed)
+
+			time.Sleep(1 * time.Second)
+		}
+	*/
 
 	game.commandQueue.dump()
 }
