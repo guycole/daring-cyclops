@@ -30,11 +30,11 @@ func main() {
 
 	game := newGame(gameId, standardBoard)
 
-	go commandFromManager(gameId+"m", game.commandQueue)
+	go commandFromManager(game.inboundQueue, game.commandQueue)
 
 	for {
 		if game.shutDownFlag {
-			log.Println("main loop brea")
+			log.Println("main loop break")
 			break
 		}
 

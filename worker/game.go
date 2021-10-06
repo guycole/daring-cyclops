@@ -6,8 +6,6 @@ import (
 	"log"
 	"math/rand"
 	"time"
-
-	redis "github.com/go-redis/redis/v8"
 )
 
 // gameType main game structure, only one instance per game
@@ -30,7 +28,10 @@ type gameType struct {
 
 	//outQueue outputType
 
-	rdb *redis.Client
+	//rdb *redis.Client
+
+	inboundQueue  string
+	outboundQueue string
 
 	uuid string // game identifier
 }
@@ -41,12 +42,17 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 	rand.Seed(time.Now().UnixNano())
 
 	gt := gameType{uuid: id, boardType: boardType}
+	gt.inboundQueue = id + "m"
+	gt.outboundQueue = id + "w"
+
 	gt.commandQueue = newCommandQueue()
-	gt.rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	/*
+		gt.rdb = redis.NewClient(&redis.Options{
+			Addr:     "localhost:6379",
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		})
+	*/
 
 	gt.board = newBoard()
 	gt.boardGenerator()
@@ -104,10 +110,26 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 	//turnQueueArrayDump(gt.players[playerNdx].turnQueue)
 }
 
+func (gt *gameType) writeResponse(ct *CommandType) {
+	log.Println("write write write")
+
+	if ct == nil {
+		log.Println("skipping nil response")
+		return
+	}
+
+	//	gt.outboundQueue
+}
+
 func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
+	var response *CommandType
+
 	switch tnt.command {
 	case moveCommand:
 		commandMoveShip(tnt, &gt.board, &gt.ships)
+	case pingCommand:
+		log.Println("pong response")
+		//response = gt.pongResponse()
 	case playerCreateCommand:
 		commandPlayerCreate(tnt, &gt.players)
 	case playerDeleteCommand:
@@ -118,8 +140,10 @@ func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
 		commandShipDelete(tnt, &gt.board, &gt.ships)
 	case shutDownCommand:
 		log.Println("shutdown noted")
-
+		gt.shutDownFlag = true
 	}
+
+	gt.writeResponse(response)
 }
 
 func (gt *gameType) serviceCommandQueue() {
@@ -132,6 +156,8 @@ func (gt *gameType) serviceCommandQueue() {
 			tnt := newTurnNode(ct)
 
 			switch tnt.command {
+			case pingCommand:
+				gt.dispatchCommand(tnt)
 			case playerCreateCommand:
 				gt.dispatchCommand(tnt)
 			case playerDeleteCommand:
@@ -173,6 +199,10 @@ func (gt *gameType) serviceTurnQueue() {
 	}
 }
 
+func (gt *gameType) serviceResponseQueue() {
+	log.Println("service response queue")
+}
+
 func (gt *gameType) turnManager() {
 	gt.turnCounter++
 	//gt.eventQueueNdx = gt.turnCounter % maxTurnEventQueue
@@ -181,6 +211,8 @@ func (gt *gameType) turnManager() {
 	gt.serviceCommandQueue()
 
 	gt.serviceTurnQueue()
+
+	gt.serviceResponseQueue()
 
 	log.Printf("ending turn:%d", gt.turnCounter)
 }

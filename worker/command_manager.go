@@ -60,3 +60,19 @@ func commandFromManager(channelName string, commandQueue *commandQueueType) {
 
 	log.Println("commandFromManager exit")
 }
+
+func okResponse(channelName string) {
+	log.Println("OK response")
+}
+
+func responseToManager(channelName string, commandQueue *commandQueueType) {
+	log.Println("responseToManager entry")
+
+	/*
+		rdb := redis.NewClient(&redis.Options{
+			Addr:     "localhost:6379",
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		})
+	*/
+}
