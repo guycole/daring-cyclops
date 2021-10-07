@@ -481,7 +481,7 @@ func commandShipDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayTyp
 	return nil
 }
 
-func commandMoveShip(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) error {
+func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) error {
 	ndx := sat.findByOwner(tnt.name)
 	if ndx < 0 {
 		return errors.New("moveShip player id not found")

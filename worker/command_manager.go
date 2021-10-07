@@ -65,14 +65,23 @@ func okResponse(channelName string) {
 	log.Println("OK response")
 }
 
-func responseToManager(channelName string, commandQueue *commandQueueType) {
+func responseToManager(channelName string, ct *CommandType) {
 	log.Println("responseToManager entry")
+	log.Println(channelName)
 
-	/*
-		rdb := redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
-			Password: "", // no password set
-			DB:       0,  // use default DB
-		})
-	*/
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	payload, err := json.Marshal(ct)
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = rdb.Publish(context.Background(), channelName, payload).Err()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

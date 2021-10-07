@@ -6,6 +6,8 @@ import (
 	"log"
 	"math/rand"
 	"time"
+
+	redis "github.com/go-redis/redis/v8"
 )
 
 // gameType main game structure, only one instance per game
@@ -28,7 +30,7 @@ type gameType struct {
 
 	//outQueue outputType
 
-	//rdb *redis.Client
+	rdb *redis.Client
 
 	inboundQueue  string
 	outboundQueue string
@@ -46,13 +48,12 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 	gt.outboundQueue = id + "w"
 
 	gt.commandQueue = newCommandQueue()
-	/*
-		gt.rdb = redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
-			Password: "", // no password set
-			DB:       0,  // use default DB
-		})
-	*/
+
+	gt.rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
 
 	gt.board = newBoard()
 	gt.boardGenerator()
@@ -110,26 +111,14 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 	//turnQueueArrayDump(gt.players[playerNdx].turnQueue)
 }
 
-func (gt *gameType) writeResponse(ct *CommandType) {
-	log.Println("write write write")
-
-	if ct == nil {
-		log.Println("skipping nil response")
-		return
-	}
-
-	//	gt.outboundQueue
-}
-
 func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
 	var response *CommandType
 
 	switch tnt.command {
 	case moveCommand:
-		commandMoveShip(tnt, &gt.board, &gt.ships)
+		commandShipMove(tnt, &gt.board, &gt.ships)
 	case pingCommand:
-		log.Println("pong response")
-		//response = gt.pongResponse()
+		response = commandPing(tnt)
 	case playerCreateCommand:
 		commandPlayerCreate(tnt, &gt.players)
 	case playerDeleteCommand:
@@ -143,7 +132,9 @@ func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
 		gt.shutDownFlag = true
 	}
 
-	gt.writeResponse(response)
+	if response != nil {
+		responseToManager(gt.outboundQueue, response)
+	}
 }
 
 func (gt *gameType) serviceCommandQueue() {
