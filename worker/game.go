@@ -112,13 +112,17 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 }
 
 func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
-	var response *CommandType
+	//var response *CommandType
 
 	switch tnt.command {
 	case moveCommand:
-		commandShipMove(tnt, &gt.board, &gt.ships)
+		response, err := commandShipMove(tnt, &gt.board, &gt.ships)
+		log.Println(err)
+		log.Println(response)
 	case pingCommand:
-		response = commandPing(tnt)
+		response, err := commandPing(tnt)
+		log.Println(err)
+		log.Println(response)
 	case playerCreateCommand:
 		commandPlayerCreate(tnt, &gt.players)
 	case playerDeleteCommand:
@@ -132,9 +136,11 @@ func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
 		gt.shutDownFlag = true
 	}
 
-	if response != nil {
-		responseToManager(gt.outboundQueue, response)
-	}
+	/*
+		if response != nil {
+			responseToManager(gt.outboundQueue, response)
+		}
+	*/
 }
 
 func (gt *gameType) serviceCommandQueue() {

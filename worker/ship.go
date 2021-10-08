@@ -481,22 +481,30 @@ func commandShipDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayTyp
 	return nil
 }
 
-func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) error {
+func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) (*CommandType, error) {
 	ndx := sat.findByOwner(tnt.name)
 	if ndx < 0 {
-		return errors.New("moveShip player id not found")
+		return nil, errors.New("moveShip player id not found")
 	}
 
 	newLocation := stringLocation(tnt.commands[1], tnt.commands[2])
 	if newLocation == nil {
-		return errors.New("moveShip bad location")
+		return nil, errors.New("moveShip bad location")
 	}
 
 	err := sat.move(sat[ndx].uuid, newLocation, bat)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = sat.condition(sat[ndx].uuid)
-	return err
+	return nil, err
+
+	/////
+	var commands commandArrayType
+	commands[0] = "pong"
+
+	ct := newCommand(tnt.name, tnt.request, 1, commands)
+
+	return ct, nil
 }
