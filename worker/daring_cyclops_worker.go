@@ -3,8 +3,12 @@
 package main
 
 import (
+	"flag"
 	"log"
+	"net/http"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // banner splash message
@@ -14,8 +18,16 @@ func testClient(gameId string) {
 	log.Printf("test client mode %s", gameId)
 }
 
+var addr = flag.String("listen-address", ":8080", "The address to listen on for HTTP requests.")
+
 func main() {
 	log.Println(banner)
+
+	flag.Parse()
+	http.Handle("/metrics", promhttp.Handler())
+	log.Fatal(http.ListenAndServe(*addr, nil))
+
+	log.Println("fell through")
 
 	/*
 		gameId := os.Getenv("gameId")

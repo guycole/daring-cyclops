@@ -73,3 +73,5 @@ publish testGame0m "{\"Name\":\"testName1\", \"RequestId\":\"reqId1\", \"Command
 
 publish testGame0m "{\"Name\":\"testName1\", \"RequestId\":\"reqId1\", \"CommandSize\": 3, \"Commands\":[\"playerCreate\", \"captain\", \"blue\", \"\", \"\"]}"
 publish testGame0m "{\"Name\":\"testName2\", \"RequestId\":\"reqId1\", \"CommandSize\": 3, \"Commands\":[\"playerCreate\", \"captain\", \"blue\", \"\", \"\"]}"
+
+https://prometheus.io/docs/guides/go-application/
