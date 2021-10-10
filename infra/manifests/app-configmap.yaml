@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
     name: app-configmap
 data:
-    redis-service: redtest-redis-master:6379
+    redis-service: cyclops-redis-master:6379

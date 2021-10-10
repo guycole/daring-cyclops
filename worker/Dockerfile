@@ -22,7 +22,7 @@ RUN go mod download
 COPY *.go ./
 #
 #RUN go mod init 
-RUN go build -o /worker
+RUN go build -o /app/worker
 
 # This is for documentation purposes only.
 # To actually open the port, runtime parameters
@@ -36,4 +36,4 @@ RUN go build -o /worker
 #ENV HTTP_PORT=8081
 
 # Run
-CMD [ "/worker" ]
+CMD [ "/app/worker" ]

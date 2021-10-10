@@ -32,8 +32,8 @@ func commandFromManager(channelName string, commandQueue *commandQueueType) {
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: "bigSekret",
+		DB:       0, // use default DB
 	})
 
 	topic := rdb.Subscribe(context.Background(), channelName)
@@ -71,8 +71,8 @@ func responseToManager(channelName string, ct *CommandType) {
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: "bigSekret",
+		DB:       0, // use default DB
 	})
 
 	payload, err := json.Marshal(ct)

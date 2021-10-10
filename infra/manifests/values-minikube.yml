@@ -1,3 +1,5 @@
+# helm install cyclops-redis bitnami/redis --values values-minikube.yml -n cyclops
+#
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
@@ -200,7 +202,7 @@ usePassword: true
 ##
 password:
 ## Use existing secret (ignores previous password)
-existingSecret: app-secret
+existingSecret: app-secret -n cyclops
 ## Password key to be retrieved from Redis secret
 ##
 existingSecretPasswordKey: redis-password
@@ -227,7 +229,8 @@ master:
   ##
   ## Can be used to specify command line arguments, for example:
   ##
-  command: "/run.sh"
+  command: []
+  #command: ["/run.sh"]
   ## Additional Redis configuration for the master nodes
   ## ref: https://redis.io/topics/config
   ##

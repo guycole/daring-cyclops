@@ -51,8 +51,8 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 
 	gt.rdb = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: "bigSekret",
+		DB:       0, // use default DB
 	})
 
 	gt.board = newBoard()
