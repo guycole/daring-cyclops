@@ -6,4 +6,5 @@
 # Author: G.S. Cole (guycole at gmail dot com)
 #
 echo -n "bigSekret" | base64
+printf bigSekret | base64
 #

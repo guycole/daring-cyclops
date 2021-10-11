@@ -19,14 +19,3 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 6379
-        env:
-          - name: REDIS_URL 
-            valueFrom:
-              configMapKeyRef:
-                name: app-configmap 
-                key: redis-service 
-          - name: REDIS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: cyclops-redis
-                key: redis-password

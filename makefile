@@ -14,29 +14,32 @@
 #   G.S. Cole (guycole at gmail dot com)
 #
 DOCKER = docker
-DARING_CYCLOPS_MANAGER = daring-cyclops-manager
-DARING_CYCLOPS_WORKER = daring-cyclops-worker
+DARING_CYCLOPS_MANAGER = daring-cyclops-manager:1
+DARING_CYCLOPS_WORKER = daring-cyclops-worker:1
+HELM = helm
 KUBECTL = kubectl
+
+start_minikube:
+	cd infra; ./start_minikube.sh
+
+redis_deploy:
+	$(KUBECTL) create namespace cyclops-redis	
+	cd infra; $(KUBECTL) apply -f redis-secret.yaml -n cyclops-redis
+	cd infra; $(HELM) install cyclops-redis bitnami/redis --values redis-values.yaml -n cyclops-redis
 
 manager_build:
 	cd manager; $(DOCKER) build . -t $(DARING_CYCLOPS_MANAGER)
 
 manager_deploy:
-	cd manager; $(KUBECTL) apply -f pg-cred.yaml
-	cd manager; $(KUBECTL) apply -f pg-volume.yaml
-	cd manager; $(KUBECTL) apply -f pg-claim.yaml
-	cd manager; $(KUBECTL) apply -f pg-pod.yaml
-	cd manager; $(KUBECTL) apply -f django-service.yaml
-	cd manager; $(KUBECTL) apply -f monitor-namespace.yaml
-	cd manager; $(KUBECTL) apply -f prom-config.yaml
-	cd manager; $(KUBECTL) apply -f prom-deploy.yaml
-	cd manager; $(KUBECTL) apply -f prom-service.yaml
-	cd manager; $(KUBECTL) apply -f grafana-deploy.yaml
-	cd manager; $(KUBECTL) apply -f grafana-service.yaml
-	cd manager; $(KUBECTL) apply -f node-exporter-daemonset.yaml
+	$(KUBECTL) create namespace cyclops-app	
+	cd manager; $(KUBECTL) apply -f manager-deploy.yaml
 
 worker_build:
 	cd worker; $(DOCKER) build . -t $(DARING_CYCLOPS_WORKER)
+
+worker_deploy:
+	$(KUBECTL) create namespace cyclops-app
+	cd infra; $(KUBECTL) apply -f worker-deploy.yaml -n cyclops-app
 
 #
 #  Cleanup this subdirectory.
