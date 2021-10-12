@@ -50,7 +50,7 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 	gt.commandQueue = newCommandQueue()
 
 	gt.rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "cyclops-redis-master:6379",
 		Password: "bigSekret",
 		DB:       0, // use default DB
 	})

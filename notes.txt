@@ -70,6 +70,7 @@ https://github.com/go-redis/redis
 redis-cli --scan
 redis-cli 
 subscribe testGame0m
+redis-cli -h cyclops-redis-master -a $REDIS_PASSWORD
 
 publish testGame0m "{\"Name\":\"testName1\", \"RequestId\":\"reqId1\", \"CommandSize\": 1, \"Commands\":[\"ping\", \"\", \"\", \"\", \"\"]}"
 
@@ -95,3 +96,9 @@ namespace cyclops
 eval $(minikube docker-env).
 
 enable prometheus scraping of redis
+
+replace arrays w/redis for multipod deployment (state moves to redis)
+
+must be in single namespace because secrets
+
+next: ping/pong manager/worker, prometheus

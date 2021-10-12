@@ -31,7 +31,7 @@ func commandFromManager(channelName string, commandQueue *commandQueueType) {
 	log.Println("commandFromManager entry")
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "cyclops-redis-master:6379",
 		Password: "bigSekret",
 		DB:       0, // use default DB
 	})
@@ -70,7 +70,7 @@ func responseToManager(channelName string, ct *CommandType) {
 	log.Println(channelName)
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "cyclops-redis-master:6379",
 		Password: "bigSekret",
 		DB:       0, // use default DB
 	})

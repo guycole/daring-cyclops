@@ -19,27 +19,37 @@ DARING_CYCLOPS_WORKER = daring-cyclops-worker:1
 HELM = helm
 KUBECTL = kubectl
 
-start_minikube:
-	cd infra; ./start_minikube.sh
-
-redis_deploy:
-	$(KUBECTL) create namespace cyclops-redis	
-	cd infra; $(KUBECTL) apply -f redis-secret.yaml -n cyclops-redis
-	cd infra; $(HELM) install cyclops-redis bitnami/redis --values redis-values.yaml -n cyclops-redis
-
 manager_build:
 	cd manager; $(DOCKER) build . -t $(DARING_CYCLOPS_MANAGER)
 
-manager_deploy:
+manager_apply:
+	cd infra; $(KUBECTL) apply -f manager-deploy.yaml
+
+manager_delete:
+	cd infra; $(KUBECTL) delete -f manager-deploy.yaml -n cyclops-app
+
+minikube_start:
+	cd infra; ./start_minikube.sh
+
+minikube_setup:
 	$(KUBECTL) create namespace cyclops-app	
-	cd manager; $(KUBECTL) apply -f manager-deploy.yaml
+	$(KUBECTL) create namespace monitoring
+
+monitoring_deploy:
+	cd infra; $(HELM) install prometheus prometheus-community/kube-prometheus-stack --namespace monitoroing  
+
+redis_deploy:
+	cd infra; $(KUBECTL) apply -f redis-secret.yaml -n cyclops-app
+	cd infra; $(HELM) install cyclops-redis bitnami/redis --values redis-values.yaml -n cyclops-app
 
 worker_build:
 	cd worker; $(DOCKER) build . -t $(DARING_CYCLOPS_WORKER)
 
-worker_deploy:
-	$(KUBECTL) create namespace cyclops-app
+worker_apply:
 	cd infra; $(KUBECTL) apply -f worker-deploy.yaml -n cyclops-app
+
+worker_delete:
+	cd infra; $(KUBECTL) delete -f worker-deploy.yaml -n cyclops-app
 
 #
 #  Cleanup this subdirectory.

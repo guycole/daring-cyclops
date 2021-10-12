@@ -7,7 +7,7 @@
 # docker run --rm daring-cyclops-worker:1
 #
 FROM golang:1.16-alpine
-LABEL build_date="2021-09-04"
+LABEL build_date="2021-10-12"
 LABEL description="daring-cyclops-worker"
 LABEL maintainer="guycole@gmail.com"
 #
