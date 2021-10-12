@@ -11,22 +11,19 @@ type turnNodeType struct {
 	duration int // command duration (in turns)
 	turn     int // turn counter for command execution
 
-	commandSize int
-	commands    commandArrayType
+	argumentSize int
+	arguments    argumentArrayType
 
-	command commandGameEnum
+	requestCommand requestEnum
 
 	next *turnNodeType
 }
 
-func newTurnNode(ct *CommandType) *turnNodeType {
-	result := turnNodeType{name: ct.Name, request: ct.RequestId, commandSize: ct.CommandSize, commands: ct.Commands}
+func newTurnNode(rt *RequestType) *turnNodeType {
+	result := turnNodeType{name: rt.Name, request: rt.RequestId, argumentSize: rt.ArgumentSize, arguments: rt.Arguments}
 
-	result.command = findGameCommand(ct.Commands[0])
-	result.duration = legalGameCommands[result.command].duration
-
-	log.Println(result)
-	log.Println(legalGameCommands[39])
+	result.requestCommand = requestEnum(rt.Request)
+	result.duration = legalRequestDuration[rt.Request]
 
 	return &result
 }

@@ -46,7 +46,7 @@ func main() {
 
 	game := newGame(gameId, standardBoard)
 
-	go commandFromManager(game.inboundQueue, game.commandQueue)
+	go requestFromManager(game.inboundQueue, game.requestQueue)
 
 	for {
 		if game.shutDownFlag {
@@ -77,5 +77,5 @@ func main() {
 		}
 	*/
 
-	game.commandQueue.dump()
+	game.requestQueue.dump()
 }
