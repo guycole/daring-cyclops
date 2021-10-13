@@ -1,9 +1,5 @@
 // Copyright 2021 Guy Cole. All rights reserved.
-// Use of this source code is governed by a GPL-3 license that can be found
-// in the LICENSE file.
-
-// go mod init github.com/guycole/daring-cyclops/manager
-
+// Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
 package main
 
 import (
@@ -17,8 +13,8 @@ import (
 
 // gameManagerType, only one instance
 type gameManagerType struct {
-	games gameArrayType
-	rdb   *redis.Client
+	//	games gameArrayType
+	rdb *redis.Client
 }
 
 var ctx = context.Background()
@@ -45,29 +41,44 @@ func newManager() *gameManagerType {
 func main() {
 	log.Println(banner)
 
-	manager := newManager()
-	log.Println(manager)
+	//var gameId = "testGame0"
 
-	// known to redis
-	setPlayer(manager.rdb, testPlayer1())
-	setPlayer(manager.rdb, testPlayer2())
+	//	go requestFromManager(game.inboundQueue, game.requestQueue)
 
-	gwt := newGame(testGame0)
-	ndx := gameAdd(gwt, &manager.games)
-	if ndx < 0 {
-		log.Fatalf("unable to add game")
+	for {
+		start := time.Now()
+
+		elapsed := time.Since(start)
+		log.Printf("turn %d took %s", 666, elapsed)
+
+		time.Sleep(5 * time.Second)
 	}
 
-	newPlayer2(gwt.gameId, testPlayerName1, manager.rdb)
-	newShip2(gwt.gameId, testPlayerName1, manager.rdb)
+	/*
+		manager := newManager()
+		log.Println(manager)
 
-	newPing(gwt.gameId, testPlayerName1, manager.rdb)
+		// known to redis
+		setPlayer(manager.rdb, testPlayer1())
+		setPlayer(manager.rdb, testPlayer2())
 
-	gamePlayerAdd(*(testPlayer1()), &gwt.blueTeam, &gwt.redTeam)
-	gamePlayerAdd(*(testPlayer2()), &gwt.blueTeam, &gwt.redTeam)
+		gwt := newGame(testGame0)
+		ndx := gameAdd(gwt, &manager.games)
+		if ndx < 0 {
+			log.Fatalf("unable to add game")
+		}
 
-	bluePopulation, redPopulation := gamePlayerCensus(*gwt)
-	log.Printf("%d %d", bluePopulation, redPopulation)
+		newPlayer2(gwt.gameId, testPlayerName1, manager.rdb)
+		newShip2(gwt.gameId, testPlayerName1, manager.rdb)
+
+		newPing(gwt.gameId, testPlayerName1, manager.rdb)
+
+		gamePlayerAdd(*(testPlayer1()), &gwt.blueTeam, &gwt.redTeam)
+		gamePlayerAdd(*(testPlayer2()), &gwt.blueTeam, &gwt.redTeam)
+
+		bluePopulation, redPopulation := gamePlayerCensus(*gwt)
+		log.Printf("%d %d", bluePopulation, redPopulation)
+	*/
 
 	////////////
 	// now start worker and write commands
@@ -75,7 +86,7 @@ func main() {
 
 	//log.Println(manager)
 
-	gameDump(manager.games)
+	//gameDump(manager.games)
 
 	/*
 		for {
