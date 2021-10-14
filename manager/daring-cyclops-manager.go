@@ -4,11 +4,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"math/rand"
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
+	"github.com/google/uuid"
 )
 
 // gameManagerType, only one instance
@@ -41,17 +43,22 @@ func newManager() *gameManagerType {
 func main() {
 	log.Println(banner)
 
-	//var gameId = "testGame0"
+	var gameId = "testGame0"
+	var counter int
 
-	//	go requestFromManager(game.inboundQueue, game.requestQueue)
+	go responseFromWorker(gameId + "w")
 
 	for {
 		start := time.Now()
 
 		elapsed := time.Since(start)
-		log.Printf("turn %d took %s", 666, elapsed)
+		log.Printf("turn %d took %s", counter, elapsed)
+
+		newPing(gameId, "pingTest")
 
 		time.Sleep(5 * time.Second)
+
+		counter += 1
 	}
 
 	/*
@@ -92,6 +99,54 @@ func main() {
 		for {
 			log.Println("sleeping...")
 			time.Sleep(8 * time.Second)
+		}
+	*/
+}
+
+const maxRequestArguments = 5
+
+type argumentArrayType [maxRequestArguments]string
+
+type RequestType struct {
+	Name         string
+	RequestId    string
+	Request      int
+	ArgumentSize int
+	Arguments    argumentArrayType
+}
+
+func newRequest(name string, argSize int, arguments argumentArrayType) *RequestType {
+	raw := RequestType{Name: name, ArgumentSize: argSize, Arguments: arguments}
+	raw.RequestId = uuid.NewString()
+	return &raw
+}
+
+func newPing(gameId, name string) {
+	channel := gameId + "m"
+	log.Println(channel)
+
+	var arguments argumentArrayType
+
+	nr := newRequest(name, 0, arguments)
+
+	payload, err := json.Marshal(nr)
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println(payload)
+
+	/*
+		// TODO get these arguments from secrets
+		rdb := redis.NewClient(&redis.Options{
+			Addr:     "cyclops-redis-master:6379",
+			Password: "bigSekret",
+			DB:       0, // use default DB
+		})
+
+		err = rdb.Publish(context.Background(), channel, payload).Err()
+		if err != nil {
+			log.Fatal(err)
 		}
 	*/
 }

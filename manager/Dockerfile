@@ -7,7 +7,7 @@
 # docker run --rm daring-cyclops-manager:1
 #
 FROM golang:1.16-alpine
-LABEL build_date="2021-09-04"
+LABEL build_date="2021-10-12"
 LABEL description="daring-cyclops-manager"
 LABEL maintainer="guycole@gmail.com"
 #
@@ -19,7 +19,7 @@ RUN go mod download
 #
 COPY *.go ./
 #
-RUN go build -o /manager
+RUN go build -o /app/Gmanager
 
 # This is for documentation purposes only.
 # To actually open the port, runtime parameters
@@ -33,4 +33,4 @@ EXPOSE 8080
 #ENV HTTP_PORT=8081
 
 # Run
-CMD [ "/manager" ]
+CMD [ "/app/manager" ]

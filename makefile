@@ -23,7 +23,7 @@ manager_build:
 	cd manager; $(DOCKER) build . -t $(DARING_CYCLOPS_MANAGER)
 
 manager_apply:
-	cd infra; $(KUBECTL) apply -f manager-deploy.yaml
+	cd infra; $(KUBECTL) apply -f manager-deploy.yaml -n cyclops-app
 
 manager_delete:
 	cd infra; $(KUBECTL) delete -f manager-deploy.yaml -n cyclops-app

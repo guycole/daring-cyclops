@@ -37,3 +37,18 @@ var legalRequestDuration = [...]int{
 	1, // tellRedRequest
 	1, // unknownRequest
 }
+
+type responseEnum int
+
+// must match order for legalRequestDuration
+const (
+	moveResponse responseEnum = iota
+	pingResponse
+	playerCreateResponse
+	playerDeleteResponse
+	shipCreateResponse
+	shipDeleteResponse
+	shutDownResponse
+	tellResponse
+	unknownResponse
+)

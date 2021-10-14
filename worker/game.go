@@ -132,43 +132,54 @@ func (gt *gameType) scheduleTurnEvent(tnt *turnNodeType) {
 }
 
 func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
+	log.Println("dispatchCommand")
+	log.Println(tnt)
+
 	//var response *CommandType
 
+	switch tnt.requestCommand {
 	/*
-		switch tnt.command {
 		case moveCommand:
 			response, err := commandShipMove(tnt, &gt.board, &gt.ships)
 			log.Println(err)
 			log.Println(response)
-		case pingCommand:
-			response, err := commandPing(tnt)
-			log.Println(err)
-			log.Println(response)
-		case playerCreateCommand:
-			commandPlayerCreate(tnt, &gt.players)
-		case playerDeleteCommand:
-			commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
-		case shipCreateCommand:
-			commandShipCreate(tnt, &gt.board, &gt.ships)
-		case shipDeleteCommand:
-			commandShipDelete(tnt, &gt.board, &gt.ships)
-		case shutDownCommand:
-			log.Println("shutdown noted")
-			gt.shutDownFlag = true
-		}
 	*/
+	case pingRequest:
+		log.Println("ping noted send response")
+		response, err := pingReqRes(tnt)
 
-	/*
-		if response != nil {
-			responseToManager(gt.outboundQueue, response)
-		}
-	*/
+		log.Println(err)
+		log.Println(response)
+
+		/*
+			case playerCreateCommand:
+				commandPlayerCreate(tnt, &gt.players)
+			case playerDeleteCommand:
+				commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
+			case shipCreateCommand:
+				commandShipCreate(tnt, &gt.board, &gt.ships)
+			case shipDeleteCommand:
+				commandShipDelete(tnt, &gt.board, &gt.ships)
+		*/
+	case shutDownRequest:
+		log.Println("shutdown noted")
+		gt.shutDownFlag = true
+	}
+
+	if response != nil {
+		responseToManager(gt.outboundQueue, response)
+	}
+
 }
 
 func (gt *gameType) serviceRequestQueue() {
+	log.Println("serviceRequestQueue entry")
+
 	for {
 		// process fresh messages from manager
 		rt := gt.requestQueue.dequeue()
+		log.Println("dq dq dq")
+		log.Println(rt)
 		if rt == nil {
 			break
 		} else {
@@ -192,6 +203,8 @@ func (gt *gameType) serviceRequestQueue() {
 			}
 		}
 	}
+
+	log.Println("serviceRequestQueue exit")
 }
 
 func (gt *gameType) servicePlayerTurnQueue(playerNdx int) {

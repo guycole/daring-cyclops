@@ -73,6 +73,7 @@ func newShip2(gameId, name string, rdb *redis.Client) {
 	}
 }
 
+/*
 func newPing(gameId, name string, rdb *redis.Client) {
 	channel := gameId + "m"
 
@@ -92,3 +93,4 @@ func newPing(gameId, name string, rdb *redis.Client) {
 		log.Fatal(err)
 	}
 }
+*/

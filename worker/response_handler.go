@@ -10,31 +10,29 @@ import (
 	redis "github.com/go-redis/redis/v8"
 )
 
-const maxRequestArguments2 = 5
-
-type argumentArrayType2 [maxRequestArguments2]string
-
 type ResponseType struct {
-	Name         string
 	RequestId    string
+	Response     int
 	ArgumentSize int
-	Arguments    argumentArrayType2
+	Arguments    argumentArrayType
 }
 
 // newResponse convenience function to populate struct
-func newResponse(name, id string, size int, arguments requestArrayType) *ResponseType {
-	result := ResponseType{Name: name, RequestId: id, ArgumentSize: size, Arguments: arguments}
+func newResponse(response responseEnum, id string, size int, arguments argumentArrayType) *ResponseType {
+	result := ResponseType{RequestId: id, ArgumentSize: size, Arguments: arguments}
+	result.Response = int(response)
 	return &result
 }
 
-func okResponse(channelName string) {
+func okResponse() (int, argumentArrayType) {
 	log.Println("OK response")
+
+	var aat argumentArrayType
+	aat[0] = "ok"
+	return 1, aat
 }
 
 func responseToManager(channelName string, rt *ResponseType) {
-	log.Println("responseToManager entry")
-	log.Println(channelName)
-
 	// TODO get these arguments from secrets
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "cyclops-redis-master:6379",
@@ -42,7 +40,7 @@ func responseToManager(channelName string, rt *ResponseType) {
 		DB:       0, // use default DB
 	})
 
-	payload, err := json.Marshal(ct)
+	payload, err := json.Marshal(rt)
 	if err != nil {
 		log.Println(err)
 	}

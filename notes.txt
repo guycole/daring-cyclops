@@ -93,6 +93,7 @@ Statistics:
 
 namespace cyclops
 
+kubectl config use-context minikube
 eval $(minikube docker-env).
 
 enable prometheus scraping of redis

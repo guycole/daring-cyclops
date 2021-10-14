@@ -2,9 +2,15 @@
 // Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
 package main
 
-/*
+import (
+	"context"
+	"log"
+
+	redis "github.com/go-redis/redis/v8"
+)
+
 // run for game duration
-func responseFromWorker(channelName string, requestQueue *requestQueueType) {
+func responseFromWorker(channelName string) {
 	log.Println("requestFromManager entry")
 
 	// TODO get these arguments from secrets
@@ -18,24 +24,27 @@ func responseFromWorker(channelName string, requestQueue *requestQueueType) {
 
 	for {
 		// blocking read
-		msg, err := topic.ReceiveMessage(context.Background())
+		message, err := topic.ReceiveMessage(context.Background())
 		if err != nil {
 			log.Println(err)
-			log.Println("requestFromManager skipping bad receive message")
+			log.Println("requestFromWorker skipping bad receive message")
 			continue
 		}
 
-		var rt RequestType
-		err = json.Unmarshal([]byte(msg.Payload), &rt)
-		if err != nil {
-			log.Println(err)
-			log.Println("requestFromManager skipping bad unmarshal")
-			continue
-		}
+		log.Println(message)
 
-		requestQueue.enqueue(&rt)
+		/*
+			var rt RequestType
+			err = json.Unmarshal([]byte(msg.Payload), &rt)
+			if err != nil {
+				log.Println(err)
+				log.Println("requestFromManager skipping bad unmarshal")
+				continue
+			}
+
+			requestQueue.enqueue(&rt)
+		*/
 	}
 
 	log.Println("requestFromManager exit")
 }
-*/

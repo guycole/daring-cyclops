@@ -43,7 +43,7 @@ func requestFromManager(channelName string, requestQueue *requestQueueType) {
 
 	for {
 		// blocking read
-		msg, err := topic.ReceiveMessage(context.Background())
+		message, err := topic.ReceiveMessage(context.Background())
 		if err != nil {
 			log.Println(err)
 			log.Println("requestFromManager skipping bad receive message")
@@ -51,12 +51,17 @@ func requestFromManager(channelName string, requestQueue *requestQueueType) {
 		}
 
 		var rt RequestType
-		err = json.Unmarshal([]byte(msg.Payload), &rt)
+		err = json.Unmarshal([]byte(message.Payload), &rt)
 		if err != nil {
 			log.Println(err)
 			log.Println("requestFromManager skipping bad unmarshal")
 			continue
 		}
+
+		log.Println("fresh rx")
+		log.Println(rt)
+
+		rt.Request = 3
 
 		requestQueue.enqueue(&rt)
 	}
