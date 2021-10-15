@@ -3,7 +3,7 @@
 package main
 
 func pingReqRes(tnt *turnNodeType) (*ResponseType, error) {
-	argSize, argArray := okResponse()
+	argSize, argArray := okArgument()
 
 	nr := newResponse(pingResponse, tnt.request, argSize, argArray)
 

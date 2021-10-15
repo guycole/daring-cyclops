@@ -4,14 +4,16 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"math/rand"
+	"strconv"
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
 )
+
+const testPlayerName1 = "testName1"
+const testPlayerName2 = "testName2"
 
 // gameManagerType, only one instance
 type gameManagerType struct {
@@ -49,17 +51,25 @@ func main() {
 	go responseFromWorker(gameId + "w")
 
 	for {
+		counter++
+
 		start := time.Now()
 
 		elapsed := time.Since(start)
 		log.Printf("turn %d took %s", counter, elapsed)
 
-		newPing(gameId, "pingTest")
+		pingRequest(gameId, "pingTest"+strconv.Itoa(counter))
+		playerCreateRequest(gameId, testPlayerName1, "cadet", "blue")
+		playerCreateRequest(gameId, testPlayerName2, "admiral", "red")
+		playerDeleteRequest(gameId, testPlayerName1)
+		playerDeleteRequest(gameId, testPlayerName2)
 
 		time.Sleep(5 * time.Second)
 
 		counter += 1
 	}
+
+	shutDownRequest(gameId, "shutDown")
 
 	/*
 		manager := newManager()
@@ -103,46 +113,27 @@ func main() {
 	*/
 }
 
-const maxRequestArguments = 5
-
-type argumentArrayType [maxRequestArguments]string
-
-type RequestType struct {
-	Name         string
-	RequestId    string
-	Request      int
-	ArgumentSize int
-	Arguments    argumentArrayType
-}
-
-func newRequest(name string, argSize int, arguments argumentArrayType) *RequestType {
-	raw := RequestType{Name: name, ArgumentSize: argSize, Arguments: arguments}
-	raw.RequestId = uuid.NewString()
-	return &raw
-}
-
-func newPing(gameId, name string) {
+func newPlayer(gameId, name string) {
 	channel := gameId + "m"
 	log.Println(channel)
-
-	var arguments argumentArrayType
-
-	nr := newRequest(name, 0, arguments)
-
-	payload, err := json.Marshal(nr)
-	if err != nil {
-		log.Println(err)
-	}
-
-	log.Println(payload)
-
 	/*
-		// TODO get these arguments from secrets
-		rdb := redis.NewClient(&redis.Options{
-			Addr:     "cyclops-redis-master:6379",
-			Password: "bigSekret",
-			DB:       0, // use default DB
-		})
+		var arguments argumentArrayType
+		commands[0] = "playerCreate"
+		commands[1] = "captain"
+		commands[2] = "blue"
+
+		nr := newRequest(name, 3, arguments)
+
+		var commands commandArrayType
+
+
+		ct := newCommand(name, 1, commands)
+		log.Println(ct)
+
+		payload, err := json.Marshal(ct)
+		if err != nil {
+			log.Println(err)
+		}
 
 		err = rdb.Publish(context.Background(), channel, payload).Err()
 		if err != nil {

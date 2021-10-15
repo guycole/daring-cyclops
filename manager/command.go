@@ -30,28 +30,6 @@ func newCommand(name string, size int, commands commandArrayType) *CommandType {
 	return &raw
 }
 
-func newPlayer2(gameId, name string, rdb *redis.Client) {
-	channel := gameId + "m"
-
-	var commands commandArrayType
-	commands[0] = "playerCreate"
-	commands[1] = "captain"
-	commands[2] = "blue"
-
-	ct := newCommand(name, 1, commands)
-	log.Println(ct)
-
-	payload, err := json.Marshal(ct)
-	if err != nil {
-		log.Println(err)
-	}
-
-	err = rdb.Publish(context.Background(), channel, payload).Err()
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func newShip2(gameId, name string, rdb *redis.Client) {
 	channel := gameId + "m"
 
@@ -72,25 +50,3 @@ func newShip2(gameId, name string, rdb *redis.Client) {
 		log.Fatal(err)
 	}
 }
-
-/*
-func newPing(gameId, name string, rdb *redis.Client) {
-	channel := gameId + "m"
-
-	var commands commandArrayType
-	commands[0] = "pingCommand"
-
-	ct := newCommand(name, 1, commands)
-	log.Println(ct)
-
-	payload, err := json.Marshal(ct)
-	if err != nil {
-		log.Println(err)
-	}
-
-	err = rdb.Publish(context.Background(), channel, payload).Err()
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-*/

@@ -208,22 +208,22 @@ func (pat playerArrayType) find(target string) int {
 	return -1
 }
 
-func commandPlayerCreate(tnt *turnNodeType, pat *playerArrayType) {
+func commandPlayerCreate(tnt *turnNodeType, pat *playerArrayType) (*ResponseType, error) {
 	log.Println("commandPlayerCreate")
 
-	rawRank := tnt.commands[1]
-	rawTeam := tnt.commands[2]
+	rawRank := tnt.arguments[1]
+	rawTeam := tnt.arguments[2]
 
 	np, err := newPlayer(tnt.name, rawRank, rawTeam)
 	if err != nil {
 		log.Println("skipping commandPlayerCreate w/newPlayer error")
-		return
+		return nil, err
 	}
 
 	duplicate := pat.find(tnt.name)
 	if duplicate >= 0 {
 		log.Println("skipping commandPlayerCreate w/duplicate player")
-		return
+		return nil, err
 	}
 
 	bluePopulation, redPopulation := pat.census()
@@ -232,28 +232,48 @@ func commandPlayerCreate(tnt *turnNodeType, pat *playerArrayType) {
 	case blueTeam:
 		if bluePopulation >= maxTeamPlayers {
 			log.Println("skipping commandPlayerCreate w/max blue team")
-			return
+			return nil, err
 		}
 	case redTeam:
 		if redPopulation >= maxTeamPlayers {
 			log.Println("skipping commandPlayerCreate w/max red team")
-			return
+			return nil, err
 		}
 	default:
 		log.Println("skipping commandPlayerCreate w/unknown team")
-		return
 	}
 
 	pat.add(np)
+
+	argSize, argArray := okArgument()
+
+	nr := newResponse(playerCreateResponse, tnt.request, argSize, argArray)
+
+	return nr, nil
 }
 
-func commandPlayerDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType, pat *playerArrayType) {
+func commandPlayerDelete(tnt *turnNodeType, pat *playerArrayType) (*ResponseType, error) {
 	log.Println("commandPlayerDelete")
 
-	ndx := sat.findByOwner(tnt.name)
-	if ndx >= 0 {
-		sat.delete(sat[ndx].uuid, bat)
-	}
+	/*
+		ndx := sat.findByOwner(tnt.name)
+		if ndx >= 0 {
+			sat.delete(sat[ndx].uuid, bat)
+		}
+	*/
 
 	pat.delete(tnt.name)
+
+	argSize, argArray := okArgument()
+
+	nr := newResponse(playerCreateResponse, tnt.request, argSize, argArray)
+
+	return nr, nil
 }
+
+/*
+func commandPlayerDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType, pat *playerArrayType) {
+
+
+}
+*/

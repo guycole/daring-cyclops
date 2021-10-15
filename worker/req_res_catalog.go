@@ -2,9 +2,11 @@
 // Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
 package main
 
+import "strings"
+
 type requestEnum int
 
-// must match order for legalRequestDuration
+// must match order for legalRequestType
 const (
 	moveAbsoluteRequest requestEnum = iota
 	moveComputedRequest
@@ -21,21 +23,31 @@ const (
 	unknownRequest
 )
 
-// must match requestEnum
-var legalRequestDuration = [...]int{
-	3, // moveAbsoluteRequest
-	3, // moveComputeRequest
-	3, // moveRelativeRequest
-	1, // pingRequest
-	0, // playerCreateRequest
-	0, // playerDeleteRequest
-	0, // shipCreateRequest
-	0, // shipDeleteRequest
-	0, // shutDownRequest
-	1, // tellAllRequest
-	1, // tellBlueRequest
-	1, // tellRedRequest
-	1, // unknownRequest
+// must matchorder for requestEnum
+var legalRequests = [...]string{
+	"moveAbsoluteRequest",
+	"moveComputedRequest",
+	"moveRelativeRequest",
+	"pingRequest",
+	"playerCreateRequest",
+	"playerDeleteRequest",
+	"shipCreateRequest",
+	"shipDeleteRequest",
+	"shutDownRequest",
+	"tellAllRequest",
+	"tellBlueRequest",
+	"tellRedRequest",
+	"unknownRequest",
+}
+
+func findRequest(arg string) requestEnum {
+	for ndx := 0; ndx < len(legalRequests); ndx++ {
+		if strings.Compare(legalRequests[ndx], arg) == 0 {
+			return requestEnum(ndx)
+		}
+	}
+
+	return requestEnum(unknownRequest)
 }
 
 type responseEnum int

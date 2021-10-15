@@ -22,8 +22,8 @@ type turnNodeType struct {
 func newTurnNode(rt *RequestType) *turnNodeType {
 	result := turnNodeType{name: rt.Name, request: rt.RequestId, argumentSize: rt.ArgumentSize, arguments: rt.Arguments}
 
-	result.requestCommand = requestEnum(rt.Request)
-	result.duration = legalRequestDuration[rt.Request]
+	result.requestCommand = findRequest(rt.Arguments[0])
+	//	result.duration = legalRequestDuration[rt.Request]
 
 	return &result
 }

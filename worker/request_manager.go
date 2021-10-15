@@ -17,14 +17,13 @@ type argumentArrayType [maxRequestArguments]string
 type RequestType struct {
 	Name         string
 	RequestId    string
-	Request      int
 	ArgumentSize int
 	Arguments    argumentArrayType
 }
 
 // newRequest convenience function to populate struct
-func newRequest(name, id string, request, size int, arguments argumentArrayType) *RequestType {
-	result := RequestType{Name: name, RequestId: id, Request: request, ArgumentSize: size, Arguments: arguments}
+func newRequest(name, id string, size int, arguments argumentArrayType) *RequestType {
+	result := RequestType{Name: name, RequestId: id, ArgumentSize: size, Arguments: arguments}
 	return &result
 }
 
@@ -57,11 +56,6 @@ func requestFromManager(channelName string, requestQueue *requestQueueType) {
 			log.Println("requestFromManager skipping bad unmarshal")
 			continue
 		}
-
-		log.Println("fresh rx")
-		log.Println(rt)
-
-		rt.Request = 3
 
 		requestQueue.enqueue(&rt)
 	}

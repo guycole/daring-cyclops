@@ -16,7 +16,7 @@ type gameType struct {
 	//board     boardArrayType
 	boardType boardTypeEnum
 	//	planets   planetArrayType
-	//players playerArrayType
+	players playerArrayType
 	//ships   shipArrayType
 	//	stars     starArrayType
 	//	starGates starGateArrayType
@@ -135,41 +135,43 @@ func (gt *gameType) dispatchCommand(tnt *turnNodeType) {
 	log.Println("dispatchCommand")
 	log.Println(tnt)
 
-	//var response *CommandType
+	var err error
+	var response *ResponseType
 
 	switch tnt.requestCommand {
-	/*
-		case moveCommand:
-			response, err := commandShipMove(tnt, &gt.board, &gt.ships)
-			log.Println(err)
-			log.Println(response)
-	*/
 	case pingRequest:
-		log.Println("ping noted send response")
-		response, err := pingReqRes(tnt)
-
-		log.Println(err)
-		log.Println(response)
-
+		response, err = pingReqRes(tnt)
+	case playerCreateRequest:
+		response, err = commandPlayerCreate(tnt, &gt.players)
+	case playerDeleteRequest:
+		response, err = commandPlayerDelete(tnt, &gt.players)
+		//response, err = commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
 		/*
-			case playerCreateCommand:
-				commandPlayerCreate(tnt, &gt.players)
-			case playerDeleteCommand:
-				commandPlayerDelete(tnt, &gt.board, &gt.ships, &gt.players)
 			case shipCreateCommand:
 				commandShipCreate(tnt, &gt.board, &gt.ships)
 			case shipDeleteCommand:
 				commandShipDelete(tnt, &gt.board, &gt.ships)
 		*/
+
 	case shutDownRequest:
 		log.Println("shutdown noted")
 		gt.shutDownFlag = true
+	default:
+		log.Println("unknown command")
+		log.Println(tnt)
 	}
 
-	if response != nil {
+	if err != nil {
+		log.Println("error error")
+		log.Println(err)
+	}
+
+	if response == nil {
+		log.Println("xxx xxx xxx nil response")
+	} else {
+		log.Println("xxx xxx xxx write response")
 		responseToManager(gt.outboundQueue, response)
 	}
-
 }
 
 func (gt *gameType) serviceRequestQueue() {
@@ -178,8 +180,6 @@ func (gt *gameType) serviceRequestQueue() {
 	for {
 		// process fresh messages from manager
 		rt := gt.requestQueue.dequeue()
-		log.Println("dq dq dq")
-		log.Println(rt)
 		if rt == nil {
 			break
 		} else {
@@ -228,15 +228,10 @@ func (gt *gameType) servicePlayerTurnQueue(playerNdx int) {
 
 func (gt *gameType) serviceTurnQueue() {
 	// need random option
-	/*
-		for ndx := 0; ndx < maxPlayers; ndx++ {
-			gt.servicePlayerTurnQueue(ndx)
-		}
-	*/
-}
 
-func (gt *gameType) serviceResponseQueue() {
-	log.Println("service response queue")
+	for ndx := 0; ndx < maxPlayers; ndx++ {
+		gt.servicePlayerTurnQueue(ndx)
+	}
 }
 
 func (gt *gameType) turnManager() {
@@ -246,9 +241,7 @@ func (gt *gameType) turnManager() {
 
 	gt.serviceRequestQueue()
 
-	//	gt.serviceTurnQueue()
-
-	//	gt.serviceResponseQueue()
+	gt.serviceTurnQueue()
 
 	log.Printf("ending turn:%d", gt.turnCounter)
 }

@@ -24,15 +24,27 @@ func newResponse(response responseEnum, id string, size int, arguments argumentA
 	return &result
 }
 
-func okResponse() (int, argumentArrayType) {
-	log.Println("OK response")
+func okArgument() (int, argumentArrayType) {
+	log.Println("OK argument")
 
 	var aat argumentArrayType
 	aat[0] = "ok"
 	return 1, aat
 }
 
+func unknownArgument() (int, argumentArrayType) {
+	log.Println("unknown argument")
+
+	var aat argumentArrayType
+	aat[0] = "unknown"
+	return 1, aat
+}
+
 func responseToManager(channelName string, rt *ResponseType) {
+	log.Println("-x-x-x-x-x-x-x-x-x-x-x-x-x-")
+	log.Println(rt)
+	log.Println("-x-x-x-x-x-x-x-x-x-x-x-x-x-")
+
 	// TODO get these arguments from secrets
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "cyclops-redis-master:6379",
