@@ -3,7 +3,6 @@
 package main
 
 import (
-	"log"
 	"math"
 	"math/rand"
 	"strconv"
@@ -92,44 +91,4 @@ func (origin *locationType) testForAdjacency(target *locationType) int {
 	}
 
 	return -1
-}
-
-// return a random location for stars and planets
-func randomCelestialLocation(bat boardArrayType) *locationType {
-	for ndx := 0; ndx < 100; ndx++ {
-		/*
-			position := randomLocation(maxBoardSideY, maxBoardSideX)
-
-				// cannot have celestial objects adjacent to stargates
-				_, locNdx := starGateAdjacent(position)
-				if locNdx >= 0 {
-					//log.Printf("stargate adjacent:%d %d %d", gateNdx, locNdx, ndx)
-					continue
-				}
-
-				boardCell := bat[position.yy][position.xx]
-				if !testForCelestial(*boardCell) {
-					return position
-				}
-		*/
-	}
-
-	log.Println("unable to generate random celestial location")
-
-	return nil
-}
-
-// return a random location for ships
-func randomShipLocation(bat boardArrayType) *locationType {
-	for ndx := 0; ndx < 100; ndx++ {
-		position := randomLocation(maxBoardSideY, maxBoardSideX)
-		boardCell := bat[position.yy][position.xx]
-		if testForEmpty(*boardCell) {
-			return position
-		}
-	}
-
-	log.Println("unable to generate random ship location")
-
-	return nil
 }

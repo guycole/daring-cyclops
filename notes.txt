@@ -103,3 +103,4 @@ replace arrays w/redis for multipod deployment (state moves to redis)
 must be in single namespace because secrets
 
 next: ping/pong manager/worker, prometheus
+next: consolidate location with board_cell

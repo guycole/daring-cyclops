@@ -12,8 +12,8 @@ import (
 
 // gameType main game structure, only one instance per game
 type gameType struct {
-	// TODO creation time
-	//board     boardArrayType
+	creation  time.Time
+	board     boardArrayType
 	boardType boardTypeEnum
 	//	planets   planetArrayType
 	players playerArrayType
@@ -58,6 +58,8 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 
 	gt := gameType{uuid: id, boardType: boardType}
 
+	gt.creation = time.Now()
+
 	gt.inboundQueue = id + "m"
 	gt.outboundQueue = id + "w"
 
@@ -76,7 +78,7 @@ func newGame(id string, boardType boardTypeEnum) *gameType {
 }
 
 func (gt *gameType) boardGenerator() {
-	//gt.board = newBoard()
+	gt.board = newBoard()
 
 	switch gt.boardType {
 	case emptyBoard:

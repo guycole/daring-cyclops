@@ -44,7 +44,7 @@ func main() {
 
 	var gameId = "testGame0"
 
-	game := newGame(gameId, standardBoard)
+	game := newGame(gameId, emptyBoard)
 
 	go requestFromManager(game.inboundQueue, game.requestQueue)
 

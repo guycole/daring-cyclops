@@ -442,9 +442,9 @@ func commandShipCreate(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayTyp
 		return errors.New("commandShip duplicate player id")
 	}
 
-	position := randomShipLocation(*bat)
+	position := bat.randomShipLocation()
 
-	st, err := newShip(tnt.commands[1], tnt.name, position)
+	st, err := newShip(tnt.arguments[1], tnt.name, position)
 	if err != nil {
 		return errors.New("commandShip creation failure")
 	}
@@ -481,13 +481,13 @@ func commandShipDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayTyp
 	return nil
 }
 
-func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) (*CommandType, error) {
+func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) (*RequestType, error) {
 	ndx := sat.findByOwner(tnt.name)
 	if ndx < 0 {
 		return nil, errors.New("moveShip player id not found")
 	}
 
-	newLocation := stringLocation(tnt.commands[1], tnt.commands[2])
+	newLocation := stringLocation(tnt.arguments[1], tnt.arguments[2])
 	if newLocation == nil {
 		return nil, errors.New("moveShip bad location")
 	}
@@ -501,10 +501,10 @@ func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType)
 	return nil, err
 
 	/////
-	var commands commandArrayType
+	var commands argumentArrayType
 	commands[0] = "pong"
 
-	ct := newCommand(tnt.name, tnt.request, 1, commands)
+	ct := newRequest(tnt.name, tnt.request, 1, commands)
 
 	return ct, nil
 }
