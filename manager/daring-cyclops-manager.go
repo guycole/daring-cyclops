@@ -6,7 +6,6 @@ import (
 	"context"
 	"log"
 	"math/rand"
-	"strconv"
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
@@ -45,32 +44,37 @@ func newManager() *gameManagerType {
 func main() {
 	log.Println(banner)
 
-	var gameId = "testGame0"
-	var counter int
+	log.Println(configuration)
 
-	go responseFromWorker(gameId + "w")
+	webPortal()
 
-	for {
-		counter++
+	/*
+		var gameId = "testGame0"
+		var counter int
 
-		start := time.Now()
+		go responseFromWorker(gameId + "w")
 
-		elapsed := time.Since(start)
-		log.Printf("turn %d took %s", counter, elapsed)
+		for {
+			counter++
 
-		pingRequest(gameId, "pingTest"+strconv.Itoa(counter))
-		playerCreateRequest(gameId, testPlayerName1, "cadet", "blue")
-		playerCreateRequest(gameId, testPlayerName2, "admiral", "red")
-		playerDeleteRequest(gameId, testPlayerName1)
-		playerDeleteRequest(gameId, testPlayerName2)
+			start := time.Now()
 
-		time.Sleep(5 * time.Second)
+			elapsed := time.Since(start)
+			log.Printf("turn %d took %s", counter, elapsed)
 
-		counter += 1
-	}
+			pingRequest(gameId, "pingTest"+strconv.Itoa(counter))
+			playerCreateRequest(gameId, testPlayerName1, "cadet", "blue")
+			playerCreateRequest(gameId, testPlayerName2, "admiral", "red")
+			playerDeleteRequest(gameId, testPlayerName1)
+			playerDeleteRequest(gameId, testPlayerName2)
 
-	shutDownRequest(gameId, "shutDown")
+			time.Sleep(5 * time.Second)
 
+			counter += 1
+		}
+
+		shutDownRequest(gameId, "shutDown")
+	*/
 	/*
 		manager := newManager()
 		log.Println(manager)

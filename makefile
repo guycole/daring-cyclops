@@ -18,6 +18,7 @@ DARING_CYCLOPS_MANAGER = daring-cyclops-manager:1
 DARING_CYCLOPS_WORKER = daring-cyclops-worker:1
 HELM = helm
 KUBECTL = kubectl
+MINIKUBE = minikube
 
 manager_build:
 	cd manager; $(DOCKER) build . -t $(DARING_CYCLOPS_MANAGER)
@@ -28,15 +29,20 @@ manager_apply:
 manager_delete:
 	cd infra; $(KUBECTL) delete -f manager-deploy.yaml -n cyclops-app
 
+minikube_reset:
+	$(MINIKUBE) stop
+	$(MINIKUBE) delete
+
 minikube_start:
 	cd infra; ./start_minikube.sh
 
 minikube_setup:
 	$(KUBECTL) create namespace cyclops-app	
 	$(KUBECTL) create namespace monitoring
+	$(MINIKUBE) addons enable ingress
 
 monitoring_deploy:
-	cd infra; $(HELM) install prometheus prometheus-community/kube-prometheus-stack --namespace monitoroing  
+	cd infra; $(HELM) install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring  
 
 redis_deploy:
 	cd infra; $(KUBECTL) apply -f redis-secret.yaml -n cyclops-app

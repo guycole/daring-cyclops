@@ -5,7 +5,8 @@
 # Development Environment: OS X 10.13.6
 # Author: G.S. Cole (guycole at gmail dot com)
 #
-infra/start_minikube.sh
+make minikube_start
+make minikube_setup
 #
 make redis_deploy
 #
