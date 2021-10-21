@@ -84,6 +84,7 @@ func findTeam(arg string) teamEnum {
 	return teamEnum(unknownTeam)
 }
 
+// serialized for redis
 type PlayerTypeJson struct {
 	//	CreatedAt time.Time `json:"name"`
 	Email    string `json:"email"`

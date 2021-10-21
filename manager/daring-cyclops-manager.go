@@ -26,23 +26,6 @@ func main() {
 	pong, err := rc.Ping(redisCtx).Result()
 	log.Println(pong, err)
 
-	/*
-		ptj := PlayerTypeJson{Email: "email@bogus.com", Name: "testaroo", Password: "password", Rank: "cadet", Score: 12345, Team: "red"}
-		log.Println(ptj)
-
-		payload, err := json.Marshal(ptj)
-		if err != nil {
-			log.Println(err)
-		}
-
-		key := ptj.Email
-
-		err = rc.Set(ctx, key, payload, 0).Err()
-		if err != nil {
-			log.Println(err)
-		}
-	*/
-
 	pt := playerType{email: "email@bogus.com", name: "testaroo", password: "password"}
 	setPlayer(rc, &pt)
 
