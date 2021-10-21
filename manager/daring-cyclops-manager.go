@@ -1,52 +1,54 @@
 // Copyright 2021 Guy Cole. All rights reserved.
 // Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
+
 package main
 
 import (
-	"context"
 	"log"
-	"math/rand"
-	"time"
-
-	redis "github.com/go-redis/redis/v8"
 )
 
-const testPlayerName1 = "testName1"
-const testPlayerName2 = "testName2"
-
-// gameManagerType, only one instance
-type gameManagerType struct {
-	//	games gameArrayType
-	rdb *redis.Client
-}
-
-var ctx = context.Background()
+//const testPlayerName1 = "testName1"
+//const testPlayerName2 = "testName2"
 
 // banner splash message
 const banner = "Daring Cyclops Manager V0.0"
-
-func newManager() *gameManagerType {
-	log.Println("new manager")
-
-	rand.Seed(time.Now().UnixNano())
-
-	gmt := gameManagerType{}
-
-	gmt.rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
-
-	return &gmt
-}
 
 func main() {
 	log.Println(banner)
 
 	log.Println(configuration)
 
-	webPortal()
+	manager := newManager()
+	log.Println(manager)
+
+	rc := freshRedisConnection()
+	log.Println(rc)
+	pong, err := rc.Ping(redisCtx).Result()
+	log.Println(pong, err)
+
+	/*
+		ptj := PlayerTypeJson{Email: "email@bogus.com", Name: "testaroo", Password: "password", Rank: "cadet", Score: 12345, Team: "red"}
+		log.Println(ptj)
+
+		payload, err := json.Marshal(ptj)
+		if err != nil {
+			log.Println(err)
+		}
+
+		key := ptj.Email
+
+		err = rc.Set(ctx, key, payload, 0).Err()
+		if err != nil {
+			log.Println(err)
+		}
+	*/
+
+	pt := playerType{email: "email@bogus.com", name: "testaroo", password: "password"}
+	setPlayer(rc, &pt)
+
+	getPlayer(rc, pt.email)
+
+	//webPortal()
 
 	/*
 		var gameId = "testGame0"
@@ -117,7 +119,7 @@ func main() {
 	*/
 }
 
-func newPlayer(gameId, name string) {
+func newPlayer2(gameId, name string) {
 	channel := gameId + "m"
 	log.Println(channel)
 	/*

@@ -1,12 +1,11 @@
 // Copyright 2021 Guy Cole. All rights reserved.
-// Use of this source code is governed by a GPL-3 license that can be found
-// in the LICENSE file.
+// Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
+
 package main
 
 import (
 	"encoding/json"
 
-	"context"
 	"errors"
 	"log"
 
@@ -85,16 +84,27 @@ func findTeam(arg string) teamEnum {
 	return teamEnum(unknownTeam)
 }
 
-type PlayerType struct {
-	Email string
-	Name  string
-	Rank  rankEnum
-	Score int
-	Team  teamEnum
+type PlayerTypeJson struct {
+	//	CreatedAt time.Time `json:"name"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Rank     string `json:"rank"`
+	Score    int    `json:"score"`
+	Team     string `json:"team"`
+}
+
+type playerType struct {
+	email    string
+	name     string
+	password string
+	rank     rankEnum
+	score    int
+	team     teamEnum
 }
 
 // newPlayer convenience function to populate struct
-func newPlayer(email, name string, rank string, team string) (*PlayerType, error) {
+func newPlayer(email, name string, rank rankEnum, team teamEnum) (*playerType, error) {
 	if len(email) < 1 {
 		return nil, errors.New("bad email")
 	}
@@ -103,24 +113,29 @@ func newPlayer(email, name string, rank string, team string) (*PlayerType, error
 		return nil, errors.New("bad player name")
 	}
 
-	result := PlayerType{Email: email, Name: name}
-	playerRank := findRank(rank)
-	if playerRank == unknownRank {
-		return nil, errors.New("unknown rank")
-	}
-
-	result.Rank = playerRank
-
-	playerTeam := findTeam(team)
-	if playerTeam == unknownTeam {
-		return nil, errors.New("unknown team")
-	}
-
-	result.Team = playerTeam
-
+	result := playerType{email: email, name: name, rank: rank, team: team}
 	return &result, nil
 }
 
+const testPlayerEmail1 = "test1@bogus.com"
+const testPlayerName1 = "testName1"
+
+// testPlayer1 returns test player1
+func testPlayer1() *playerType {
+	np1, _ := newPlayer(testPlayerEmail1, testPlayerName1, cadetRank, blueTeam)
+	return np1
+}
+
+const testPlayerEmail2 = "test2@bogus.com"
+const testPlayerName2 = "testName2"
+
+// testPlayer2 returns test player2
+func testPlayer2() *playerType {
+	np2, _ := newPlayer(testPlayerEmail2, testPlayerName2, admiralRank, redTeam)
+	return np2
+}
+
+/*
 func rankChange(pt *PlayerType, newRank rankEnum) {
 	// TODO issue 16
 	// test for consecutive rank
@@ -137,57 +152,50 @@ func teamChange(pt *PlayerType, newTeam teamEnum) {
 	// ensure only red/blue team selection
 	pt.Team = newTeam
 }
-
-const testPlayerEmail1 = "test1@bogus.com"
-const testPlayerName1 = "testName1"
-
-// testPlayer1 returns test player1
-func testPlayer1() *PlayerType {
-	np1, _ := newPlayer(testPlayerEmail1, testPlayerName1, "cadet", "blue")
-	return np1
-}
-
-const testPlayerEmail2 = "test2@bogus.com"
-const testPlayerName2 = "testName2"
-
-// testPlayer2 returns test player2
-func testPlayer2() *PlayerType {
-	np2, _ := newPlayer(testPlayerEmail2, testPlayerName2, "admiral", "red")
-	return np2
-}
+*/
 
 // getPlayer reads from redis
-func getPlayer(rdb *redis.Client, key string) *PlayerType {
+func getPlayer(rc *redis.Client, key string) *playerType {
 	log.Printf("getPlayer:%s", key)
 
-	rawJson, err := rdb.Get(context.Background(), key).Result()
+	rawJson, err := rc.Get(redisCtx, key).Result()
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
 
-	var pt PlayerType
-	err = json.Unmarshal([]byte(rawJson), &pt)
+	var ptj PlayerTypeJson
+	err = json.Unmarshal([]byte(rawJson), &ptj)
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
+
+	pt := playerType{email: ptj.Email, name: ptj.Name, password: ptj.Password, score: ptj.Score}
+	pt.rank = findRank(ptj.Rank)
+	pt.team = findTeam(ptj.Team)
+	log.Println(pt)
 
 	return &pt
 }
 
 // setPlayer writes to redis
-func setPlayer(rdb *redis.Client, pt *PlayerType) {
-	log.Printf("setPlayer:%s", pt.Name)
+func setPlayer(rc *redis.Client, pt *playerType) {
+	log.Printf("setPlayer:%s", pt.name)
 
-	payload, err := json.Marshal(pt)
+	rank := pt.rank.string()
+	team := pt.team.string()
+
+	ptj := PlayerTypeJson{Email: pt.email, Name: pt.name, Password: pt.password, Rank: rank, Score: pt.score, Team: team}
+
+	payload, err := json.Marshal(ptj)
 	if err != nil {
 		log.Println(err)
 	}
 
-	key := pt.Name
+	key := ptj.Email
 
-	err = rdb.Set(context.Background(), key, payload, 0).Err()
+	err = rc.Set(redisCtx, key, payload, 0).Err()
 	if err != nil {
 		log.Println(err)
 	}

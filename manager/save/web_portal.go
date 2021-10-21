@@ -23,6 +23,7 @@ func webPortal() {
 
 	// index
 	mux.HandleFunc("/", index)
+
 	// error
 	mux.HandleFunc("/err", err)
 
