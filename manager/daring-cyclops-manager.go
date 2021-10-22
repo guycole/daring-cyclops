@@ -20,18 +20,18 @@ func main() {
 
 	manager := newManager()
 	log.Println(manager)
+	/*
+		rc := freshRedisConnection()
+		log.Println(rc)
+		pong, err := rc.Ping(redisCtx).Result()
+		log.Println(pong, err)
 
-	rc := freshRedisConnection()
-	log.Println(rc)
-	pong, err := rc.Ping(redisCtx).Result()
-	log.Println(pong, err)
+		pt := playerType{email: "email@bogus.com", name: "testaroo", password: "password"}
+		setPlayer(rc, &pt)
 
-	pt := playerType{email: "email@bogus.com", name: "testaroo", password: "password"}
-	setPlayer(rc, &pt)
-
-	getPlayer(rc, pt.email)
-
-	//webPortal()
+		getPlayer(rc, pt.email)
+	*/
+	webPortal()
 
 	/*
 		var gameId = "testGame0"

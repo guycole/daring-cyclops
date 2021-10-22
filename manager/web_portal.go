@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+	"time"
 )
 
 func splashPage(response http.ResponseWriter, request *http.Request) {
@@ -27,32 +28,48 @@ func webPortal() {
 	// error
 	mux.HandleFunc("/err", err)
 
+	// starting up the server
+	server := &http.Server{
+		Addr:           configuration.Address,
+		Handler:        mux,
+		ReadTimeout:    time.Duration(configuration.ReadTimeout * int64(time.Second)),
+		WriteTimeout:   time.Duration(configuration.WriteTimeout * int64(time.Second)),
+		MaxHeaderBytes: 1 << 20,
+	}
+	server.ListenAndServe()
+
 	log.Println("webPortal exit")
 }
 
 // GET /err?msg=
 func err(writer http.ResponseWriter, request *http.Request) {
-	vals := request.URL.Query()
-	_, err := session(writer, request)
-	if err != nil {
-		generateHTML(writer, vals.Get("msg"), "layout", "public.navbar", "error")
-	} else {
-		generateHTML(writer, vals.Get("msg"), "layout", "private.navbar", "error")
-	}
+	log.Println("err noted")
+	/*
+		vals := request.URL.Query()
+		_, err := session(writer, request)
+		if err != nil {
+			generateHTML(writer, vals.Get("msg"), "layout", "public.navbar", "error")
+		} else {
+			generateHTML(writer, vals.Get("msg"), "layout", "private.navbar", "error")
+		}
+	*/
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
-	threads, err := data.Threads()
-	if err != nil {
-		error_message(writer, request, "Cannot get threads")
-	} else {
-		_, err := session(writer, request)
+	/*
+		threads, err := data.Threads()
 		if err != nil {
-			generateHTML(writer, threads, "layout", "public.navbar", "index")
+			error_message(writer, request, "Cannot get threads")
 		} else {
-			generateHTML(writer, threads, "layout", "private.navbar", "index")
+			_, err := session(writer, request)
+			if err != nil {
+				generateHTML(writer, threads, "layout", "public.navbar", "index")
+			} else {
+				generateHTML(writer, threads, "layout", "private.navbar", "index")
+			}
 		}
-	}
+	*/
+	log.Println("thread noted")
 }
 
 func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
