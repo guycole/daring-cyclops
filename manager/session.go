@@ -3,21 +3,62 @@ package main
 import (
 	"encoding/json"
 	"log"
-
-	redis "github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
+	"net/http"
 )
 
-type Session struct {
+// serialized for redis
+type SessionTypeJson struct {
 	Email string
 	Id    string
 	//	CreatedAt time.Time
 }
 
+func sessionCheck(id string) *SessionTypeJson {
+	log.Println("sessionCheck")
+	log.Println(id)
+
+	rc := freshRedisConnection()
+
+	rawJson, err := rc.Get(redisCtx, id).Result()
+	if err != nil {
+		log.Println(err)
+		log.Println("session err1x")
+		return nil
+	}
+
+	var result SessionTypeJson
+	err = json.Unmarshal([]byte(rawJson), &result)
+	if err != nil {
+		log.Println(err)
+		log.Println("session err2x")
+		return nil
+	}
+
+	return &result
+}
+
+func sessionTest(request *http.Request, response http.ResponseWriter) *SessionTypeJson {
+	//	func session(writer http.ResponseWriter, request *http.Request) (sess data.Session, err error) {
+
+	log.Println("-x-x-x-x-x-x-x-x-")
+	cookie, err := request.Cookie("_cookie")
+	log.Println(cookie)
+	log.Println(err)
+
+	session := SessionTypeJson{}
+	if err == nil {
+		session = *sessionCheck(cookie.Value)
+	}
+
+	return &session
+}
+
+/*
 func getSession(rc *redis.Client, id string) (session *Session, err error) {
 	rawJson, err := rc.Get(redisCtx, id).Result()
 	if err != nil {
 		log.Println(err)
+		log.Println("session err1")
 		return nil, nil
 	}
 
@@ -25,6 +66,7 @@ func getSession(rc *redis.Client, id string) (session *Session, err error) {
 	err = json.Unmarshal([]byte(rawJson), &result)
 	if err != nil {
 		log.Println(err)
+		log.Println("session err2")
 		return nil, nil
 	}
 
@@ -48,3 +90,4 @@ func setSession(rc *redis.Client, email string) (session *Session, err error) {
 
 	return &result, nil
 }
+*/

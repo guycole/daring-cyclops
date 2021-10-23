@@ -55,8 +55,11 @@ func err(writer http.ResponseWriter, request *http.Request) {
 	*/
 }
 
+/*
 func index(writer http.ResponseWriter, request *http.Request) {
-	/*
+
+c getSession(rc *redis.Client, id string) (session *Session, err error) {
+
 		threads, err := data.Threads()
 		if err != nil {
 			error_message(writer, request, "Cannot get threads")
@@ -68,11 +71,14 @@ func index(writer http.ResponseWriter, request *http.Request) {
 				generateHTML(writer, threads, "layout", "private.navbar", "index")
 			}
 		}
-	*/
+
 	log.Println("thread noted")
 }
+*/
 
 func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
+	log.Println("generate html")
+
 	var files []string
 	for _, file := range filenames {
 		files = append(files, fmt.Sprintf("templates/%s.html", file))

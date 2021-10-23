@@ -1,5 +1,6 @@
 // Copyright 2021 Guy Cole. All rights reserved.
 // Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
+
 package main
 
 import (
@@ -22,8 +23,9 @@ type gameType struct {
 
 const maxGames = 5
 
-// gameArrayType contains all games
 type gameArrayType [maxGames]*gameType
+
+var gameArray gameArrayType
 
 func newGame(gameId int, gameKey string) *gameType {
 	result := gameType{gameId: gameId}
@@ -37,6 +39,7 @@ func newGame(gameId int, gameKey string) *gameType {
 	return &result
 }
 
+// TODO persist to redis
 func gameAdd(gt *gameType, gat *gameArrayType) int {
 	log.Printf("gameAdd:%d %s", gt.gameId, gt.gameKey)
 
@@ -50,6 +53,7 @@ func gameAdd(gt *gameType, gat *gameArrayType) int {
 	return -1
 }
 
+// TODO persist to redis
 func gameDelete(target string, gat *gameArrayType) int {
 	log.Printf("ganeDelete:%s", target)
 
