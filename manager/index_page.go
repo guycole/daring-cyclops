@@ -18,6 +18,7 @@ func index(response http.ResponseWriter, request *http.Request) {
 	log.Println(session)
 	if session.Id == "" {
 		log.Println("nil")
+		generateHTML(response, "layout", "public.navbar", "index")
 		//generateHTML(response, threads, "layout", "public.navbar", "index")
 	} else {
 		log.Println("not nil")

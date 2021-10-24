@@ -76,7 +76,8 @@ c getSession(rc *redis.Client, id string) (session *Session, err error) {
 }
 */
 
-func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
+func generateHTML(writer http.ResponseWriter, filenames ...string) {
+	//func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
 	log.Println("generate html")
 
 	var files []string
@@ -85,5 +86,6 @@ func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...str
 	}
 
 	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(writer, "layout", data)
+	log.Println(templates)
+	//templates.ExecuteTemplate(writer, "layout", data)
 }
