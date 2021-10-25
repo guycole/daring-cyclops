@@ -1,5 +1,6 @@
 // Copyright 2021 Guy Cole. All rights reserved.
 // Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
+
 package main
 
 import (
@@ -82,6 +83,7 @@ func generateHTML(writer http.ResponseWriter, filenames ...string) {
 
 	var files []string
 	for _, file := range filenames {
+		// replace data interface
 		files = append(files, fmt.Sprintf("templates/%s.html", file))
 	}
 
