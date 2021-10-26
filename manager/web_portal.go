@@ -82,12 +82,15 @@ func generateHTML(writer http.ResponseWriter, filenames ...string) {
 	log.Println("generate html")
 
 	var files []string
-	for _, file := range filenames {
-		// replace data interface
-		files = append(files, fmt.Sprintf("templates/%s.html", file))
-	}
+	files[0] = "index"
+	/*
+		for _, file := range filenames {
+			// replace data interface
+			files = append(files, fmt.Sprintf("templates/%s.html", file))
+		}
+	*/
 
 	templates := template.Must(template.ParseFiles(files...))
 	log.Println(templates)
-	//templates.ExecuteTemplate(writer, "layout", data)
+	templates.ExecuteTemplate(writer, "layout", data)
 }

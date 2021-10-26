@@ -1,36 +1,51 @@
 // Copyright 2021 Guy Cole. All rights reserved.
 // Use of this source code is governed by a GPL-3 license that can be found in the LICENSE file.
-
 package main
 
 import (
+	"context"
 	"log"
+	"math/rand"
+	"time"
+
+	redis "github.com/go-redis/redis/v8"
 )
 
-//const testPlayerName1 = "testName1"
-//const testPlayerName2 = "testName2"
+const testPlayerName1 = "testName1"
+const testPlayerName2 = "testName2"
+
+// gameManagerType, only one instance
+type gameManagerType struct {
+	//	games gameArrayType
+	rdb *redis.Client
+}
+
+var ctx = context.Background()
 
 // banner splash message
 const banner = "Daring Cyclops Manager V0.0"
+
+func newManager() *gameManagerType {
+	log.Println("new manager")
+
+	rand.Seed(time.Now().UnixNano())
+
+	gmt := gameManagerType{}
+
+	gmt.rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	return &gmt
+}
 
 func main() {
 	log.Println(banner)
 
 	log.Println(configuration)
 
-	manager := newManager()
-	log.Println(manager)
-	/*
-		rc := freshRedisConnection()
-		log.Println(rc)
-		pong, err := rc.Ping(redisCtx).Result()
-		log.Println(pong, err)
-
-		pt := playerType{email: "email@bogus.com", name: "testaroo", password: "password"}
-		setPlayer(rc, &pt)
-
-		getPlayer(rc, pt.email)
-	*/
 	webPortal()
 
 	/*
@@ -102,7 +117,7 @@ func main() {
 	*/
 }
 
-func newPlayer2(gameId, name string) {
+func newPlayer(gameId, name string) {
 	channel := gameId + "m"
 	log.Println(channel)
 	/*
