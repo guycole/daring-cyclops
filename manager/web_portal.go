@@ -92,5 +92,5 @@ func generateHTML(writer http.ResponseWriter, filenames ...string) {
 
 	templates := template.Must(template.ParseFiles(files...))
 	log.Println(templates)
-	templates.ExecuteTemplate(writer, "layout", data)
+	//	templates.ExecuteTemplate(writer, "layout", data)
 }

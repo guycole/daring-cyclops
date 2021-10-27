@@ -201,3 +201,32 @@ func setPlayer(rc *redis.Client, pt *playerType) {
 		log.Println(err)
 	}
 }
+
+func newPlayerX(gameId, name string) {
+	channel := gameId + "m"
+	log.Println(channel)
+	/*
+		var arguments argumentArrayType
+		commands[0] = "playerCreate"
+		commands[1] = "captain"
+		commands[2] = "blue"
+
+		nr := newRequest(name, 3, arguments)
+
+		var commands commandArrayType
+
+
+		ct := newCommand(name, 1, commands)
+		log.Println(ct)
+
+		payload, err := json.Marshal(ct)
+		if err != nil {
+			log.Println(err)
+		}
+
+		err = rdb.Publish(context.Background(), channel, payload).Err()
+		if err != nil {
+			log.Fatal(err)
+		}
+	*/
+}
