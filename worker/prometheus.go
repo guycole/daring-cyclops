@@ -12,6 +12,11 @@ import (
 )
 
 var (
+	durationCounter = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "daring_cyclops_game_duration",
+		Help: "duration of game",
+	})
+
 	commandCounter = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "daring_cyclops_command_total",
 		Help: "total count of commands since boot",
@@ -20,16 +25,6 @@ var (
 	commandPopulation = promauto.NewGauge(prometheus.GaugeOpts{
 		Name: "daring_cyclops_active_commands",
 		Help: "current population of active commands",
-	})
-
-	gameCounter = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "daring_cyclops_game_total",
-		Help: "total count of games since boot",
-	})
-
-	gamePopulation = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "daring_cyclops_active_games",
-		Help: "current population of active games",
 	})
 
 	playerCounter = promauto.NewCounter(prometheus.CounterOpts{
@@ -43,7 +38,7 @@ var (
 	})
 )
 
-func main() {
+func main3() {
 	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(":2112", nil)
 }
