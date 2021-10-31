@@ -12,7 +12,7 @@ var ctx = context.Background()
 // banner splash message
 const banner = "Daring Cyclops Manager V0.0"
 
-func main() {
+func main3() {
 	log.Println(banner)
 
 	log.Println(configuration)
