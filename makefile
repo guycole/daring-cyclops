@@ -40,9 +40,11 @@ minikube_setup:
 	$(KUBECTL) create namespace cyclops-app	
 	$(KUBECTL) create namespace monitoring
 	$(MINIKUBE) addons enable ingress
+	$(HELM) repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
 monitoring_deploy:
-	cd infra; $(HELM) install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring  
+	$(HELM) repo update
+	cd infra; $(HELM) upgrade --debug --install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --version 19.0.2
 
 redis_deploy:
 	cd infra; $(KUBECTL) apply -f redis-secret.yaml -n cyclops-app
