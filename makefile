@@ -46,6 +46,11 @@ monitoring_deploy:
 	$(HELM) repo update
 	cd infra; $(HELM) upgrade --debug --install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --version 19.0.2
 
+monitoring_expose:
+	$(KUBECTL) expose service prometheus-kube-prometheus-alertmanager --type=NodePort --target-port=9093 --name=prometheus-alertmanager-np --namespace=monitoring
+	$(KUBECTL) expose service prometheus-kube-prometheus-prometheus --type=NodePort --target-port=9090 --name=prometheus-server-np --namespace=monitoring
+	$(KUBECTL) expose service prometheus-grafana --type=NodePort --target-port=3000 --name=grafana-np --namespace=monitoring
+
 redis_deploy:
 	cd infra; $(KUBECTL) apply -f redis-secret.yaml -n cyclops-app
 	cd infra; $(HELM) install cyclops-redis bitnami/redis --values redis-values.yaml -n cyclops-app
