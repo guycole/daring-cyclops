@@ -44,7 +44,7 @@ minikube_setup:
 
 monitoring_deploy:
 	$(HELM) repo update
-	cd infra; $(HELM) upgrade --debug --install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --version 19.0.2
+	cd infra; $(HELM) upgrade --debug --install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --version 19.0.2 --values infra/kube-prometheus.yaml
 
 monitoring_expose:
 	$(KUBECTL) expose service prometheus-kube-prometheus-alertmanager --type=NodePort --target-port=9093 --name=prometheus-alertmanager-np --namespace=monitoring
