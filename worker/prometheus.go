@@ -4,6 +4,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -38,7 +39,9 @@ var (
 	})
 )
 
-func main3() {
+func main() {
+	log.Println("start start")
+
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":2112", nil)
+	http.ListenAndServe(":9090", nil)
 }

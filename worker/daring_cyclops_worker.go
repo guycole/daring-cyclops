@@ -22,7 +22,7 @@ func testClient(gameId string) {
 
 var addr = flag.String("listen-address", ":8080", "The address to listen on for HTTP requests.")
 
-func main() {
+func main3() {
 	log.Println(banner)
 
 	/*
