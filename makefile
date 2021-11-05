@@ -44,10 +44,8 @@ minikube_setup:
 monitoring_deploy:
 	$(HELM) repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	$(HELM) repo update
-	# NOTE does not block, will return before pods are completely up
 	cd infra; $(HELM) upgrade --debug --install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --version 19.0.2 --values kube-prometheus.yaml
 
-# do not invoke until monitoring pods have started
 monitoring_expose:
 	$(KUBECTL) expose service prometheus-kube-prometheus-alertmanager --type=NodePort --target-port=9093 --name=prometheus-alertmanager-np --namespace=monitoring
 	$(KUBECTL) expose service prometheus-kube-prometheus-prometheus --type=NodePort --target-port=9090 --name=prometheus-server-np --namespace=monitoring

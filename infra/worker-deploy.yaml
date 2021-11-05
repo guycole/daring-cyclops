@@ -18,6 +18,7 @@ spec:
         image: daring-cyclops-worker:1
         imagePullPolicy: IfNotPresent
         ports:
+          - containerPort: 4190
           - containerPort: 6379
         env:
           - name: REDIS_PASSWORD
