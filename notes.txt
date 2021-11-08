@@ -91,12 +91,10 @@ Statistics:
   game elapsed time
   game score/team
 
-namespace cyclops
+namespace cyclops-app
 
 kubectl config use-context minikube
 eval $(minikube docker-env).
-
-enable prometheus scraping of redis
 
 replace arrays w/redis for multipod deployment (state moves to redis)
 
@@ -104,3 +102,55 @@ must be in single namespace because secrets
 
 next: ping/pong manager/worker, prometheus
 next: consolidate location with board_cell
+
+redis
+  must be in cyclops-app namespace for secrets
+
+  enable prometheus scraping of redis (redis exporter)
+
+  kubectl apply -f infra/redis-secret.yaml -n cyclops-app 
+secret/redis-secret created
+helm install cyclops-redis bitnami/redis -n cyclops-app --version 15.5.4 --values infra/redis-values.yaml
+NAME: cyclops-redis
+LAST DEPLOYED: Sun Nov  7 00:35:18 2021
+NAMESPACE: cyclops-app
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: redis
+CHART VERSION: 15.5.4
+APP VERSION: 6.2.6
+
+** Please be patient while the chart is being deployed **
+
+Redis&trade; can be accessed on the following DNS names from within your cluster:
+
+    cyclops-redis-master.cyclops-app.svc.cluster.local for read/write operations (port 6379)
+    cyclops-redis-replicas.cyclops-app.svc.cluster.local for read-only operations (port 6379)
+
+
+
+To get your password run:
+
+    export REDIS_PASSWORD=$(kubectl get secret --namespace cyclops-app redis-secret -o jsonpath="{.data.redis-password}" | base64 --decode)
+
+To connect to your Redis&trade; server:
+
+1. Run a Redis&trade; pod that you can use as a client:
+
+   kubectl run --namespace cyclops-app redis-client --restart='Never'  --env REDIS_PASSWORD=$REDIS_PASSWORD  --image docker.io/bitnami/redis:6.0.16-debian-10-r6 --command -- sleep infinity
+
+   Use the following command to attach to the pod:
+
+   kubectl exec --tty -i redis-client --namespace cyclops-app -- bash
+
+2. Connect using the Redis&trade; CLI:
+   redis-cli -h cyclops-redis-master -a $REDIS_PASSWORD
+   redis-cli -h cyclops-redis-replicas -a $REDIS_PASSWORD
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace cyclops-app svc/cyclops-redis-master 6379:6379 &
+    redis-cli -h 127.0.0.1 -p 6379 -a $REDIS_PASSWORD
+gsc@lingling:151>

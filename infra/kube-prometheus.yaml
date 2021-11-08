@@ -953,9 +953,10 @@ kubelet:
     #   action: replace
 
 ## Component scraping the kube controller manager
+## disabled for minikube
 ##
 kubeControllerManager:
-  enabled: true
+  enabled: false
 
   ## If your kube controller manager is not deployed as a pod, specify IPs it can be found on
   ##
@@ -1111,9 +1112,11 @@ kubeDns:
     #   action: replace
 
 ## Component scraping etcd
+## disabled for minikube
+## https://angapov.medium.com/using-prometheus-operator-with-minikube-9855c2b275f0
 ##
 kubeEtcd:
-  enabled: true
+  enabled: false
 
   ## If your etcd is not deployed as a pod, specify IPs it can be found on
   ##
@@ -1122,7 +1125,7 @@ kubeEtcd:
   # - 10.141.4.23
   # - 10.141.4.24
 
-  ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
+  ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used  scheme: https
   ##
   service:
     enabled: true
@@ -1178,9 +1181,10 @@ kubeEtcd:
 
 
 ## Component scraping kube scheduler
+## disabled for minikube
 ##
 kubeScheduler:
-  enabled: true
+  enabled: false
 
   ## If your kube scheduler is not deployed as a pod, specify IPs it can be found on
   ##
@@ -2372,34 +2376,70 @@ prometheus:
     ## The scrape configuration example below will find master nodes, provided they have the name .*mst.*, relabel the
     ## port to 2379 and allow etcd scraping provided it is running on all Kubernetes master nodes
     ##
-    additionalScrapeConfigs: []
-    # - job_name: kube-etcd
-    #   kubernetes_sd_configs:
-    #     - role: node
-    #   scheme: https
-    #   tls_config:
-    #     ca_file:   /etc/prometheus/secrets/etcd-client-cert/etcd-ca
-    #     cert_file: /etc/prometheus/secrets/etcd-client-cert/etcd-client
-    #     key_file:  /etc/prometheus/secrets/etcd-client-cert/etcd-client-key
-    #   relabel_configs:
-    #   - action: labelmap
-    #     regex: __meta_kubernetes_node_label_(.+)
-    #   - source_labels: [__address__]
-    #     action: replace
-    #     targetLabel: __address__
-    #     regex: ([^:;]+):(\d+)
-    #     replacement: ${1}:2379
-    #   - source_labels: [__meta_kubernetes_node_name]
-    #     action: keep
-    #     regex: .*mst.*
-    #   - source_labels: [__meta_kubernetes_node_name]
-    #     action: replace
-    #     targetLabel: node
-    #     regex: (.*)
-    #     replacement: ${1}
-    #   metric_relabel_configs:
-    #   - regex: (kubernetes_io_hostname|failure_domain_beta_kubernetes_io_region|beta_kubernetes_io_os|beta_kubernetes_io_arch|beta_kubernetes_io_instance_type|failure_domain_beta_kubernetes_io_zone)
-    #     action: labeldrop
+    additionalScrapeConfigs:
+      - job_name: 'redis-exporter'
+        kubernetes_sd_configs:
+        - role: "pod"
+          namespaces:
+            names:
+            - cyclops-app
+          selectors:
+          - role: "pod"
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_container_port_number]
+          action: keep
+          regex: 9121
+
+#    - job_name: 'redis-exporter'
+#      kubernetes_sd_configs:
+#      - role: pod
+#      relabel_configs:
+#        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+#          action: keep
+#          regex: true
+#        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+#          action: replace
+#          target_label: __metrics_path__
+#          regex: (.+)
+#        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+#          action: replace
+#          regex: ([^:]+)(?::\d+)?;(\d+)
+#          replacement: $1:$2
+#          target_label: __address__
+#        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+#          action: replace
+#          target_label: __scheme__
+#          regex: (.+)
+
+#    additionalScrapeConfigs: []
+#    additionalScrapeConfigs:
+#      - job_name: kube-etcd
+#        scheme: https
+#        kubernetes_sd_configs:
+#        - role: node
+#        tls_config:
+#        ca_file:   /etc/prometheus/secrets/etcd-client-cert/etcd-ca
+#        cert_file: /etc/prometheus/secrets/etcd-client-cert/etcd-client
+#        key_file:  /etc/prometheus/secrets/etcd-client-cert/etcd-client-key
+#        relabel_configs:
+#        - action: labelmap
+#          regex: __meta_kubernetes_node_label_(.+)
+#        - source_labels: [__address__]
+#          action: replace
+#          targetLabel: __address__
+#          regex: ([^:;]+):(\d+)
+#          replacement: ${1}:2379
+#        - source_labels: [__meta_kubernetes_node_name]
+#          action: keep
+#          regex: .*mst.*
+#        - source_labels: [__meta_kubernetes_node_name]
+#          action: replace
+#          targetLabel: node
+#          regex: (.*)
+#          replacement: ${1}
+#        metric_relabel_configs:
+#        - regex: (kubernetes_io_hostname|failure_domain_beta_kubernetes_io_region|beta_kubernetes_io_os|beta_kubernetes_io_arch|beta_kubernetes_io_instance_type|failure_domain_beta_kubernetes_io_zone)
+#          action: labeldrop
 
     ## If additional scrape configurations are already deployed in a single secret file you can use this section.
     ## Expected values are the secret name and key
