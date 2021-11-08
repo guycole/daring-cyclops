@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: worker-app
+  name: cyclops-worker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: worker-app
+      app: cyclops-worker
   template:
     metadata:
       labels:
-        app: worker-app
+        app: cyclops-worker
     spec:
       containers:
       - name: worker-app-container
         image: daring-cyclops-worker:1
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Never
         ports:
           - containerPort: 4190
           - containerPort: 6379

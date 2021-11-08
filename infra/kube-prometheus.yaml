@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 #
+#https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
 #helm show values prometheus-community/kube-prometheus-stack > kube-prometheus.yaml
 #
 
@@ -755,7 +756,6 @@ grafana:
     # Path to use for scraping metrics. Might be different if server.root_url is set
     # in grafana.ini
     path: "/metrics"
-
 
     ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
@@ -2389,6 +2389,32 @@ prometheus:
         - source_labels: [__meta_kubernetes_pod_container_port_number]
           action: keep
           regex: 9121
+      - job_name: 'cyclops-manager'
+        kubernetes_sd_configs:
+        - role: "pod"
+          namespaces:
+            names:
+            - cyclops-app
+          selectors:
+          - role: "pod"
+            label: "app=cyclops-manager"
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_container_port_number]
+          action: keep
+          regex: 4190
+      - job_name: 'cyclops-worker'
+        kubernetes_sd_configs:
+        - role: "pod"
+          namespaces:
+            names:
+            - cyclops-app
+          selectors:
+          - role: "pod"
+            label: "app=cyclops-worker"
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_container_port_number]
+          action: keep
+          regex: 4190
 
 #    - job_name: 'redis-exporter'
 #      kubernetes_sd_configs:

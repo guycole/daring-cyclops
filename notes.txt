@@ -154,3 +154,14 @@ To connect to your database from outside the cluster execute the following comma
     kubectl port-forward --namespace cyclops-app svc/cyclops-redis-master 6379:6379 &
     redis-cli -h 127.0.0.1 -p 6379 -a $REDIS_PASSWORD
 gsc@lingling:151>
+
+need grafana dashboard 763
+
+## how to deploy
+
+00//install minikube, make sure docker correctly points to minikube
+01//make minikube_start
+02//make minikube_setup
+03//make redis_deploy
+04//make monitoring_deploy (takes several minutes)
+05//make monitoring_expose

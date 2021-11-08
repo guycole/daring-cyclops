@@ -4,9 +4,7 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
-	"os"
 )
 
 type Configuration struct {
@@ -23,15 +21,18 @@ func init() {
 }
 
 func loadConfig() {
-	file, err := os.Open("configuration.json")
-	if err != nil {
-		log.Fatalln("Cannot open config file", err)
-	}
+	/*
+		file, err := os.Open("configuration.json")
+		if err != nil {
+			log.Fatalln("Cannot open config file", err)
+		}
 
-	decoder := json.NewDecoder(file)
-	configuration = Configuration{}
-	err = decoder.Decode(&configuration)
-	if err != nil {
-		log.Fatalln("Cannot get configuration from file", err)
-	}
+		decoder := json.NewDecoder(file)
+		configuration = Configuration{}
+		err = decoder.Decode(&configuration)
+		if err != nil {
+			log.Fatalln("Cannot get configuration from file", err)
+		}
+	*/
+	log.Println("skipping loadConfig")
 }

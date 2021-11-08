@@ -23,11 +23,11 @@ MINIKUBE = minikube
 manager_build:
 	cd manager; $(DOCKER) build . -t $(DARING_CYCLOPS_MANAGER)
 
-manager_apply:
-	$(KUBECTL) apply -f infra/manager-deploy.yaml -n cyclops-app
-
 manager_delete:
 	$(KUBECTL) delete -f infra/manager-deploy.yaml -n cyclops-app
+
+manager_deploy:
+	$(KUBECTL) apply -f infra/manager-deploy.yaml -n cyclops-app
 
 minikube_reset:
 	$(MINIKUBE) stop
@@ -60,8 +60,8 @@ redis_deploy:
 worker_build:
 	cd worker; $(DOCKER) build . -t $(DARING_CYCLOPS_WORKER)
 
-worker_apply:
-	$(KUBECTL) apply -f infra/worker-deploy.yaml -n cyclops-app
-
 worker_delete:
 	$(KUBECTL) delete -f infra/worker-deploy.yaml -n cyclops-app
+
+worker_deploy:
+	$(KUBECTL) apply -f infra/worker-deploy.yaml -n cyclops-app
