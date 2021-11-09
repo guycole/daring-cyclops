@@ -43,7 +43,12 @@ minikube_setup:
 	$(HELM) repo add stable https://charts.helm.sh/stable
 	$(HELM) repo update
 
+monitoring_delete:
+	$(KUBECTL) delete -f infra/redis-dashboard.yaml -n monitoring
+	$(HELM) uninstall prometheus -n monitoring
+
 monitoring_deploy:
+	$(KUBECTL) apply -f infra/redis-dashboard.yaml -n monitoring
 	$(HELM) repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	$(HELM) upgrade --debug --install prometheus prometheus-community/kube-prometheus-stack -n monitoring --version 19.0.2 --values infra/kube-prometheus.yaml
 

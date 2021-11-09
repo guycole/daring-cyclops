@@ -646,7 +646,8 @@ grafana:
   ##
   defaultDashboardsTimezone: utc
 
-  adminPassword: prom-operator
+  adminPassword: daring-cyclops
+  # adminPassword: prom-operator
 
   ingress:
     ## If true, Grafana Ingress will be created
@@ -696,6 +697,28 @@ grafana:
           enabled: false
       provider:
         allowUiUpdates: false
+        
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: 'default'  # corresponds to the defaultDashboards.
+            orgId: 1
+            folder: 'Kubernetes'
+            type: file
+            disableDeletion: true
+            editable: false
+            options:
+              path: /tmp/dashboards/default  # should match sidecar.dashboards.defaultFolderName
+          - name: 'cyclops'
+            orgId: 1
+            folder: 'cyclops'
+            type: file
+            disableDeletion: true
+            editable: false
+            options:
+              path: /tmp/dashboards/cyclops
+
     datasources:
       enabled: true
       defaultDatasourceEnabled: true

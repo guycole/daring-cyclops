@@ -155,8 +155,6 @@ To connect to your database from outside the cluster execute the following comma
     redis-cli -h 127.0.0.1 -p 6379 -a $REDIS_PASSWORD
 gsc@lingling:151>
 
-need grafana dashboard 763
-
 ## how to deploy
 
 00//install minikube, make sure docker correctly points to minikube
