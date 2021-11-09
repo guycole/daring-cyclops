@@ -20,24 +20,25 @@ func webPortal() {
 
 	// handle static assets
 	mux := http.NewServeMux()
-	files := http.FileServer(http.Dir(configuration.Static))
-	mux.Handle("/static/", http.StripPrefix("/static/", files))
+	//files := http.FileServer(http.Dir(configuration.Static))
+	//mux.Handle("/static/", http.StripPrefix("/static/", files))
 
 	// index
-	mux.HandleFunc("/", index)
+	mux.HandleFunc("/", index2)
 
 	// error
 	mux.HandleFunc("/err", err)
 
 	// starting up the server
 	server := &http.Server{
-		Addr:           configuration.Address,
+		// Addr:           configuration.Address,
+		Addr:           "0.0.0.0:8088",
 		Handler:        mux,
 		ReadTimeout:    time.Duration(configuration.ReadTimeout * int64(time.Second)),
 		WriteTimeout:   time.Duration(configuration.WriteTimeout * int64(time.Second)),
 		MaxHeaderBytes: 1 << 20,
 	}
-	server.ListenAndServe()
+	log.Fatal(server.ListenAndServe())
 
 	log.Println("webPortal exit")
 }
@@ -56,8 +57,12 @@ func err(writer http.ResponseWriter, request *http.Request) {
 	*/
 }
 
+func index2(writer http.ResponseWriter, request *http.Request) {
+	writer.Write([]byte("<h1>This is the index page</h1>"))
+}
+
 /*
-func index(writer http.ResponseWriter, request *http.Request) {
+
 
 c getSession(rc *redis.Client, id string) (session *Session, err error) {
 

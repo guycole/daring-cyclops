@@ -43,7 +43,7 @@ var (
 	})
 )
 
-func main() {
+func main3() {
 	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(":4190", nil)
 }
