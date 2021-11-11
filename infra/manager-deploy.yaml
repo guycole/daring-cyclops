@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,10 +15,11 @@ spec:
       containers:
       - name: manager-app-container
         image: daring-cyclops-manager:1
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Never
         ports:
           - containerPort: 4190
           - containerPort: 6379
+          - containerPort: 8080
         env:
           - name: REDIS_PASSWORD
             valueFrom:
