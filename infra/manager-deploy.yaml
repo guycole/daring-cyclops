@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cyclops-manager
+  labels:
+    app: cyclops-manager
 spec:
   replicas: 1
   selector:
@@ -19,7 +21,7 @@ spec:
         ports:
           - containerPort: 4190
           - containerPort: 6379
-          - containerPort: 8080
+          - containerPort: 8088
         env:
           - name: REDIS_PASSWORD
             valueFrom:
