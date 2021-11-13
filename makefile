@@ -24,6 +24,8 @@ manager_build:
 	cd manager; $(DOCKER) build . -t $(DARING_CYCLOPS_MANAGER)
 
 manager_delete:
+	$(KUBECTL) delete -f infra/manager-ingress.yaml -n cyclops-app
+	$(KUBECTL) delete -f infra/manager-service.yaml -n cyclops-app
 	$(KUBECTL) delete -f infra/manager-deploy.yaml -n cyclops-app
 
 manager_deploy:
