@@ -3,16 +3,16 @@ kind: Ingress
 metadata:
   name: manager-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: cyclops.info
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: cyclops-service
-                port:
-                  number: 8088
+  - host: cyclops.braingang.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cyclops-service
+            port:
+              number: 8088

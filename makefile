@@ -28,10 +28,8 @@ manager_delete:
 
 manager_deploy:
 	$(KUBECTL) apply -f infra/manager-deploy.yaml -n cyclops-app
-	$(KUBECTL) apply -f infra/manager-service.yaml -n cyclops-app
-
-manager_expose:
-	$(KUBECTL) expose service manager-service --type=NodePort --target-port=8080 --name=manager-np --namespace=cyclops-app
+	$(KUBECTL) apply -f infra/manager-service.yaml -n cyclops-app	
+	$(KUBECTL) apply -f infra/manager-ingress.yaml -n cyclops-app
 
 minikube_reset:
 	$(MINIKUBE) stop
