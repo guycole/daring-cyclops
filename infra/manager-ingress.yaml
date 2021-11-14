@@ -3,8 +3,21 @@ kind: Ingress
 metadata:
   name: manager-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+### guy tweak begin
+#    nginx.ingress.kubernetes.io/canary: "true"
+#    nginx.ingress.kubernetes.io/canary-by-header: "never"
+#    nginx.ingress.kubernetes.io/configuration-snippet: |
+#      if ($apikey_is_ok != 1) {
+#      return 401;
+#      }
+### guy tweak end
 spec:
+  defaultBackend:
+    resource:
+      apiGroup: k8s.example.com
+      kind: StorageBucket
+      name: static-assets
   rules:
   - host: cyclops.braingang.net
     http:

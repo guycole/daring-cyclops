@@ -1,0 +1,18 @@
+# https://www.elvinefendi.com/2018/11/25/canary-deployment-with-ingress-nginx.html
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: echo-demo
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "stuntbox"
+#    nginx.ingress.kubernetes.io/canary-weight: "10"
+spec:
+  rules:
+  - host: echo.braingang.net
+    http:
+      paths:
+      - backend:
+          serviceName: echo-demo
+          servicePort: 80
