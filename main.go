@@ -23,9 +23,9 @@ func main() {
 
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	var featureFlags, grpcAddress string
+	var featureFlags, grpcAddress, runMode string
 
-	envVars := [...]string{"FEATURE_FLAGS", "GRPC_ADDRESS"}
+	envVars := [...]string{"FEATURE_FLAGS", "GRPC_ADDRESS", "RUN_MODE"}
 
 	for index, element := range envVars {
 		temp, err := os.LookupEnv(element)
@@ -40,6 +40,8 @@ func main() {
 			featureFlags = temp
 		case "GRPC_ADDRESS":
 			grpcAddress = temp
+		case "RUN_MODE":
+			runMode = temp
 		default:
 			sugarLog.Fatal("unknown environment var:", element)
 		}
@@ -47,5 +49,5 @@ func main() {
 
 	app := server.AppType{SugarLog: sugarLog}
 	app.Initialize(featureFlags)
-	app.Run(grpcAddress)
+	app.Run(grpcAddress, runMode)
 }

@@ -6,6 +6,7 @@ package server
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"go.uber.org/zap"
 
@@ -45,11 +46,15 @@ func (at *AppType) Initialize(featureFlags string) {
 }
 
 // Run pacifier
-func (at *AppType) Run(address string) {
-	at.SugarLog.Info("run run run")
+func (at *AppType) Run(grpcAddress, runMode string) {
+	if strings.Compare(runMode, "server") == 0 {
+		at.SugarLog.Info("starting server mode")
+		mux := http.NewServeMux()
+		mux.Handle(cyclopsv1connect.NewCyclopsServiceHandler(&cyclopsServiceServer{Ft: at.Ft}))
+		err := http.ListenAndServe(grpcAddress, h2c.NewHandler(mux, &http2.Server{}))
+		at.SugarLog.Fatalf("listen failure: %v", err)
+	} else {
+		at.SugarLog.Fatal("unsupported run mode")
+	}
 
-	mux := http.NewServeMux()
-	mux.Handle(cyclopsv1connect.NewCyclopsServiceHandler(&cyclopsServiceServer{Ft: at.Ft}))
-	err := http.ListenAndServe(address, h2c.NewHandler(mux, &http2.Server{}))
-	at.SugarLog.Fatalf("listen failure: %v", err)
 }
