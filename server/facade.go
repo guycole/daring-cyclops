@@ -14,26 +14,26 @@ type FacadeType struct {
 }
 
 func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) (*FacadeType, error) {
-	gameManager.startAllGames()
+	gameManager.runAllGames()
 
 	return &FacadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}, nil
 }
 
-func (ft *FacadeType) gameCatalog() gameArrayType {
-	return ft.gameManager.GameArray
+func (ft *FacadeType) findGame(key *GameKeyType) *gameType {
+	result := ft.gameManager.findGame(key)
+	return result
 }
 
-func (ft *FacadeType) gameNew() (*gameType, error) {
-	gt, err := newGame("", ft.sugarLog)
-	return gt, err
+func (ft *FacadeType) gameSummary() gameSummaryArrayType {
+	return ft.gameManager.gameSummary()
 }
 
-func (ft *FacadeType) playerNew(name string) (*playerType, error) {
-	_, err := newPlayer(name, "", "", "")
-	if err != nil {
-		ft.sugarLog.Error("playerNew failure")
-		return nil, err
-	}
+func (ft *FacadeType) playerIdentityNew(name string) (*playerIdentityType, error) {
+	pit := ft.gameManager.addFreshPlayer(name)
+	return pit, nil
+}
 
-	return nil, nil
+func (ft *FacadeType) playerIdentityGet(key *PlayerKeyType) (*playerIdentityType, error) {
+	pit := ft.gameManager.playerIdentityGet(key)
+	return pit, nil
 }

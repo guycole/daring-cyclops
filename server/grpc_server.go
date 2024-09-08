@@ -18,6 +18,7 @@ import (
 // curl -v --header "Content-Type: application/json" --data '{"source":"curl"}' http://localhost:8080/cyclops.v1.CyclopsService/Ping
 // curl -v --header "Content-Type: application/json" --data '{"source":"curl"}' http://192.168.1.102:8080/cyclops.v1.CyclopsService/Ping
 // buf curl --schema proto --data '{"name":"bufcurl"}' http://localhost:8080/cyclops.v1.CyclopsService/PlayerNew
+// buf curl --schema proto --data '{"available":"bufcurl"}' http://localhost:8080/cyclops.v1.CyclopsService/GameSummary
 
 type cyclopsServiceServer struct {
 	ft *FacadeType
@@ -25,23 +26,28 @@ type cyclopsServiceServer struct {
 	cyclopsv1connect.UnimplementedCyclopsServiceHandler
 }
 
-func (css *cyclopsServiceServer) GameCatalog(ctx context.Context, req *connect.Request[v1.GameCatalogRequest]) (*connect.Response[v1.GameCatalogResponse], error) {
-	css.ft.sugarLog.Debug("gameCatalog:", req.Msg.GetGameKey())
+func (css *cyclopsServiceServer) GameSummary(ctx context.Context, req *connect.Request[v1.GameSummaryRequest]) (*connect.Response[v1.GameSummaryResponse], error) {
+	css.ft.sugarLog.Debug("gameCatalog:", req.Msg.GetAvailable())
 
 	var retCode uint32 = shared.RetCodeSuccess
 	results := []*v1.GameSummary{}
 
-	gat := css.ft.gameCatalog()
-	for _, gt := range gat {
-		if gt == nil {
+	gsat := css.ft.gameSummary()
+	for _, gst := range gsat {
+		if gst == nil {
 			continue
 		}
 
-		temp := v1.GameSummary{Age: gt.age, Key: gt.key.key}
+		blue_ships2 := uint32(gst.blue_ships)
+		red_ships2 := uint32(gst.red_ships)
+
+		temp := v1.GameSummary{Age: gst.age, Key: gst.key.key, BlueScore: gst.blue_score, BlueShips: blue_ships2, RedScore: gst.red_score, RedShips: red_ships2}
 		results = append(results, &temp)
 	}
 
-	return connect.NewResponse(&v1.GameCatalogResponse{GameSummary: results, Retcode: retCode}), nil
+	// Note that values with zero value are not included in the response
+
+	return connect.NewResponse(&v1.GameSummaryResponse{GameSummary: results, Retcode: retCode}), nil
 }
 
 func (css *cyclopsServiceServer) Ping(ctx context.Context, req *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {

@@ -33,9 +33,9 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// CyclopsServiceGameCatalogProcedure is the fully-qualified name of the CyclopsService's
-	// GameCatalog RPC.
-	CyclopsServiceGameCatalogProcedure = "/cyclops.v1.CyclopsService/GameCatalog"
+	// CyclopsServiceGameSummaryProcedure is the fully-qualified name of the CyclopsService's
+	// GameSummary RPC.
+	CyclopsServiceGameSummaryProcedure = "/cyclops.v1.CyclopsService/GameSummary"
 	// CyclopsServicePingProcedure is the fully-qualified name of the CyclopsService's Ping RPC.
 	CyclopsServicePingProcedure = "/cyclops.v1.CyclopsService/Ping"
 	// CyclopsServicePlayerNewProcedure is the fully-qualified name of the CyclopsService's PlayerNew
@@ -46,14 +46,14 @@ const (
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
 	cyclopsServiceServiceDescriptor           = v1.File_cyclops_v1_cyclops_proto.Services().ByName("CyclopsService")
-	cyclopsServiceGameCatalogMethodDescriptor = cyclopsServiceServiceDescriptor.Methods().ByName("GameCatalog")
+	cyclopsServiceGameSummaryMethodDescriptor = cyclopsServiceServiceDescriptor.Methods().ByName("GameSummary")
 	cyclopsServicePingMethodDescriptor        = cyclopsServiceServiceDescriptor.Methods().ByName("Ping")
 	cyclopsServicePlayerNewMethodDescriptor   = cyclopsServiceServiceDescriptor.Methods().ByName("PlayerNew")
 )
 
 // CyclopsServiceClient is a client for the cyclops.v1.CyclopsService service.
 type CyclopsServiceClient interface {
-	GameCatalog(context.Context, *connect.Request[v1.GameCatalogRequest]) (*connect.Response[v1.GameCatalogResponse], error)
+	GameSummary(context.Context, *connect.Request[v1.GameSummaryRequest]) (*connect.Response[v1.GameSummaryResponse], error)
 	Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 	PlayerNew(context.Context, *connect.Request[v1.PlayerNewRequest]) (*connect.Response[v1.PlayerNewResponse], error)
 }
@@ -68,10 +68,10 @@ type CyclopsServiceClient interface {
 func NewCyclopsServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) CyclopsServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &cyclopsServiceClient{
-		gameCatalog: connect.NewClient[v1.GameCatalogRequest, v1.GameCatalogResponse](
+		gameSummary: connect.NewClient[v1.GameSummaryRequest, v1.GameSummaryResponse](
 			httpClient,
-			baseURL+CyclopsServiceGameCatalogProcedure,
-			connect.WithSchema(cyclopsServiceGameCatalogMethodDescriptor),
+			baseURL+CyclopsServiceGameSummaryProcedure,
+			connect.WithSchema(cyclopsServiceGameSummaryMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 		ping: connect.NewClient[v1.PingRequest, v1.PingResponse](
@@ -91,14 +91,14 @@ func NewCyclopsServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 
 // cyclopsServiceClient implements CyclopsServiceClient.
 type cyclopsServiceClient struct {
-	gameCatalog *connect.Client[v1.GameCatalogRequest, v1.GameCatalogResponse]
+	gameSummary *connect.Client[v1.GameSummaryRequest, v1.GameSummaryResponse]
 	ping        *connect.Client[v1.PingRequest, v1.PingResponse]
 	playerNew   *connect.Client[v1.PlayerNewRequest, v1.PlayerNewResponse]
 }
 
-// GameCatalog calls cyclops.v1.CyclopsService.GameCatalog.
-func (c *cyclopsServiceClient) GameCatalog(ctx context.Context, req *connect.Request[v1.GameCatalogRequest]) (*connect.Response[v1.GameCatalogResponse], error) {
-	return c.gameCatalog.CallUnary(ctx, req)
+// GameSummary calls cyclops.v1.CyclopsService.GameSummary.
+func (c *cyclopsServiceClient) GameSummary(ctx context.Context, req *connect.Request[v1.GameSummaryRequest]) (*connect.Response[v1.GameSummaryResponse], error) {
+	return c.gameSummary.CallUnary(ctx, req)
 }
 
 // Ping calls cyclops.v1.CyclopsService.Ping.
@@ -113,7 +113,7 @@ func (c *cyclopsServiceClient) PlayerNew(ctx context.Context, req *connect.Reque
 
 // CyclopsServiceHandler is an implementation of the cyclops.v1.CyclopsService service.
 type CyclopsServiceHandler interface {
-	GameCatalog(context.Context, *connect.Request[v1.GameCatalogRequest]) (*connect.Response[v1.GameCatalogResponse], error)
+	GameSummary(context.Context, *connect.Request[v1.GameSummaryRequest]) (*connect.Response[v1.GameSummaryResponse], error)
 	Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 	PlayerNew(context.Context, *connect.Request[v1.PlayerNewRequest]) (*connect.Response[v1.PlayerNewResponse], error)
 }
@@ -124,10 +124,10 @@ type CyclopsServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewCyclopsServiceHandler(svc CyclopsServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	cyclopsServiceGameCatalogHandler := connect.NewUnaryHandler(
-		CyclopsServiceGameCatalogProcedure,
-		svc.GameCatalog,
-		connect.WithSchema(cyclopsServiceGameCatalogMethodDescriptor),
+	cyclopsServiceGameSummaryHandler := connect.NewUnaryHandler(
+		CyclopsServiceGameSummaryProcedure,
+		svc.GameSummary,
+		connect.WithSchema(cyclopsServiceGameSummaryMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
 	cyclopsServicePingHandler := connect.NewUnaryHandler(
@@ -144,8 +144,8 @@ func NewCyclopsServiceHandler(svc CyclopsServiceHandler, opts ...connect.Handler
 	)
 	return "/cyclops.v1.CyclopsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case CyclopsServiceGameCatalogProcedure:
-			cyclopsServiceGameCatalogHandler.ServeHTTP(w, r)
+		case CyclopsServiceGameSummaryProcedure:
+			cyclopsServiceGameSummaryHandler.ServeHTTP(w, r)
 		case CyclopsServicePingProcedure:
 			cyclopsServicePingHandler.ServeHTTP(w, r)
 		case CyclopsServicePlayerNewProcedure:
@@ -159,8 +159,8 @@ func NewCyclopsServiceHandler(svc CyclopsServiceHandler, opts ...connect.Handler
 // UnimplementedCyclopsServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedCyclopsServiceHandler struct{}
 
-func (UnimplementedCyclopsServiceHandler) GameCatalog(context.Context, *connect.Request[v1.GameCatalogRequest]) (*connect.Response[v1.GameCatalogResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cyclops.v1.CyclopsService.GameCatalog is not implemented"))
+func (UnimplementedCyclopsServiceHandler) GameSummary(context.Context, *connect.Request[v1.GameSummaryRequest]) (*connect.Response[v1.GameSummaryResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cyclops.v1.CyclopsService.GameSummary is not implemented"))
 }
 
 func (UnimplementedCyclopsServiceHandler) Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {

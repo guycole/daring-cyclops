@@ -100,15 +100,16 @@ func newPlayerKey(key string) *PlayerKeyType {
 	return &result
 }
 
-type playerType struct {
-	key  *PlayerKeyType
-	name string
-	rank rankEnum
-	team teamEnum
+type playerIdentityType struct {
+	key    *PlayerKeyType
+	name   string
+	points uint64 // lifetime total
+	rank   rankEnum
 }
 
-func newPlayer(name string, rank string, team string, uuid string) (*playerType, error) {
-	result := playerType{key: newPlayerKey(uuid)}
+// convenience factory
+func newPlayerIdentity(name string, rank string, uuid string) (*playerIdentityType, error) {
+	result := playerIdentityType{key: newPlayerKey(uuid), points: 0}
 
 	temp := strings.TrimSpace(name)
 	if len(temp) == 0 {
@@ -122,13 +123,6 @@ func newPlayer(name string, rank string, team string, uuid string) (*playerType,
 		result.rank = cadetRank
 	} else {
 		result.rank = findRank(temp)
-	}
-
-	temp = strings.TrimSpace(team)
-	if len(temp) == 0 {
-		result.team = neutralTeam
-	} else {
-		result.team = findTeam(temp)
 	}
 
 	return &result, nil

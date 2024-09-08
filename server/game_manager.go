@@ -11,32 +11,85 @@ const (
 	maxGames uint16 = 5
 )
 
-type gameArrayType [maxGames]*gameType
-
 type GameManagerType struct {
-	GameArray gameArrayType
-	SugarLog  *zap.SugaredLogger
+	GameMaps           map[string]*gameType // all active games
+	SugarLog           *zap.SugaredLogger
+	PlayerIdentityMaps map[string]*playerIdentityType // all known players
 }
 
+// convenience factory
 func newGameManager(sugarLog *zap.SugaredLogger) (*GameManagerType, error) {
-	result := GameManagerType{SugarLog: sugarLog}
+	gmt := GameManagerType{SugarLog: sugarLog}
+	gmt.GameMaps = make(map[string]*gameType)
+	gmt.PlayerIdentityMaps = make(map[string]*playerIdentityType)
+	return &gmt, nil
+}
 
-	for ndx := uint16(0); ndx < maxGames; ndx++ {
-		result.GameArray[ndx] = nil
+// ensure there are always maxGames running
+func (gmt *GameManagerType) runAllGames() {
+	for key, val := range gmt.GameMaps {
+		if val.removeGame {
+			gmt.SugarLog.Infof("runAllGames: removing %s", key)
+			delete(gmt.GameMaps, key)
+		}
 	}
 
-	return &result, nil
+	for len(gmt.GameMaps) < int(maxGames) {
+		gt, err := newGame(gmt.SugarLog)
+
+		if err == nil {
+			gmt.SugarLog.Infof("runAllGames: adding %s", gt.key.key)
+			gmt.GameMaps[gt.key.key] = gt
+		} else {
+			gmt.SugarLog.Info(err)
+		}
+	}
 }
 
-func (gmt *GameManagerType) startAllGames() {
-	var err error
+func (gmt *GameManagerType) findGame(key *GameKeyType) *gameType {
+	result := gmt.GameMaps[key.key]
+	return result
+}
 
-	for ndx := uint16(0); ndx < maxGames; ndx++ {
-		if gmt.GameArray[ndx] == nil {
-			gmt.GameArray[ndx], err = newGame("", gmt.SugarLog)
-			if err != nil {
-				gmt.SugarLog.Info(err)
-			}
-		}
+// supports gRPC message
+type gameSummaryArrayType [maxGames]*gameSummaryType
+
+func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
+	var ndx int
+	var results gameSummaryArrayType
+
+	for _, val := range gmt.GameMaps {
+		results[ndx] = newGameSummary(val)
+		ndx++
+	}
+
+	return results
+}
+
+func (gmt *GameManagerType) addFreshPlayer(name string) *playerIdentityType {
+	pt, err := newPlayerIdentity(name, "", "")
+	if err == nil {
+		gmt.PlayerIdentityMaps[pt.key.key] = pt
+		return pt
+	}
+
+	return nil
+}
+
+func (gmt *GameManagerType) playerIdentityGet(key *PlayerKeyType) *playerIdentityType {
+	result := gmt.PlayerIdentityMaps[key.key]
+	return result
+}
+
+func (gmt *GameManagerType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerTeam teamEnum) {
+	game := gmt.GameMaps[gameKey.key]
+
+	switch playerTeam {
+	case blueTeam:
+		game.blue_players = playerKey.key
+	case redTeam:
+		game.red_players = playerKey.key
+	default:
+		gmt.SugarLog.Infof("addPlayerToGame: unknown team %s", playerTeam.string())
 	}
 }

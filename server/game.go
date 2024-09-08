@@ -17,7 +17,7 @@ const (
 )
 
 // playerArrayType contains all active players
-type playerArrayType [maxPlayers]*playerType
+type playerArrayType [maxPlayers]*playerIdentityType
 
 type GameKeyType struct {
 	key string
@@ -38,13 +38,39 @@ func newGameKey(key string) *GameKeyType {
 }
 
 type gameType struct {
-	age      uint64
-	key      *GameKeyType
-	players  playerArrayType
-	sugarLog *zap.SugaredLogger
+	age          uint64
+	blue_score   uint64
+	blue_ships   uint16
+	key          *GameKeyType
+	players      playerArrayType
+	blue_players string
+	red_players  string
+	red_score    uint64
+	red_ships    uint16
+	removeGame   bool
+	sugarLog     *zap.SugaredLogger
 }
 
-func newGame(id string, sugarLog *zap.SugaredLogger) (*gameType, error) {
-	result := gameType{key: newGameKey(id), sugarLog: sugarLog}
+func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
+	players := playerArrayType{}
+	for ndx := uint16(0); ndx < maxPlayers; ndx++ {
+		players[ndx] = nil
+	}
+
+	result := gameType{key: newGameKey(""), age: 0, removeGame: false, players: players, sugarLog: sugarLog}
 	return &result, nil
+}
+
+type gameSummaryType struct {
+	age        uint64
+	blue_score uint64
+	blue_ships uint16
+	key        *GameKeyType
+	red_score  uint64
+	red_ships  uint16
+}
+
+func newGameSummary(gt *gameType) *gameSummaryType {
+	results := gameSummaryType{age: gt.age, blue_score: gt.blue_score, blue_ships: gt.blue_ships, key: gt.key, red_score: gt.red_score, red_ships: gt.red_ships}
+	return &results
 }
