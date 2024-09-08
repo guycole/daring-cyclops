@@ -8,10 +8,32 @@ import (
 )
 
 type FacadeType struct {
-	FeatureFlags uint32
-	SugarLog     *zap.SugaredLogger
+	featureFlags uint32
+	gameManager  *GameManagerType
+	sugarLog     *zap.SugaredLogger
 }
 
-func newFacade(featureFlags uint32, sugarLog *zap.SugaredLogger) (*FacadeType, error) {
-	return &FacadeType{FeatureFlags: featureFlags, SugarLog: sugarLog}, nil
+func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) (*FacadeType, error) {
+	gameManager.startAllGames()
+
+	return &FacadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}, nil
+}
+
+func (ft *FacadeType) gameCatalog() gameArrayType {
+	return ft.gameManager.GameArray
+}
+
+func (ft *FacadeType) gameNew() (*gameType, error) {
+	gt, err := newGame("", ft.sugarLog)
+	return gt, err
+}
+
+func (ft *FacadeType) playerNew(name string) (*playerType, error) {
+	_, err := newPlayer(name, "", "", "")
+	if err != nil {
+		ft.sugarLog.Error("playerNew failure")
+		return nil, err
+	}
+
+	return nil, nil
 }

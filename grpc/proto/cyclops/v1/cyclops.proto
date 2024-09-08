@@ -8,15 +8,51 @@ option go_package = "./grpc";
 
 //
 service CyclopsService {
+  rpc GameCatalog(GameCatalogRequest) returns (GameCatalogResponse) {}
   rpc Ping(PingRequest) returns (PingResponse) {}
+  rpc PlayerNew(PlayerNewRequest) returns (PlayerNewResponse) {}
+}
+
+// 
+message GameSummary {
+  uint64 age = 1;
+  string key = 2;
+  uint32 players_blue = 3;
+  uint32 players_red = 4;
+  uint64 score_blue = 5;
+  uint64 score_red = 6;
+}
+
+//
+message GameCatalogRequest {
+  string game_key = 1;
+}
+
+//
+message GameCatalogResponse {
+  uint32 retcode = 1;
+  repeated GameSummary game_summary = 2;
 }
 
 //
 message PingRequest {
-    string source = 1;
+  string source = 1;
 }
 
 //
 message PingResponse {
-    uint32 retcode = 1;
+  uint32 retcode = 1;
+}
+
+// create a new player
+message PlayerNewRequest {
+  string name = 1;
+}
+
+//
+message PlayerNewResponse {
+  uint32 retcode = 1;
+  string uuid = 2;
+  string name = 3;
+  string rank = 4;
 }
