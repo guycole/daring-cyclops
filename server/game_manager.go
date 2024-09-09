@@ -12,17 +12,16 @@ const (
 )
 
 type GameManagerType struct {
-	GameMaps           map[string]*gameType // all active games
-	SugarLog           *zap.SugaredLogger
-	PlayerIdentityMaps map[string]*playerIdentityType // all known players
+	GameMaps      map[string]*gameType // all active games
+	SugarLog      *zap.SugaredLogger
+	PlayerManager *PlayerManagerType
 }
 
 // convenience factory
-func newGameManager(sugarLog *zap.SugaredLogger) (*GameManagerType, error) {
-	gmt := GameManagerType{SugarLog: sugarLog}
+func newGameManager(playerManager *PlayerManagerType, sugarLog *zap.SugaredLogger) *GameManagerType {
+	gmt := GameManagerType{PlayerManager: playerManager, SugarLog: sugarLog}
 	gmt.GameMaps = make(map[string]*gameType)
-	gmt.PlayerIdentityMaps = make(map[string]*playerIdentityType)
-	return &gmt, nil
+	return &gmt
 }
 
 // ensure there are always maxGames running
@@ -66,30 +65,17 @@ func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
 	return results
 }
 
-func (gmt *GameManagerType) addFreshPlayer(name string) *playerIdentityType {
-	pt, err := newPlayerIdentity(name, "", "")
-	if err == nil {
-		gmt.PlayerIdentityMaps[pt.key.key] = pt
-		return pt
-	}
-
-	return nil
-}
-
-func (gmt *GameManagerType) playerIdentityGet(key *PlayerKeyType) *playerIdentityType {
-	result := gmt.PlayerIdentityMaps[key.key]
-	return result
-}
-
 func (gmt *GameManagerType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerTeam teamEnum) {
-	game := gmt.GameMaps[gameKey.key]
+	/*
+		game := gmt.GameMaps[gameKey.key]
 
-	switch playerTeam {
-	case blueTeam:
-		game.blue_players = playerKey.key
-	case redTeam:
-		game.red_players = playerKey.key
-	default:
-		gmt.SugarLog.Infof("addPlayerToGame: unknown team %s", playerTeam.string())
-	}
+		switch playerTeam {
+		case blueTeam:
+			game.blue_players = playerKey.key
+		case redTeam:
+			game.red_players = playerKey.key
+		default:
+			gmt.SugarLog.Infof("addPlayerToGame: unknown team %s", playerTeam.string())
+		}
+	*/
 }

@@ -38,10 +38,8 @@ func (at *AppType) Initialize(featureFlags string) {
 		at.SugarLog.Debug("debug level log entry")
 	}
 
-	gameManager, err2 := newGameManager(at.SugarLog)
-	if err2 != nil {
-		at.SugarLog.Fatal("newGameManager failure")
-	}
+	playerManager := newPlayerManager(at.SugarLog)
+	gameManager := newGameManager(playerManager, at.SugarLog)
 
 	at.Ft, err1 = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
 	if err1 != nil {

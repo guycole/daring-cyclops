@@ -6,6 +6,7 @@ package server
 import (
 	"errors"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -100,16 +101,20 @@ func newPlayerKey(key string) *PlayerKeyType {
 	return &result
 }
 
-type playerIdentityType struct {
-	key    *PlayerKeyType
-	name   string
-	points uint64 // lifetime total
-	rank   rankEnum
+type playerType struct {
+	key              *PlayerKeyType
+	lastOn           time.Time
+	name             string
+	cumulativePoints uint64    // lifetime total
+	highPoints       uint64    // single game high
+	highPointsTime   time.Time // time of highPoints
+	sortie           uint64
+	rank             rankEnum
 }
 
 // convenience factory
-func newPlayerIdentity(name string, rank string, uuid string) (*playerIdentityType, error) {
-	result := playerIdentityType{key: newPlayerKey(uuid), points: 0}
+func newPlayer(name string, rank string, uuid string) (*playerType, error) {
+	result := playerType{key: newPlayerKey(uuid)}
 
 	temp := strings.TrimSpace(name)
 	if len(temp) == 0 {

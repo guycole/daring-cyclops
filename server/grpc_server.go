@@ -38,10 +38,10 @@ func (css *cyclopsServiceServer) GameSummary(ctx context.Context, req *connect.R
 			continue
 		}
 
-		blue_ships2 := uint32(gst.blue_ships)
-		red_ships2 := uint32(gst.red_ships)
+		blueShips2 := uint32(gst.blueShips)
+		redShips2 := uint32(gst.redShips)
 
-		temp := v1.GameSummary{Age: gst.age, Key: gst.key.key, BlueScore: gst.blue_score, BlueShips: blue_ships2, RedScore: gst.red_score, RedShips: red_ships2}
+		temp := v1.GameSummary{Age: gst.age, Key: gst.key.key, BlueScore: gst.blueScore, BlueShips: blueShips2, RedScore: gst.redScore, RedShips: redShips2}
 		results = append(results, &temp)
 	}
 

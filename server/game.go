@@ -17,7 +17,7 @@ const (
 )
 
 // playerArrayType contains all active players
-type playerArrayType [maxPlayers]*playerIdentityType
+type playerArrayType [maxPlayers]*playerType
 
 type GameKeyType struct {
 	key string
@@ -38,17 +38,17 @@ func newGameKey(key string) *GameKeyType {
 }
 
 type gameType struct {
-	age          uint64
-	blue_score   uint64
-	blue_ships   uint16
-	key          *GameKeyType
-	players      playerArrayType
-	blue_players string
-	red_players  string
-	red_score    uint64
-	red_ships    uint16
-	removeGame   bool
-	sugarLog     *zap.SugaredLogger
+	age         uint64
+	blueScore   uint64
+	blueShips   uint16
+	key         *GameKeyType
+	players     playerArrayType
+	bluePlayers string
+	redPlayers  string
+	redScore    uint64
+	redShips    uint16
+	removeGame  bool
+	sugarLog    *zap.SugaredLogger
 }
 
 func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
@@ -62,15 +62,15 @@ func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
 }
 
 type gameSummaryType struct {
-	age        uint64
-	blue_score uint64
-	blue_ships uint16
-	key        *GameKeyType
-	red_score  uint64
-	red_ships  uint16
+	age       uint64
+	blueScore uint64
+	blueShips uint16
+	key       *GameKeyType
+	redScore  uint64
+	redShips  uint16
 }
 
 func newGameSummary(gt *gameType) *gameSummaryType {
-	results := gameSummaryType{age: gt.age, blue_score: gt.blue_score, blue_ships: gt.blue_ships, key: gt.key, red_score: gt.red_score, red_ships: gt.red_ships}
+	results := gameSummaryType{age: gt.age, blueScore: gt.blueScore, blueShips: gt.blueShips, key: gt.key, redScore: gt.redScore, redShips: gt.redShips}
 	return &results
 }

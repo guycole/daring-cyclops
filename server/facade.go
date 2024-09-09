@@ -8,9 +8,10 @@ import (
 )
 
 type FacadeType struct {
-	featureFlags uint32
-	gameManager  *GameManagerType
-	sugarLog     *zap.SugaredLogger
+	featureFlags  uint32
+	gameManager   *GameManagerType
+	playerManager *PlayerManagerType
+	sugarLog      *zap.SugaredLogger
 }
 
 func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) (*FacadeType, error) {
@@ -28,12 +29,10 @@ func (ft *FacadeType) gameSummary() gameSummaryArrayType {
 	return ft.gameManager.gameSummary()
 }
 
-func (ft *FacadeType) playerIdentityNew(name string) (*playerIdentityType, error) {
-	pit := ft.gameManager.addFreshPlayer(name)
-	return pit, nil
+func (ft *FacadeType) playerAdd(name string) *playerType {
+	return ft.playerManager.addFreshPlayer(name)
 }
 
-func (ft *FacadeType) playerIdentityGet(key *PlayerKeyType) (*playerIdentityType, error) {
-	pit := ft.gameManager.playerIdentityGet(key)
-	return pit, nil
+func (ft *FacadeType) playerGet(key *PlayerKeyType) *playerType {
+	return ft.playerManager.playerGet(key)
 }
