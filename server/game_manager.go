@@ -66,6 +66,7 @@ func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
 }
 
 func (gmt *GameManagerType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerTeam teamEnum) {
+	// switch array to map
 	/*
 		game := gmt.GameMaps[gameKey.key]
 

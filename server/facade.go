@@ -14,10 +14,10 @@ type FacadeType struct {
 	sugarLog      *zap.SugaredLogger
 }
 
-func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) (*FacadeType, error) {
+func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) *FacadeType {
 	gameManager.runAllGames()
 
-	return &FacadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}, nil
+	return &FacadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}
 }
 
 func (ft *FacadeType) findGame(key *GameKeyType) *gameType {

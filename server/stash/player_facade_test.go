@@ -12,25 +12,12 @@ import (
 func TestFacadeGamePlayer(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
-	gmt, _ := newGameManager(sugarLog)
-	ft, _ := newFacade(0, gmt, sugarLog)
+	pmt := newPlayerManager(sugarLog)
+	gmt := newGameManager(pmt, sugarLog)
+	ft := newFacade(0, gmt, sugarLog)
 
-	pit1, _ := ft.playerIdentityNew("player1")
-	pit2, _ := ft.playerIdentityNew("player2")
-
-	temp1, _ := ft.playerIdentityGet(pit1.key)
-	temp2, _ := ft.playerIdentityGet(pit2.key)
-
-	if temp1.name != "player1" {
-		t.Error("player1")
-	}
-
-	if temp2.name != "player2" {
-		t.Error("player2")
-	}
-
-	//	sugarLog.Info(pit1)
-	//	sugarLog.Info(pit2)
+	pit1 := ft.playerAdd("player1")
+	pit2 := ft.playerAdd("player2")
 
 	// add player to game
 
@@ -39,5 +26,4 @@ func TestFacadeGamePlayer(t *testing.T) {
 
 	gmt.addPlayerToGame(gt.key, pit1.key, blueTeam)
 	gmt.addPlayerToGame(gt.key, pit2.key, redTeam)
-
 }

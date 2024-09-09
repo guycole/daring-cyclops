@@ -41,10 +41,7 @@ func (at *AppType) Initialize(featureFlags string) {
 	playerManager := newPlayerManager(at.SugarLog)
 	gameManager := newGameManager(playerManager, at.SugarLog)
 
-	at.Ft, err1 = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
-	if err1 != nil {
-		at.SugarLog.Fatal("newFacade failure")
-	}
+	at.Ft = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
 }
 
 // Run pacifier

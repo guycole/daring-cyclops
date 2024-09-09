@@ -10,14 +10,31 @@ import (
 	"go.uber.org/zap"
 )
 
+// player for this game
+type gamePlayerType struct {
+	active bool
+	key    *PlayerKeyType
+	name   string
+	rank   rankEnum
+	score  uint64
+	ship   string
+	team   teamEnum
+}
+
+// convenience factory
+func newGamePlayer(key *PlayerKeyType, name string, rank rankEnum, ship string, team teamEnum) *gamePlayerType {
+	result := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
+	return &result
+}
+
 const (
-	maxTeams       uint16 = 2
-	maxTeamPlayers uint16 = 5
-	maxPlayers     uint16 = maxTeamPlayers * maxTeams
+	maxGameTeams       uint16 = 2
+	maxGameTeamPlayers uint16 = 5
+	maxGamePlayers     uint16 = maxGameTeamPlayers * maxGameTeams
 )
 
 // playerArrayType contains all active players
-type playerArrayType [maxPlayers]*playerType
+type gamePlayerArrayType [maxGamePlayers]*gamePlayerType
 
 type GameKeyType struct {
 	key string
@@ -38,22 +55,16 @@ func newGameKey(key string) *GameKeyType {
 }
 
 type gameType struct {
-	age         uint64
-	blueScore   uint64
-	blueShips   uint16
-	key         *GameKeyType
-	players     playerArrayType
-	bluePlayers string
-	redPlayers  string
-	redScore    uint64
-	redShips    uint16
-	removeGame  bool
-	sugarLog    *zap.SugaredLogger
+	age        uint64
+	key        *GameKeyType
+	players    gamePlayerArrayType
+	removeGame bool
+	sugarLog   *zap.SugaredLogger
 }
 
 func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
-	players := playerArrayType{}
-	for ndx := uint16(0); ndx < maxPlayers; ndx++ {
+	players := gamePlayerArrayType{}
+	for ndx := uint16(0); ndx < maxGamePlayers; ndx++ {
 		players[ndx] = nil
 	}
 
@@ -71,6 +82,20 @@ type gameSummaryType struct {
 }
 
 func newGameSummary(gt *gameType) *gameSummaryType {
-	results := gameSummaryType{age: gt.age, blueScore: gt.blueScore, blueShips: gt.blueShips, key: gt.key, redScore: gt.redScore, redShips: gt.redShips}
-	return &results
+	gst := gameSummaryType{age: gt.age, key: gt.key}
+
+	for _, val := range gt.players {
+		if val != nil {
+			switch val.team {
+			case blueTeam:
+				gst.blueShips++
+				gst.blueScore += val.score
+			case redTeam:
+				gst.redShips++
+				gst.redScore += val.score
+			}
+		}
+	}
+
+	return &gst
 }
