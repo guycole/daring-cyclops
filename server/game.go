@@ -34,7 +34,7 @@ const (
 )
 
 // playerArrayType contains all active players
-type gamePlayerArrayType [maxGamePlayers]*gamePlayerType
+//type gamePlayerArrayType [maxGamePlayers]*gamePlayerType
 
 type GameKeyType struct {
 	key string
@@ -57,18 +57,14 @@ func newGameKey(key string) *GameKeyType {
 type gameType struct {
 	age        uint64
 	key        *GameKeyType
-	players    gamePlayerArrayType
+	playerMap  map[string]*gamePlayerType
 	removeGame bool
 	sugarLog   *zap.SugaredLogger
 }
 
 func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
-	players := gamePlayerArrayType{}
-	for ndx := uint16(0); ndx < maxGamePlayers; ndx++ {
-		players[ndx] = nil
-	}
-
-	result := gameType{key: newGameKey(""), age: 0, removeGame: false, players: players, sugarLog: sugarLog}
+	players := make(map[string]*gamePlayerType)
+	result := gameType{key: newGameKey(""), age: 0, removeGame: false, playerMap: players, sugarLog: sugarLog}
 	return &result, nil
 }
 
@@ -84,7 +80,7 @@ type gameSummaryType struct {
 func newGameSummary(gt *gameType) *gameSummaryType {
 	gst := gameSummaryType{age: gt.age, key: gt.key}
 
-	for _, val := range gt.players {
+	for _, val := range gt.playerMap {
 		if val != nil {
 			switch val.team {
 			case blueTeam:

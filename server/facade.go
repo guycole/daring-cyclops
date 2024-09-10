@@ -8,16 +8,19 @@ import (
 )
 
 type FacadeType struct {
-	featureFlags  uint32
-	gameManager   *GameManagerType
-	playerManager *PlayerManagerType
-	sugarLog      *zap.SugaredLogger
+	featureFlags uint32
+	gameManager  *GameManagerType
+	sugarLog     *zap.SugaredLogger
 }
 
 func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) *FacadeType {
 	gameManager.runAllGames()
 
 	return &FacadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}
+}
+
+func (ft *FacadeType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerShip string, playerTeam teamEnum) {
+	ft.gameManager.addPlayerToGame(gameKey, playerKey, playerShip, playerTeam)
 }
 
 func (ft *FacadeType) findGame(key *GameKeyType) *gameType {
@@ -29,10 +32,12 @@ func (ft *FacadeType) gameSummary() gameSummaryArrayType {
 	return ft.gameManager.gameSummary()
 }
 
+// add to global player map
 func (ft *FacadeType) playerAdd(name string) *playerType {
-	return ft.playerManager.addFreshPlayer(name)
+	return ft.gameManager.playerManager.addFreshPlayer(name)
 }
 
+// select from global player map
 func (ft *FacadeType) playerGet(key *PlayerKeyType) *playerType {
-	return ft.playerManager.playerGet(key)
+	return ft.gameManager.playerManager.playerGet(key)
 }

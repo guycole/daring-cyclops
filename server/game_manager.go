@@ -12,41 +12,41 @@ const (
 )
 
 type GameManagerType struct {
-	GameMaps      map[string]*gameType // all active games
-	SugarLog      *zap.SugaredLogger
-	PlayerManager *PlayerManagerType
+	gameMaps      map[string]*gameType // all active games
+	sugarLog      *zap.SugaredLogger
+	playerManager *PlayerManagerType
 }
 
 // convenience factory
 func newGameManager(playerManager *PlayerManagerType, sugarLog *zap.SugaredLogger) *GameManagerType {
-	gmt := GameManagerType{PlayerManager: playerManager, SugarLog: sugarLog}
-	gmt.GameMaps = make(map[string]*gameType)
+	gmt := GameManagerType{playerManager: playerManager, sugarLog: sugarLog}
+	gmt.gameMaps = make(map[string]*gameType)
 	return &gmt
 }
 
 // ensure there are always maxGames running
 func (gmt *GameManagerType) runAllGames() {
-	for key, val := range gmt.GameMaps {
+	for key, val := range gmt.gameMaps {
 		if val.removeGame {
-			gmt.SugarLog.Infof("runAllGames: removing %s", key)
-			delete(gmt.GameMaps, key)
+			gmt.sugarLog.Infof("runAllGames: removing %s", key)
+			delete(gmt.gameMaps, key)
 		}
 	}
 
-	for len(gmt.GameMaps) < int(maxGames) {
-		gt, err := newGame(gmt.SugarLog)
+	for len(gmt.gameMaps) < int(maxGames) {
+		gt, err := newGame(gmt.sugarLog)
 
 		if err == nil {
-			gmt.SugarLog.Infof("runAllGames: adding %s", gt.key.key)
-			gmt.GameMaps[gt.key.key] = gt
+			gmt.sugarLog.Infof("runAllGames: adding %s", gt.key.key)
+			gmt.gameMaps[gt.key.key] = gt
 		} else {
-			gmt.SugarLog.Info(err)
+			gmt.sugarLog.Info(err)
 		}
 	}
 }
 
 func (gmt *GameManagerType) findGame(key *GameKeyType) *gameType {
-	result := gmt.GameMaps[key.key]
+	result := gmt.gameMaps[key.key]
 	return result
 }
 
@@ -57,7 +57,7 @@ func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
 	var ndx int
 	var results gameSummaryArrayType
 
-	for _, val := range gmt.GameMaps {
+	for _, val := range gmt.gameMaps {
 		results[ndx] = newGameSummary(val)
 		ndx++
 	}
@@ -65,18 +65,15 @@ func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
 	return results
 }
 
-func (gmt *GameManagerType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerTeam teamEnum) {
-	// switch array to map
-	/*
-		game := gmt.GameMaps[gameKey.key]
+func (gmt *GameManagerType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerShip string, playerTeam teamEnum) {
+	pm := gmt.gameMaps[gameKey.key].playerMap
 
-		switch playerTeam {
-		case blueTeam:
-			game.blue_players = playerKey.key
-		case redTeam:
-			game.red_players = playerKey.key
-		default:
-			gmt.SugarLog.Infof("addPlayerToGame: unknown team %s", playerTeam.string())
-		}
-	*/
+	//ensure there are no stale entries
+	delete(pm, playerKey.key)
+
+	// convert to game player type
+	pt := gmt.playerManager.playerGet(playerKey)
+	gpt := newGamePlayer(playerKey, pt.name, pt.rank, playerShip, playerTeam)
+
+	pm[playerKey.key] = gpt
 }

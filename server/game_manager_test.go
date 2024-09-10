@@ -33,16 +33,26 @@ func TestGameManager(t *testing.T) {
 
 	// single game select
 	target := gsat[0].key
-	candidate := gmt.findGame(target)
+	gt := gmt.findGame(target)
 
-	if candidate.key.key != target.key {
-		t.Error("gameSelect failure:", candidate)
+	if gt.key.key != target.key {
+		t.Error("gameSelect failure:", gt)
 	}
 
 	// add user to game
 	pt1 := pmt.addFreshPlayer("player1")
 	pt2 := pmt.addFreshPlayer("player2")
 
-	gmt.addPlayerToGame(target, pt1.key, blueTeam)
-	gmt.addPlayerToGame(target, pt2.key, redTeam)
+	gmt.addPlayerToGame(target, pt1.key, "ship1", blueTeam)
+	gmt.addPlayerToGame(target, pt2.key, "ship2", redTeam)
+
+	// test all known players
+	if len(gmt.playerManager.playerMap) != 2 {
+		t.Error("playerMap length failure:", gmt.playerManager.playerMap)
+	}
+
+	// test players for game
+	if len(gt.playerMap) != 2 {
+		t.Error("playerMap length failure:", gt.playerMap)
+	}
 }
