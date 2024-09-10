@@ -21,13 +21,12 @@ import (
 type AppType struct {
 	Ft           *FacadeType
 	FeatureFlags uint32 // control run time features
-	GrpcPort     int
 	SugarLog     *zap.SugaredLogger
 }
 
 func (at *AppType) Initialize(featureFlags string) {
-	temp, err := strconv.Atoi(featureFlags)
-	if err == nil {
+	temp, err1 := strconv.Atoi(featureFlags)
+	if err1 == nil {
 		at.SugarLog.Infof("featureFlags: %x", temp)
 		at.FeatureFlags = uint32(temp)
 	} else {
@@ -39,10 +38,10 @@ func (at *AppType) Initialize(featureFlags string) {
 		at.SugarLog.Debug("debug level log entry")
 	}
 
-	at.Ft, err = newFacade(at.FeatureFlags, at.SugarLog)
-	if err != nil {
-		at.SugarLog.Fatal("newFacade failure")
-	}
+	playerManager := newPlayerManager(at.SugarLog)
+	gameManager := newGameManager(playerManager, at.SugarLog)
+
+	at.Ft = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
 }
 
 // Run pacifier
@@ -50,11 +49,10 @@ func (at *AppType) Run(grpcAddress, runMode string) {
 	if strings.Compare(runMode, "server") == 0 {
 		at.SugarLog.Info("starting server mode")
 		mux := http.NewServeMux()
-		mux.Handle(cyclopsv1connect.NewCyclopsServiceHandler(&cyclopsServiceServer{Ft: at.Ft}))
+		mux.Handle(cyclopsv1connect.NewCyclopsServiceHandler(&cyclopsServiceServer{ft: at.Ft}))
 		err := http.ListenAndServe(grpcAddress, h2c.NewHandler(mux, &http2.Server{}))
 		at.SugarLog.Fatalf("listen failure: %v", err)
 	} else {
 		at.SugarLog.Fatal("unsupported run mode")
 	}
-
 }
