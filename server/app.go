@@ -19,7 +19,7 @@ import (
 )
 
 type AppType struct {
-	Ft           *FacadeType
+	Ft           *facadeType
 	FeatureFlags uint32 // control run time features
 	SugarLog     *zap.SugaredLogger
 }

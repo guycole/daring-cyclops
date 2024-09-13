@@ -21,7 +21,7 @@ import (
 // buf curl --schema proto --data '{"available":"bufcurl"}' http://localhost:8080/cyclops.v1.CyclopsService/GameSummary
 
 type cyclopsServiceServer struct {
-	ft *FacadeType
+	ft *facadeType
 
 	cyclopsv1connect.UnimplementedCyclopsServiceHandler
 }
