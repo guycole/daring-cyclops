@@ -45,7 +45,7 @@ func (gmt *GameManagerType) runAllGames() {
 	}
 }
 
-func (gmt *GameManagerType) findGame(key *GameKeyType) *gameType {
+func (gmt *GameManagerType) findGame(key *gameKeyType) *gameType {
 	result := gmt.gameMaps[key.key]
 	return result
 }
@@ -65,7 +65,7 @@ func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
 	return results
 }
 
-func (gmt *GameManagerType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerShip string, playerTeam teamEnum) {
+func (gmt *GameManagerType) addPlayerToGame(gameKey *gameKeyType, playerKey *playerKeyType, playerShip string, playerTeam teamEnum) {
 	pm := gmt.gameMaps[gameKey.key].playerMap
 
 	//ensure there are no stale entries

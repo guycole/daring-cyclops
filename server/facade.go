@@ -7,37 +7,37 @@ import (
 	"go.uber.org/zap"
 )
 
-type FacadeType struct {
+type facadeType struct {
 	featureFlags uint32
 	gameManager  *GameManagerType
 	sugarLog     *zap.SugaredLogger
 }
 
-func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) *FacadeType {
+func newFacade(featureFlags uint32, gameManager *GameManagerType, sugarLog *zap.SugaredLogger) *facadeType {
 	gameManager.runAllGames()
 
-	return &FacadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}
+	return &facadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}
 }
 
-func (ft *FacadeType) addPlayerToGame(gameKey *GameKeyType, playerKey *PlayerKeyType, playerShip string, playerTeam teamEnum) {
+func (ft *facadeType) addPlayerToGame(gameKey *gameKeyType, playerKey *playerKeyType, playerShip string, playerTeam teamEnum) {
 	ft.gameManager.addPlayerToGame(gameKey, playerKey, playerShip, playerTeam)
 }
 
-func (ft *FacadeType) findGame(key *GameKeyType) *gameType {
+func (ft *facadeType) findGame(key *gameKeyType) *gameType {
 	result := ft.gameManager.findGame(key)
 	return result
 }
 
-func (ft *FacadeType) gameSummary() gameSummaryArrayType {
+func (ft *facadeType) gameSummary() gameSummaryArrayType {
 	return ft.gameManager.gameSummary()
 }
 
 // add to global player map
-func (ft *FacadeType) playerAdd(name string) *playerType {
+func (ft *facadeType) playerAdd(name string) *playerType {
 	return ft.gameManager.playerManager.addFreshPlayer(name)
 }
 
 // select from global player map
-func (ft *FacadeType) playerGet(key *PlayerKeyType) *playerType {
+func (ft *facadeType) playerGet(key *playerKeyType) *playerType {
 	return ft.gameManager.playerManager.playerGet(key)
 }

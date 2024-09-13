@@ -13,7 +13,7 @@ import (
 // player for this game
 type gamePlayerType struct {
 	active bool
-	key    *PlayerKeyType
+	key    *playerKeyType
 	name   string
 	rank   rankEnum
 	score  uint64
@@ -22,7 +22,7 @@ type gamePlayerType struct {
 }
 
 // convenience factory
-func newGamePlayer(key *PlayerKeyType, name string, rank rankEnum, ship string, team teamEnum) *gamePlayerType {
+func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship string, team teamEnum) *gamePlayerType {
 	result := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
 	return &result
 }
@@ -36,19 +36,19 @@ const (
 // playerArrayType contains all active players
 //type gamePlayerArrayType [maxGamePlayers]*gamePlayerType
 
-type GameKeyType struct {
+type gameKeyType struct {
 	key string
 }
 
 // convenience factory
-func newGameKey(key string) *GameKeyType {
-	var result GameKeyType
+func newGameKey(key string) *gameKeyType {
+	var result gameKeyType
 
 	temp := strings.TrimSpace(key)
 	if len(temp) < 36 {
-		result = GameKeyType{key: uuid.NewString()}
+		result = gameKeyType{key: uuid.NewString()}
 	} else {
-		result = GameKeyType{key: temp}
+		result = gameKeyType{key: temp}
 	}
 
 	return &result
@@ -56,7 +56,7 @@ func newGameKey(key string) *GameKeyType {
 
 type gameType struct {
 	age        uint64
-	key        *GameKeyType
+	key        *gameKeyType
 	playerMap  map[string]*gamePlayerType
 	removeGame bool
 	sugarLog   *zap.SugaredLogger
@@ -72,7 +72,7 @@ type gameSummaryType struct {
 	age       uint64
 	blueScore uint64
 	blueShips uint16
-	key       *GameKeyType
+	key       *gameKeyType
 	redScore  uint64
 	redShips  uint16
 }

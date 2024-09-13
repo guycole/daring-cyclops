@@ -83,31 +83,32 @@ func findTeam(arg string) teamEnum {
 	return teamEnum(unknownTeam)
 }
 
-type PlayerKeyType struct {
+type playerKeyType struct {
 	key string
 }
 
 // convenience factory
-func newPlayerKey(key string) *PlayerKeyType {
-	var result PlayerKeyType
+func newPlayerKey(key string) *playerKeyType {
+	var result playerKeyType
 
 	temp := strings.TrimSpace(key)
 	if len(temp) < 36 {
-		result = PlayerKeyType{key: uuid.NewString()}
+		result = playerKeyType{key: uuid.NewString()}
 	} else {
-		result = PlayerKeyType{key: temp}
+		result = playerKeyType{key: temp}
 	}
 
 	return &result
 }
 
 type playerType struct {
-	key              *PlayerKeyType
+	key              *playerKeyType
 	lastOn           time.Time
 	name             string
 	cumulativePoints uint64    // lifetime total
 	highPoints       uint64    // single game high
 	highPointsTime   time.Time // time of highPoints
+	messages         *messageType
 	sortie           uint64
 	rank             rankEnum
 }
