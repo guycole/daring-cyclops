@@ -9,21 +9,35 @@ import (
 	shared "github.com/guycole/daring-cyclops/shared"
 )
 
-func TestPlayerManager(t *testing.T) {
+func TestPlayerCreation(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
 	pmt := newPlayerManager(sugarLog)
-	pt1a := pmt.addFreshPlayer("player1")
-	pt2a := pmt.addFreshPlayer("player2")
+	pmt.seedTestUsers()
 
-	pt1b := pmt.findPlayer(pt1a.key)
-	pt2b := pmt.findPlayer(pt2a.key)
-
-	if pt1a.name != pt1b.name {
-		t.Error("player1")
+	pt1 := pmt.findPlayerByKey(newPlayerKey(testPlayer1))
+	if pt1 == nil {
+		t.Error("player1 find failure")
 	}
 
-	if pt2a.name != pt2b.name {
+	if pt1.name != "testPlayer1" {
+		t.Error("player1 name")
+	}
+
+	if pt1.rank != lieutenantRank {
+		t.Error("player1 rank")
+	}
+
+	pt2 := pmt.findPlayerByKey(newPlayerKey(testPlayer2))
+	if pt2 == nil {
+		t.Error("player2 find failure")
+	}
+
+	if pt2.name != "testPlayer2" {
 		t.Error("player2")
+	}
+
+	if pt2.rank != captainRank {
+		t.Error("player2 rank")
 	}
 }

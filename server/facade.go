@@ -33,7 +33,7 @@ func (ft *facadeType) gameSummary() gameSummaryArrayType {
 }
 
 // add to global player map
-func (ft *facadeType) playerAdd(name string) *playerType {
+func (ft *facadeType) playerAdd(name string) (*playerType, error) {
 	return ft.gameManager.playerManager.addFreshPlayer(name)
 }
 

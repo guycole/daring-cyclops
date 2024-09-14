@@ -18,8 +18,8 @@ type GameManagerType struct {
 }
 
 // convenience factory
-func newGameManager(playerManager *PlayerManagerType, sugarLog *zap.SugaredLogger) *GameManagerType {
-	gmt := GameManagerType{playerManager: playerManager, sugarLog: sugarLog}
+func newGameManager(sugarLog *zap.SugaredLogger) *GameManagerType {
+	gmt := GameManagerType{playerManager: newPlayerManager(sugarLog), sugarLog: sugarLog}
 	gmt.gameMaps = make(map[string]*gameType)
 	return &gmt
 }

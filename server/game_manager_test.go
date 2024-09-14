@@ -12,8 +12,7 @@ import (
 func TestGameManager(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
-	pmt := newPlayerManager(sugarLog)
-	gmt := newGameManager(pmt, sugarLog)
+	gmt := newGameManager(sugarLog)
 
 	gmt.runAllGames()
 
@@ -40,8 +39,8 @@ func TestGameManager(t *testing.T) {
 	}
 
 	// add user to game
-	pt1 := pmt.addFreshPlayer("player1")
-	pt2 := pmt.addFreshPlayer("player2")
+	pt1, _ := gmt.playerManager.addFreshPlayer("player1")
+	pt2, _ := gmt.playerManager.addFreshPlayer("player2")
 
 	gmt.addPlayerToGame(target, pt1.key, "ship1", blueTeam)
 	gmt.addPlayerToGame(target, pt2.key, "ship2", redTeam)
