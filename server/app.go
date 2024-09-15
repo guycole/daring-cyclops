@@ -24,9 +24,9 @@ type AppType struct {
 	SugarLog     *zap.SugaredLogger
 }
 
-func (at *AppType) Initialize(featureFlags string) {
-	temp, err1 := strconv.Atoi(featureFlags)
-	if err1 == nil {
+func (at *AppType) Initialize(featureFlags, maxGames string) {
+	temp, err := strconv.Atoi(featureFlags)
+	if err == nil {
 		at.SugarLog.Infof("featureFlags: %x", temp)
 		at.FeatureFlags = uint32(temp)
 	} else {
@@ -38,7 +38,16 @@ func (at *AppType) Initialize(featureFlags string) {
 		at.SugarLog.Debug("debug level log entry")
 	}
 
-	gameManager := newGameManager(at.SugarLog)
+	var maxGameLimit uint16
+
+	temp, err = strconv.Atoi(maxGames)
+	if err == nil {
+		maxGameLimit = uint16(temp)
+	} else {
+		at.SugarLog.Fatal("bad maxGames")
+	}
+
+	gameManager := newGameManager(maxGameLimit, at.SugarLog)
 
 	at.Ft = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
 }

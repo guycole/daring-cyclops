@@ -7,19 +7,16 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	maxGames uint16 = 5
-)
-
 type gameManagerType struct {
 	gameMaps      map[string]*gameType // all active games
+	maxGames      uint16               // game population limit
+	playerManager *PlayerManagerType   // all known players
 	sugarLog      *zap.SugaredLogger
-	playerManager *PlayerManagerType
 }
 
 // convenience factory
-func newGameManager(sugarLog *zap.SugaredLogger) *gameManagerType {
-	gmt := gameManagerType{playerManager: newPlayerManager(sugarLog), sugarLog: sugarLog}
+func newGameManager(maxGames uint16, sugarLog *zap.SugaredLogger) *gameManagerType {
+	gmt := gameManagerType{maxGames: maxGames, playerManager: newPlayerManager(sugarLog), sugarLog: sugarLog}
 	gmt.gameMaps = make(map[string]*gameType)
 	return &gmt
 }
@@ -33,7 +30,7 @@ func (gmt *gameManagerType) runAllGames() {
 		}
 	}
 
-	for len(gmt.gameMaps) < int(maxGames) {
+	for len(gmt.gameMaps) < int(gmt.maxGames) {
 		gt, err := newGame(gmt.sugarLog)
 
 		if err == nil {

@@ -5,6 +5,7 @@ package server
 
 import (
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -21,10 +22,6 @@ type gamePlayerType struct {
 	score    uint64
 	ship     shipNameEnum
 	team     teamEnum
-}
-
-func (gpt *gamePlayerType) addInboundCommand(ct *commandType) {
-	// TODO
 }
 
 // convenience factory
@@ -65,19 +62,31 @@ func newGameKey(key string) *gameKeyType {
 type turnCounterType uint64
 
 type gameType struct {
-	currentTurn turnCounterType
-	key         *gameKeyType
-	playerMap   map[string]*gamePlayerType
-	removeGame  bool
-	shipMap     map[shipNameEnum]*shipType
-	sugarLog    *zap.SugaredLogger
+	activeFlag   bool
+	currentTurn  turnCounterType
+	sleepSeconds uint16
+	key          *gameKeyType
+	playerMap    map[string]*gamePlayerType
+	removeGame   bool
+	shipMap      map[shipNameEnum]*shipType
+	sugarLog     *zap.SugaredLogger
 }
 
 func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
 	players := make(map[string]*gamePlayerType)
 	ships := make(map[shipNameEnum]*shipType)
-	result := gameType{key: newGameKey(""), removeGame: false, playerMap: players, shipMap: ships, sugarLog: sugarLog}
-	return &result, nil
+	sleepSeconds := uint16(10)
+	gt := gameType{activeFlag: true, key: newGameKey(""), removeGame: false, playerMap: players, shipMap: ships, sleepSeconds: sleepSeconds, sugarLog: sugarLog}
+	//go gt.eclectic()
+	return &gt, nil
+}
+
+func (gt *gameType) eclectic() {
+	for {
+		gt.sugarLog.Info("eclectic:", gt.currentTurn)
+		gt.currentTurn++
+		time.Sleep(time.Duration(gt.sleepSeconds) * time.Second)
+	}
 }
 
 type gameSummaryType struct {

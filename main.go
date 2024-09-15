@@ -23,9 +23,9 @@ func main() {
 
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	var featureFlags, grpcAddress, runMode string
+	var featureFlags, grpcAddress, maxGames, runMode string
 
-	envVars := [...]string{"FEATURE_FLAGS", "GRPC_ADDRESS", "RUN_MODE"}
+	envVars := [...]string{"FEATURE_FLAGS", "GRPC_ADDRESS", "MAX_GAMES", "RUN_MODE"}
 
 	for index, element := range envVars {
 		temp, err := os.LookupEnv(element)
@@ -40,6 +40,8 @@ func main() {
 			featureFlags = temp
 		case "GRPC_ADDRESS":
 			grpcAddress = temp
+		case "MAX_GAMES":
+			maxGames = temp
 		case "RUN_MODE":
 			runMode = temp
 		default:
@@ -48,6 +50,6 @@ func main() {
 	}
 
 	app := server.AppType{SugarLog: sugarLog}
-	app.Initialize(featureFlags)
+	app.Initialize(featureFlags, maxGames)
 	app.Run(grpcAddress, runMode)
 }
