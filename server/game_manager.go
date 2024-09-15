@@ -11,21 +11,21 @@ const (
 	maxGames uint16 = 5
 )
 
-type GameManagerType struct {
+type gameManagerType struct {
 	gameMaps      map[string]*gameType // all active games
 	sugarLog      *zap.SugaredLogger
 	playerManager *PlayerManagerType
 }
 
 // convenience factory
-func newGameManager(sugarLog *zap.SugaredLogger) *GameManagerType {
-	gmt := GameManagerType{playerManager: newPlayerManager(sugarLog), sugarLog: sugarLog}
+func newGameManager(sugarLog *zap.SugaredLogger) *gameManagerType {
+	gmt := gameManagerType{playerManager: newPlayerManager(sugarLog), sugarLog: sugarLog}
 	gmt.gameMaps = make(map[string]*gameType)
 	return &gmt
 }
 
 // ensure there are always maxGames running
-func (gmt *GameManagerType) runAllGames() {
+func (gmt *gameManagerType) runAllGames() {
 	for key, val := range gmt.gameMaps {
 		if val.removeGame {
 			gmt.sugarLog.Infof("runAllGames: removing %s", key)
@@ -45,7 +45,7 @@ func (gmt *GameManagerType) runAllGames() {
 	}
 }
 
-func (gmt *GameManagerType) findGame(key *gameKeyType) *gameType {
+func (gmt *gameManagerType) findGame(key *gameKeyType) *gameType {
 	result := gmt.gameMaps[key.key]
 	return result
 }
@@ -53,7 +53,7 @@ func (gmt *GameManagerType) findGame(key *gameKeyType) *gameType {
 // supports gRPC message
 type gameSummaryArrayType [maxGames]*gameSummaryType
 
-func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
+func (gmt *gameManagerType) gameSummary() gameSummaryArrayType {
 	var ndx int
 	var results gameSummaryArrayType
 
@@ -63,17 +63,4 @@ func (gmt *GameManagerType) gameSummary() gameSummaryArrayType {
 	}
 
 	return results
-}
-
-func (gmt *GameManagerType) addPlayerToGame(gameKey *gameKeyType, playerKey *playerKeyType, playerShip string, playerTeam teamEnum) {
-	pm := gmt.gameMaps[gameKey.key].playerMap
-
-	//ensure there are no stale entries
-	delete(pm, playerKey.key)
-
-	// convert to game player type
-	pt := gmt.playerManager.playerGet(playerKey)
-	gpt := newGamePlayer(playerKey, pt.name, pt.rank, playerShip, playerTeam)
-
-	pm[playerKey.key] = gpt
 }

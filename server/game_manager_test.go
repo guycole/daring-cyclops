@@ -24,11 +24,15 @@ func TestGameManager(t *testing.T) {
 
 	sugarLog.Info(gsat)
 
+	// game with keys
 	for _, gst := range gsat {
 		if len(gst.key.key) < 36 {
 			t.Error("gameSummary key failure:", gst)
 		}
 	}
+
+	// add players to game
+	gmt.playerManager.seedTestUsers()
 
 	// single game select
 	target := gsat[0].key
@@ -38,20 +42,17 @@ func TestGameManager(t *testing.T) {
 		t.Error("gameSelect failure:", gt)
 	}
 
-	// add user to game
-	pt1, _ := gmt.playerManager.addFreshPlayer("player1")
-	pt2, _ := gmt.playerManager.addFreshPlayer("player2")
+	pt1 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer1))
+	gt.addPlayerToGame(pt1, roninShipName, blueTeam)
 
-	gmt.addPlayerToGame(target, pt1.key, "ship1", blueTeam)
-	gmt.addPlayerToGame(target, pt2.key, "ship2", redTeam)
+	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
+	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
-	// test all known players
-	if len(gmt.playerManager.playerMap) != 2 {
-		t.Error("playerMap length failure:", gmt.playerManager.playerMap)
-	}
-
-	// test players for game
 	if len(gt.playerMap) != 2 {
 		t.Error("playerMap length failure:", gt.playerMap)
+	}
+
+	if len(gt.shipMap) != 2 {
+		t.Error("shipMap length failure:", gt.shipMap)
 	}
 }
