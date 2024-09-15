@@ -83,6 +83,11 @@ func findTeam(arg string) teamEnum {
 	return teamEnum(unknownTeam)
 }
 
+const (
+	testPlayer1 = "87277d2e-86f8-4dbd-8b7c-4ae3bdbad703"
+	testPlayer2 = "daa10cdd-14ce-4996-9518-370b692a059f"
+)
+
 type playerKeyType struct {
 	key string
 }

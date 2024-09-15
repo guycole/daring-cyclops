@@ -12,8 +12,7 @@ import (
 func TestFacadeGameSummary(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
-	pmt := newPlayerManager(sugarLog)
-	gmt := newGameManager(pmt, sugarLog)
+	gmt := newGameManager(sugarLog)
 	ft := newFacade(0, gmt, sugarLog)
 
 	gsat := ft.gameSummary()

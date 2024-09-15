@@ -12,12 +12,7 @@ import (
 func TestFacadeGamePlayer(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
-	pmt := newPlayerManager(sugarLog)
-	if pmt == nil {
-		t.Error("player manager failure")
-	}
-
-	gmt := newGameManager(pmt, sugarLog)
+	gmt := newGameManager(sugarLog)
 	if gmt.playerManager == nil {
 		t.Error("player manager failure")
 	}

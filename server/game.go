@@ -12,19 +12,27 @@ import (
 
 // player for this game
 type gamePlayerType struct {
-	active bool
-	key    *playerKeyType
-	name   string
-	rank   rankEnum
-	score  uint64
-	ship   string
-	team   teamEnum
+	active   bool
+	joinedAt turnCounterType
+	key      *playerKeyType
+	inbound  map[string]*commandType
+	name     string
+	rank     rankEnum
+	score    uint64
+	ship     shipNameEnum
+	team     teamEnum
+}
+
+func (gpt *gamePlayerType) addInboundCommand(ct *commandType) {
+	// TODO
 }
 
 // convenience factory
-func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship string, team teamEnum) *gamePlayerType {
-	result := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
-	return &result
+func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
+	gpt := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
+	gpt.inbound = make(map[string]*commandType)
+	gpt.joinedAt = tc
+	return &gpt
 }
 
 const (
@@ -54,22 +62,26 @@ func newGameKey(key string) *gameKeyType {
 	return &result
 }
 
+type turnCounterType uint64
+
 type gameType struct {
-	age        uint64
-	key        *gameKeyType
-	playerMap  map[string]*gamePlayerType
-	removeGame bool
-	sugarLog   *zap.SugaredLogger
+	currentTurn turnCounterType
+	key         *gameKeyType
+	playerMap   map[string]*gamePlayerType
+	removeGame  bool
+	shipMap     map[shipNameEnum]*shipType
+	sugarLog    *zap.SugaredLogger
 }
 
 func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
 	players := make(map[string]*gamePlayerType)
-	result := gameType{key: newGameKey(""), age: 0, removeGame: false, playerMap: players, sugarLog: sugarLog}
+	ships := make(map[shipNameEnum]*shipType)
+	result := gameType{key: newGameKey(""), removeGame: false, playerMap: players, shipMap: ships, sugarLog: sugarLog}
 	return &result, nil
 }
 
 type gameSummaryType struct {
-	age       uint64
+	age       turnCounterType
 	blueScore uint64
 	blueShips uint16
 	key       *gameKeyType
@@ -78,7 +90,7 @@ type gameSummaryType struct {
 }
 
 func newGameSummary(gt *gameType) *gameSummaryType {
-	gst := gameSummaryType{age: gt.age, key: gt.key}
+	gst := gameSummaryType{age: gt.currentTurn, key: gt.key}
 
 	for _, val := range gt.playerMap {
 		if val != nil {
@@ -94,4 +106,52 @@ func newGameSummary(gt *gameType) *gameSummaryType {
 	}
 
 	return &gst
+}
+
+func (gt *gameType) findPlayerByKey(key *playerKeyType) *gamePlayerType {
+	result := gt.playerMap[key.key]
+	return result
+}
+
+func (gt *gameType) findPlayerByName(name string) *gamePlayerType {
+	for _, val := range gt.playerMap {
+		if val.name == name {
+			return val
+		}
+	}
+
+	return nil
+}
+
+func (gt *gameType) findShipByName(name shipNameEnum) *shipType {
+	/*
+		for _, val := range gt.shipMap {
+			if val.name == name {
+				return val
+			}
+		}
+	*/
+
+	return nil
+}
+
+func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team teamEnum) {
+	//ensure there are no stale entries
+	gpt := gt.findPlayerByKey(pt.key)
+	if gpt != nil {
+		gt.sugarLog.Info("delete duplicate player key")
+		delete(gt.playerMap, pt.key.key)
+	}
+
+	st := gt.findShipByName(ship)
+	if st != nil {
+		gt.sugarLog.Info("delete duplicate ship")
+	}
+
+	// convert playerType to gamePlayerType
+	gpt = newGamePlayer(pt.key, pt.name, pt.rank, ship, team, gt.currentTurn)
+	gt.playerMap[pt.key.key] = gpt
+
+	st, _ = newShip(ship)
+	gt.shipMap[ship] = st
 }

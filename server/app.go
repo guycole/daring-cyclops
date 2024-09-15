@@ -38,8 +38,7 @@ func (at *AppType) Initialize(featureFlags string) {
 		at.SugarLog.Debug("debug level log entry")
 	}
 
-	playerManager := newPlayerManager(at.SugarLog)
-	gameManager := newGameManager(playerManager, at.SugarLog)
+	gameManager := newGameManager(at.SugarLog)
 
 	at.Ft = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
 }
