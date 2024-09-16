@@ -8,7 +8,7 @@ type userTimeType struct {
 }
 
 func (gt *gameType) timeCommand(ct *commandType) *userTimeType {
-	gt.sugarLog.Debug(ct.command)
+	gt.sugarLog.Debug("timeCommand")
 
 	utt := userTimeType{age: gt.currentTurn}
 

@@ -8,7 +8,7 @@ type userPointsType struct {
 }
 
 func (gt *gameType) pointsCommand(ct *commandType) *userPointsType {
-	gt.sugarLog.Debug(ct.command)
+	gt.sugarLog.Debug("pointsCommand")
 
 	upt := userPointsType{age: gt.currentTurn}
 

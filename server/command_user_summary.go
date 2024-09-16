@@ -13,12 +13,12 @@ type userSummaryType struct {
 }
 
 func (gt *gameType) usersCommand(ct *commandType) []*userSummaryType {
-	gt.sugarLog.Debug(ct.command)
+	gt.sugarLog.Debug("usersCommand")
 
 	results := []*userSummaryType{}
 
 	for _, val := range gt.playerMap {
-		gt.sugarLog.Info(val.name)
+		//gt.sugarLog.Info(val.name)
 		temp := userSummaryType{active: val.active, name: val.name, rank: val.rank, score: val.score, team: val.team}
 		temp.age = gt.currentTurn - val.joinedAt
 		results = append(results, &temp)

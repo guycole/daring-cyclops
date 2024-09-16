@@ -19,7 +19,7 @@ func TestMinorCommands(t *testing.T) {
 	pt2 := pmt.findPlayerByKey(newPlayerKey(testPlayer2))
 
 	// start a game
-	gt, _ := newGame(sugarLog)
+	gt, _ := newGame(0, sugarLog)
 	sugarLog.Info(gt)
 
 	gt.addPlayerToGame(pt1, roninShipName, blueTeam)

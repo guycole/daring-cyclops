@@ -16,7 +16,6 @@ type gamePlayerType struct {
 	active   bool
 	joinedAt turnCounterType
 	key      *playerKeyType
-	inbound  map[string]*commandType
 	name     string
 	rank     rankEnum
 	score    uint64
@@ -27,12 +26,13 @@ type gamePlayerType struct {
 // convenience factory
 func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
 	gpt := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
-	gpt.inbound = make(map[string]*commandType)
 	gpt.joinedAt = tc
 	return &gpt
 }
 
 const (
+	defaultSleepSeconds uint16 = 3
+
 	maxGameTeams       uint16 = 2
 	maxGameTeamPlayers uint16 = 5
 	maxGamePlayers     uint16 = maxGameTeamPlayers * maxGameTeams
@@ -64,29 +64,54 @@ type turnCounterType uint64
 type gameType struct {
 	activeFlag   bool
 	currentTurn  turnCounterType
-	sleepSeconds uint16
+	inQueue      []*commandType
 	key          *gameKeyType
 	playerMap    map[string]*gamePlayerType
 	removeGame   bool
 	shipMap      map[shipNameEnum]*shipType
+	sleepSeconds uint16
 	sugarLog     *zap.SugaredLogger
 }
 
-func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
+func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error) {
 	players := make(map[string]*gamePlayerType)
 	ships := make(map[shipNameEnum]*shipType)
-	sleepSeconds := uint16(10)
 	gt := gameType{activeFlag: true, key: newGameKey(""), removeGame: false, playerMap: players, shipMap: ships, sleepSeconds: sleepSeconds, sugarLog: sugarLog}
-	//go gt.eclectic()
+	//gt.inQueue = make(map[string]*commandType)
+
+	if sleepSeconds > 0 {
+		sugarLog.Infof("fresh game %s with thread", gt.key.key)
+		go gt.eclectic()
+	} else {
+		sugarLog.Infof("fresh game %s no thread", gt.key.key)
+	}
+
 	return &gt, nil
 }
 
 func (gt *gameType) eclectic() {
+	gt.sleepSeconds = 5
+
 	for {
 		gt.sugarLog.Info("eclectic:", gt.currentTurn)
+
+		for len(gt.inQueue) > 0 {
+			gt.sugarLog.Info("eclectic dispatch")
+			break
+			//element := gt.inQueue[0]
+			//gt.sugarLog.Info(element)
+			//gt.inQueue = gt.inQueue[1:]
+		}
+
 		gt.currentTurn++
 		time.Sleep(time.Duration(gt.sleepSeconds) * time.Second)
 	}
+}
+
+func (gt *gameType) enqueue(ct *commandType) {
+	gt.inQueue = append(gt.inQueue, ct)
+	//gt.inQueue[ct.key.key] = ct
+	//gt.inQueue = append(gt.inQueue, ct)
 }
 
 type gameSummaryType struct {

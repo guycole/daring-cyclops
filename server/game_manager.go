@@ -22,7 +22,7 @@ func newGameManager(maxGames uint16, sugarLog *zap.SugaredLogger) *gameManagerTy
 }
 
 // ensure there are always maxGames running
-func (gmt *gameManagerType) runAllGames() {
+func (gmt *gameManagerType) runAllGames(sleepSeconds uint16) {
 	for key, val := range gmt.gameMaps {
 		if val.removeGame {
 			gmt.sugarLog.Infof("runAllGames: removing %s", key)
@@ -31,7 +31,7 @@ func (gmt *gameManagerType) runAllGames() {
 	}
 
 	for len(gmt.gameMaps) < int(gmt.maxGames) {
-		gt, err := newGame(gmt.sugarLog)
+		gt, err := newGame(sleepSeconds, gmt.sugarLog)
 
 		if err == nil {
 			gmt.sugarLog.Infof("runAllGames: adding %s", gt.key.key)
@@ -47,16 +47,24 @@ func (gmt *gameManagerType) findGame(key *gameKeyType) *gameType {
 	return result
 }
 
+func (gmt *gameManagerType) pickGame() *gameType {
+	var gt *gameType
+
+	for _, val := range gmt.gameMaps {
+		gt = val
+	}
+
+	return gt
+}
+
 // supports gRPC message
-type gameSummaryArrayType [maxGames]*gameSummaryType
+type gameSummaryArrayType []*gameSummaryType
 
 func (gmt *gameManagerType) gameSummary() gameSummaryArrayType {
-	var ndx int
 	var results gameSummaryArrayType
 
 	for _, val := range gmt.gameMaps {
-		results[ndx] = newGameSummary(val)
-		ndx++
+		results = append(results, newGameSummary(val))
 	}
 
 	return results
