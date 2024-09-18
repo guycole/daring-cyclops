@@ -3,6 +3,15 @@
 
 package server
 
+type userRequestType struct{}
+
+// convenience factory
+func newUserRequest(playerKey *playerKeyType) *commandType {
+	ct := commandType{command: userCommand, sourcePlayerKey: playerKey}
+	ct.userRequest = &userRequestType{}
+	return &ct
+}
+
 type userSummaryType struct {
 	active bool
 	age    turnCounterType
@@ -12,7 +21,11 @@ type userSummaryType struct {
 	team   teamEnum
 }
 
-func (gt *gameType) usersCommand(ct *commandType) []*userSummaryType {
+type userResponseType struct {
+	ust []*userSummaryType
+}
+
+func (gt *gameType) userCommand(ct *commandType) *commandType {
 	gt.sugarLog.Debug("usersCommand")
 
 	results := []*userSummaryType{}
@@ -24,5 +37,8 @@ func (gt *gameType) usersCommand(ct *commandType) []*userSummaryType {
 		results = append(results, &temp)
 	}
 
-	return results
+	response := userResponseType{ust: results}
+	ct.userResponse = &response
+
+	return ct
 }

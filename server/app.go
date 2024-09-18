@@ -50,6 +50,8 @@ func (at *AppType) Initialize(featureFlags, maxGames string) {
 	gameManager := newGameManager(maxGameLimit, at.SugarLog)
 
 	at.Ft = newFacade(at.FeatureFlags, gameManager, at.SugarLog)
+
+	aggle(nil)
 }
 
 // Run pacifier

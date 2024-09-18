@@ -16,7 +16,7 @@ func TestEclectic(t *testing.T) {
 	const maxGames = uint16(1)
 	gmt := newGameManager(maxGames, sugarLog)
 
-	// start game
+	// start game without thread
 	const sleepSeconds = uint16(0)
 	gmt.runAllGames(sleepSeconds)
 
@@ -33,10 +33,14 @@ func TestEclectic(t *testing.T) {
 	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
 	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
-	ct := newCommand(usersCommand)
+	ct := newCommand(userCommand, pt1.key)
 	//gt.usersCommand(ct)
 	gt.enqueue(ct)
 	gt.eclectic()
+
+	if len(gt.queueOut) != 1 {
+		t.Error("eclectic test failed")
+	}
 
 	//	for _, val := range ust {
 	//		sugarLog.Infof("%s %s %t %d %d %s", val.name, val.rank.string(), val.active, val.age, val.score, val.team.string())

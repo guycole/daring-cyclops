@@ -64,7 +64,8 @@ type turnCounterType uint64
 type gameType struct {
 	activeFlag   bool
 	currentTurn  turnCounterType
-	inQueue      []*commandType
+	queueIn      []*commandType
+	queueOut     []*commandType
 	key          *gameKeyType
 	playerMap    map[string]*gamePlayerType
 	removeGame   bool
@@ -95,12 +96,13 @@ func (gt *gameType) eclectic() {
 	for {
 		gt.sugarLog.Info("eclectic:", gt.currentTurn)
 
-		for len(gt.inQueue) > 0 {
+		for len(gt.queueIn) > 0 {
 			gt.sugarLog.Info("eclectic dispatch")
-			break
-			//element := gt.inQueue[0]
-			//gt.sugarLog.Info(element)
-			//gt.inQueue = gt.inQueue[1:]
+			candidate := gt.queueIn[0]
+			gt.sugarLog.Info(candidate)
+			gt.commandDispatch(candidate)
+			gt.queueOut = append(gt.queueOut, candidate)
+			gt.queueIn = gt.queueIn[1:]
 		}
 
 		gt.currentTurn++
@@ -109,7 +111,7 @@ func (gt *gameType) eclectic() {
 }
 
 func (gt *gameType) enqueue(ct *commandType) {
-	gt.inQueue = append(gt.inQueue, ct)
+	gt.queueIn = append(gt.queueIn, ct)
 	//gt.inQueue[ct.key.key] = ct
 	//gt.inQueue = append(gt.inQueue, ct)
 }

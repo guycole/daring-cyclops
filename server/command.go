@@ -36,7 +36,7 @@ const (
 	planetsCommand
 	//playerCreateCommand
 	//playerDeleteCommand
-	pointsCommand
+	pointCommand // command_point.go
 	//pongCommand
 	radioCommand
 	repairCommand
@@ -50,12 +50,12 @@ const (
 	summaryCommand
 	targetsCommand
 	tellCommand
-	timeCommand
+	timeCommand // command_time.go
 	torpedoCommand
 	tractorCommand
 	typeCommand
 	unknownCommand
-	usersCommand // command_user_summary.go
+	userCommand // command_user_summary.go
 )
 
 type legalGameCommandType struct {
@@ -88,7 +88,7 @@ var legalGameCommands = [...]legalGameCommandType{
 	{"planet", "", 1},
 	{"playerCreate", "playerCreate", 0},
 	{"playerDelete", "playerDelete", 0},
-	{"points", "", 1},
+	{"point", "", 1},
 	{"pong", "", 0},
 	{"radio", "", 1},
 	{"repair", "", 1},
@@ -107,7 +107,7 @@ var legalGameCommands = [...]legalGameCommandType{
 	{"tractor", "", 1},
 	{"type", "", 1},
 	{"unknownCommand", "unknownCommand", 1},
-	{"users", "", 1},
+	{"user", "", 1},
 }
 
 func findGameCommand(arg string) commandGameEnum {
@@ -139,14 +139,28 @@ func newCommandKey(key string) *commandKeyType {
 }
 
 type commandType struct {
-	key         *commandKeyType
-	command     commandGameEnum
-	destination int
-	source      *playerKeyType
+	key             *commandKeyType
+	command         commandGameEnum
+	sourcePlayerKey *playerKeyType
+	userRequest     *userRequestType
+	userResponse    *userResponseType
 }
 
 // convenience factory
-func newCommand(command commandGameEnum) *commandType {
-	result := commandType{command: command, key: newCommandKey("")}
+func newCommand(command commandGameEnum, playerKey *playerKeyType) *commandType {
+	result := commandType{command: command, key: newCommandKey(""), sourcePlayerKey: playerKey}
 	return &result
+}
+
+func (gt *gameType) commandDispatch(ct *commandType) {
+	switch ct.command {
+	//case pointCommand:
+	//	gt.pointCommand(ct)
+	//case timeCommand:
+	//	gt.timeCommand(ct)
+	case userCommand:
+		gt.userCommand(ct)
+	default:
+		gt.sugarLog.Info("unknown command")
+	}
 }
