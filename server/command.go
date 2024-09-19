@@ -139,12 +139,15 @@ func newCommandKey(key string) *commandKeyType {
 }
 
 type commandType struct {
-	key             *commandKeyType
-	command         commandGameEnum
-	sourcePlayerKey *playerKeyType
-	userRequest     *userRequestType
-	userResponse    *userResponseType
+	key                   *commandKeyType
+	command               commandGameEnum
+	sourcePlayerKey       *playerKeyType
+	destinationPlayerKeys playerKeyArrayType
+	userRequest           *userRequestType
+	userResponse          *userResponseType
 }
+
+type commandArrayType []*commandType
 
 // convenience factory
 func newCommand(command commandGameEnum, playerKey *playerKeyType) *commandType {

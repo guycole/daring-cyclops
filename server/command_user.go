@@ -17,7 +17,7 @@ type userSummaryType struct {
 	age    turnCounterType
 	name   string
 	rank   rankEnum
-	score  uint64
+	score  scoreType
 	team   teamEnum
 }
 
@@ -30,15 +30,27 @@ func (gt *gameType) userCommand(ct *commandType) *commandType {
 
 	results := []*userSummaryType{}
 
-	for _, val := range gt.playerMap {
+	for _, val := range gt.playerArray {
+		if val == nil {
+			gt.sugarLog.Debug("skipping nil player")
+			continue
+		}
+
+		gt.sugarLog.Debug("not nil player")
+
 		//gt.sugarLog.Info(val.name)
 		temp := userSummaryType{active: val.active, name: val.name, rank: val.rank, score: val.score, team: val.team}
 		temp.age = gt.currentTurn - val.joinedAt
 		results = append(results, &temp)
+		gt.sugarLog.Debug(results)
 	}
 
 	response := userResponseType{ust: results}
+	gt.sugarLog.Debug(response)
+
 	ct.userResponse = &response
+
+	ct.destinationPlayerKeys = append(ct.destinationPlayerKeys, ct.sourcePlayerKey)
 
 	return ct
 }

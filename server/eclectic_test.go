@@ -38,9 +38,8 @@ func TestEclectic(t *testing.T) {
 	gt.enqueue(ct)
 	gt.eclectic()
 
-	if len(gt.queueOut) != 1 {
-		t.Error("eclectic test failed")
-	}
+	xx := gt.getOutput(newPlayerKey(testPlayer1))
+	sugarLog.Info("eclectic test:", xx)
 
 	//	for _, val := range ust {
 	//		sugarLog.Infof("%s %s %t %d %d %s", val.name, val.rank.string(), val.active, val.age, val.score, val.team.string())

@@ -24,7 +24,7 @@ func newGameManager(maxGames uint16, sugarLog *zap.SugaredLogger) *gameManagerTy
 // ensure there are always maxGames running
 func (gmt *gameManagerType) runAllGames(sleepSeconds uint16) {
 	for key, val := range gmt.gameMaps {
-		if val.removeGame {
+		if val.activeFlag == false {
 			gmt.sugarLog.Infof("runAllGames: removing %s", key)
 			delete(gmt.gameMaps, key)
 		}
@@ -63,8 +63,8 @@ type gameSummaryArrayType []*gameSummaryType
 func (gmt *gameManagerType) gameSummary() gameSummaryArrayType {
 	var results gameSummaryArrayType
 
-	for _, val := range gmt.gameMaps {
-		results = append(results, newGameSummary(val))
+	for _, gt := range gmt.gameMaps {
+		results = append(results, gt.newGameSummary())
 	}
 
 	return results

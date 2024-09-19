@@ -106,12 +106,14 @@ func newPlayerKey(key string) *playerKeyType {
 	return &result
 }
 
+type playerKeyArrayType []*playerKeyType
+
 type playerType struct {
 	key              *playerKeyType
 	lastOn           time.Time
 	name             string
-	cumulativePoints uint64    // lifetime total
-	highPoints       uint64    // single game high
+	cumulativePoints scoreType // lifetime total
+	highPoints       scoreType // single game high
 	highPointsTime   time.Time // time of highPoints
 	messages         *messageType
 	sortie           uint64
