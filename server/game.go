@@ -13,15 +13,16 @@ import (
 
 // player for this game
 type gamePlayerType struct {
-	active   bool
-	joinedAt turnCounterType
-	key      *playerKeyType
-	name     string
-	queueOut []*commandType
-	rank     rankEnum
-	score    scoreType
-	ship     shipNameEnum
-	team     teamEnum
+	active   bool            // false means player should be removed
+	joinedAt turnCounterType // turn counter when player joined
+	key      *playerKeyType  // unique player identifier
+	name     string          // player name
+	queueIn  []*commandType  // commands awaiting scheduling
+	queueOut []*commandType  // completed commands awaiting output
+	rank     rankEnum        // player rank
+	score    scoreType       // player score
+	ship     shipNameEnum    // player ship
+	team     teamEnum        // player team
 }
 
 // convenience factory
@@ -67,7 +68,6 @@ type gameType struct {
 	acheronFlag   bool                // true means acheron active
 	activeFlag    bool                // false means game is over
 	currentTurn   turnCounterType     // monotonic turn counter
-	queueIn       commandArrayType    // input commands sorted by turn counter
 	key           *gameKeyType        // unique game identifier
 	playerArray   gamePlayerArrayType // current players and ships in game
 	scheduleArray scheduleArrayType   // commands sorted by turn counter
