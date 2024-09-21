@@ -50,7 +50,11 @@ const (
 	summaryCommand
 	targetsCommand
 	tellCommand
-	timeCommand // command_time.go
+	stubCommand0 // command_test.go
+	stubCommand1 // command_test.go
+	stubCommand2 // command_test.go
+	stubCommand3 // command_test.go
+	timeCommand  // command_time.go
 	torpedoCommand
 	tractorCommand
 	typeCommand
@@ -61,7 +65,7 @@ const (
 type legalGameCommandType struct {
 	longName  string
 	shortName string
-	duration  int
+	duration  turnCounterType
 }
 
 var legalGameCommands = [...]legalGameCommandType{
@@ -84,24 +88,28 @@ var legalGameCommands = [...]legalGameCommandType{
 	{"move", "m", 3},
 	{"news", "", 1},
 	{"phasers", "", 1},
-	{"ping", "", 0},
+	//{"ping", "", 0},
 	{"planet", "", 1},
-	{"playerCreate", "playerCreate", 0},
-	{"playerDelete", "playerDelete", 0},
+	//{"playerCreate", "playerCreate", 0},
+	//{"playerDelete", "playerDelete", 0},
 	{"point", "", 1},
-	{"pong", "", 0},
+	//{"pong", "", 0},
 	{"radio", "", 1},
 	{"repair", "", 1},
 	{"scan", "", 1},
 	{"set", "", 1},
 	{"shields", "", 1},
-	{"shipCreate", "shipCreate", 0},
-	{"shipDelete", "shipDelete", 0},
-	{"shutDown", "shutDown", 0},
+	//{"shipCreate", "shipCreate", 0},
+	//{"shipDelete", "shipDelete", 0},
+	//{"shutDown", "shutDown", 0},
 	{"status", "st", 1},
 	{"summary", "", 1},
 	{"target", "", 1},
 	{"tell", "", 1},
+	{"stub0", "", 0},
+	{"stub1", "", 1},
+	{"stub2", "", 2},
+	{"stub3", "", 3},
 	{"time", "", 1},
 	{"torpedo", "", 1},
 	{"tractor", "", 1},
@@ -141,10 +149,17 @@ func newCommandKey(key string) *commandKeyType {
 type commandType struct {
 	key                   *commandKeyType
 	command               commandGameEnum
-	sourcePlayerKey       *playerKeyType
 	destinationPlayerKeys playerKeyArrayType
-	userRequest           *userRequestType
-	userResponse          *userResponseType
+	next                  *commandType
+	sourcePlayerKey       *playerKeyType
+	//pointsRequest         *pointsRequestType
+	//pointsResponse        *pointsResponseType
+	stubRequest  *stubRequestType
+	stubResponse *stubResponseType
+	timeRequest  *timeRequestType
+	timeResponse *timeResponseType
+	userRequest  *userRequestType
+	userResponse *userResponseType
 }
 
 type commandArrayType []*commandType
@@ -161,9 +176,18 @@ func (gt *gameType) commandDispatch(ct *commandType) {
 	//	gt.pointCommand(ct)
 	//case timeCommand:
 	//	gt.timeCommand(ct)
+
+	case stubCommand0:
+		gt.stubCommand(ct)
+	case stubCommand1:
+		gt.stubCommand(ct)
+	case stubCommand2:
+		gt.stubCommand(ct)
+	case stubCommand3:
+		gt.stubCommand(ct)
 	case userCommand:
 		gt.userCommand(ct)
 	default:
-		gt.sugarLog.Info("unknown command")
+		gt.sugarLog.Infof("unknown command %s", legalGameCommands[ct.command].longName)
 	}
 }

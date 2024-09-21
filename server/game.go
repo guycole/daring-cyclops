@@ -11,37 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// player for this game
-type gamePlayerType struct {
-	active   bool            // false means player should be removed
-	joinedAt turnCounterType // turn counter when player joined
-	key      *playerKeyType  // unique player identifier
-	name     string          // player name
-	queueIn  []*commandType  // commands awaiting scheduling
-	queueOut []*commandType  // completed commands awaiting output
-	rank     rankEnum        // player rank
-	score    scoreType       // player score
-	ship     shipNameEnum    // player ship
-	team     teamEnum        // player team
-}
-
-// convenience factory
-func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
-	gpt := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
-	gpt.joinedAt = tc
-	return &gpt
-}
-
-const (
-	defaultSleepSeconds uint16 = 3
-
-	maxGameTeams       uint16 = 2
-	maxGameTeamPlayers uint16 = 5
-	maxGamePlayers     uint16 = maxGameTeamPlayers * maxGameTeams
-)
-
-// playerArrayType contains all active players
-type gamePlayerArrayType [maxGamePlayers]*gamePlayerType
+type turnCounterType uint64
 
 type gameKeyType struct {
 	key string
@@ -61,9 +31,6 @@ func newGameKey(key string) *gameKeyType {
 	return &result
 }
 
-type scoreType uint64
-type turnCounterType uint64
-
 type gameType struct {
 	acheronFlag   bool                // true means acheron active
 	activeFlag    bool                // false means game is over
@@ -78,13 +45,8 @@ type gameType struct {
 func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error) {
 	gt := gameType{acheronFlag: true, activeFlag: true, key: newGameKey(""), sleepSeconds: sleepSeconds, sugarLog: sugarLog}
 
-	for ndx, _ := range gt.playerArray {
-		gt.playerArray[ndx] = nil
-	}
-
-	for ndx, _ := range gt.scheduleArray {
-		gt.scheduleArray[ndx] = nil
-	}
+	gt.playerArray = newGamePlayerArray()
+	gt.scheduleArray = newScheduleArray()
 
 	if sleepSeconds > 0 {
 		sugarLog.Infof("fresh game %s with thread", gt.key.key)
@@ -97,105 +59,76 @@ func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error
 }
 
 func (gt *gameType) eclectic() {
-	gt.sleepSeconds = 5
-
-	for {
-		gt.sugarLog.Info("eclectic:", gt.currentTurn)
-
-		// schedule fresh commands
-		for len(gt.queueIn) > 0 {
-			candidate := gt.queueIn[0]
-			gt.schedule(candidate)
-			gt.queueIn = gt.queueIn[1:]
-		}
-
-		// consume commands for this turn
-
-		gt.currentTurn++
+	for gt.activeFlag {
+		gt.playTurn()
 		time.Sleep(time.Duration(gt.sleepSeconds) * time.Second)
 	}
 }
 
-func (gt *gameType) enqueue(ct *commandType) {
-	gt.queueIn = append(gt.queueIn, ct)
-	//gt.inQueue[ct.key.key] = ct
-	//gt.inQueue = append(gt.inQueue, ct)
+func (gt *gameType) playTurn() {
+	ndx := gt.currentTurn % turnCounterType(maxScheduleArray)
+	gt.sugarLog.Debugf("playTurn %d %d:", gt.currentTurn, ndx)
+
+	st := gt.scheduleArray[ndx]
+	gt.currentTurn++
+
+	gt.sugarLog.Debugf("len:%d", st.length)
+
+	for current := st.root; current != nil; current = current.next {
+		gt.commandDispatch(current)
+	}
+
+	st.length = 0
+	st.root = nil
+	st.tail = nil
 }
 
 func (gt *gameType) findPlayerByKey(key *playerKeyType) *gamePlayerType {
-	//	result := gt.playerMap[key.key]
-	//	return result
+	for _, gpt := range gt.playerArray {
+		if strings.Compare(gpt.key.key, key.key) == 0 {
+			return gpt
+		}
+	}
+
 	return nil
 }
 
 func (gt *gameType) findPlayerByName(name string) *gamePlayerType {
-	/*
-		for _, val := range gt.playerMap {
-			if val.name == name {
-				return val
-			}
+	for _, gpt := range gt.playerArray {
+		if strings.Compare(gpt.name, name) == 0 {
+			return gpt
 		}
-	*/
+	}
 
 	return nil
 }
 
-func (gt *gameType) findShipByName(name shipNameEnum) *shipType {
-	/*
-		for _, val := range gt.shipMap {
-			if val.name == name {
-				return val
-			}
+func (gt *gameType) findPlayerByShip(name shipNameEnum) *gamePlayerType {
+	for _, gpt := range gt.playerArray {
+		if gpt.ship == name {
+			return gpt
 		}
-	*/
+	}
 
 	return nil
 }
 
-func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team teamEnum) {
-	// ensure there are no stale entries
-
-	var blue_population, red_population uint16
-
-	for ndx, val := range gt.playerArray {
-		// no duplicate players
-		if val != nil && val.key.key == pt.key.key {
-			gt.sugarLog.Info("duplicate player key")
-		}
-
-		// no duplicate ships
-		if val != nil && val.ship == ship {
-			gt.sugarLog.Info("duplicate ship")
-			gt.playerArray[ndx] = nil
-		}
-
-		// count team population
-		if val != nil && val.team == redTeam {
-			red_population++
-		} else {
-			blue_population++
-		}
+func (gt *gameType) enqueue(ct *commandType) {
+	gpt := gt.findPlayerByKey(ct.sourcePlayerKey)
+	if gpt == nil {
+		gt.sugarLog.Info("rejecting message from unknown player")
+		return
 	}
 
-	// enforce team size limits
-	if team == blueTeam {
-		if blue_population >= maxGameTeamPlayers {
-			gt.sugarLog.Info("blue team full")
-		}
-	} else {
-		if red_population >= maxGameTeamPlayers {
-			gt.sugarLog.Info("red team full")
-		}
+	if gpt.maxFuture < gt.currentTurn {
+		gpt.maxFuture = gt.currentTurn
 	}
 
-	for ndx, val := range gt.playerArray {
-		if val == nil {
-			gt.playerArray[ndx] = newGamePlayer(pt.key, pt.name, pt.rank, ship, team, gt.currentTurn)
-			break
-		}
-	}
-}
+	ndx := gpt.maxFuture % turnCounterType(maxScheduleArray)
+	gt.sugarLog.Infof("schedule command at %d %s %s %s", ndx, legalGameCommands[ct.command].longName, gpt.name, gpt.team.string())
 
-func (gt *gameType) getOutput(pkt *playerKeyType) commandArrayType {
-	return nil
+	st := gt.scheduleArray[ndx]
+	st.scheduleAdd(ct)
+
+	gpt.maxFuture = gpt.maxFuture + legalGameCommands[ct.command].duration
 }

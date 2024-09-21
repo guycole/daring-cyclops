@@ -3,14 +3,34 @@
 
 package server
 
-type userTimeType struct {
+type timeRequestType struct{}
+
+// convenience factory
+func newTimeRequest(playerKey *playerKeyType) *commandType {
+	ct := commandType{command: timeCommand, sourcePlayerKey: playerKey}
+	ct.timeRequest = &timeRequestType{}
+	return &ct
+}
+
+type timeType struct {
 	age turnCounterType
 }
 
-func (gt *gameType) timeCommand(ct *commandType) *userTimeType {
+type timeResponseType struct {
+	tt *timeType
+}
+
+func (gt *gameType) timeCommand(ct *commandType) *commandType {
 	gt.sugarLog.Debug("timeCommand")
 
-	utt := userTimeType{age: gt.currentTurn}
+	tt := timeType{age: gt.currentTurn}
 
-	return &utt
+	response := timeResponseType{tt: &tt}
+	gt.sugarLog.Debug(response)
+
+	ct.timeResponse = &response
+
+	ct.destinationPlayerKeys = append(ct.destinationPlayerKeys, ct.sourcePlayerKey)
+
+	return ct
 }

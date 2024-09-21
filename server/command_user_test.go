@@ -9,40 +9,23 @@ import (
 	shared "github.com/guycole/daring-cyclops/shared"
 )
 
-func TestGameManager(t *testing.T) {
+func TestUserCommand(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
+	sugarLog.Info("user command test")
 
-	const maxGames = uint16(5)
+	const maxGames = uint16(1)
 	gmt := newGameManager(maxGames, sugarLog)
 
+	// start game
 	const sleepSeconds = uint16(0)
 	gmt.runAllGames(sleepSeconds)
-
-	// ensure all games are running
-	gsat := gmt.gameSummary()
-	if len(gsat) != int(maxGames) {
-		t.Error("gameSummary length failure:", gsat)
-	}
-
-	sugarLog.Info(gsat)
-
-	// game with keys
-	for _, gst := range gsat {
-		if len(gst.key.key) < 36 {
-			t.Error("gameSummary key failure:", gst)
-		}
-	}
 
 	// add players to game
 	gmt.playerManager.seedTestUsers()
 
-	// single game select
-	target := gsat[0].key
-	gt := gmt.findGame(target)
-
-	if gt.key.key != target.key {
-		t.Error("gameSelect failure:", gt)
-	}
+	// test game
+	gt := gmt.pickGame()
+	sugarLog.Info("user command test:", gt.key.key)
 
 	pt1 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer1))
 	gt.addPlayerToGame(pt1, roninShipName, blueTeam)
@@ -50,11 +33,11 @@ func TestGameManager(t *testing.T) {
 	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
 	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
-	if len(gt.playerMap) != 2 {
-		t.Error("playerMap length failure:", gt.playerMap)
-	}
+	ct := newCommand(userCommand, pt1.key)
+	gt.userCommand(ct)
+	ust := ct.userResponse.ust
 
-	if len(gt.shipMap) != 2 {
-		t.Error("shipMap length failure:", gt.shipMap)
+	for _, val := range ust {
+		sugarLog.Infof("%s %s %t %d %d %s", val.name, val.rank.string(), val.active, val.age, val.score, val.team.string())
 	}
 }

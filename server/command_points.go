@@ -7,7 +7,7 @@ type userPointType struct {
 	age turnCounterType
 }
 
-func (gt *gameType) pointCommand(ct *commandType) *userPointType {
+func (gt *gameType) pointsCommand(ct *commandType) *userPointType {
 	gt.sugarLog.Debug("pointsCommand")
 
 	upt := userPointType{age: gt.currentTurn}

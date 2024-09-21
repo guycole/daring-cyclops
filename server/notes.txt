@@ -1,0 +1,2 @@
+commands are always from one player, but might affect multiple players
+commands are scheduled relative to source player.
