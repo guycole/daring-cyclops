@@ -19,20 +19,33 @@ func TestMinorCommands(t *testing.T) {
 	pt2 := pmt.findPlayerByKey(newPlayerKey(testPlayer2))
 
 	// start a game
-	gt, _ := newGame(sugarLog)
+	gt, _ := newGame(0, sugarLog)
 	sugarLog.Info(gt)
 
 	gt.addPlayerToGame(pt1, roninShipName, blueTeam)
 	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
-	ct := newCommand(usersCommand)
-	ust := gt.usersCommand(ct)
-	sugarLog.Info(ust)
-	if len(ust) != 2 {
-		t.Error("userSummaryType length failure:", len(ust))
+	ct := newCommand(userCommand, pt1.key)
+	gt.userCommand(ct)
+
+	if ct.destinationPlayerKeys == nil {
+		t.Error("destinationPlayerKeys failure")
 	}
 
-	ct = newCommand(timeCommand)
-	utt := gt.timeCommand(ct)
-	sugarLog.Info(utt)
+	if len(ct.destinationPlayerKeys) != 1 {
+		t.Error("destinationPlayerKeys length failure:", len(ct.destinationPlayerKeys))
+	}
+
+	if ct.destinationPlayerKeys[0] != pt1.key {
+		t.Error("destinationPlayerKeys key failure:", ct.destinationPlayerKeys[0])
+	}
+
+	ur := ct.userResponse
+	if ur == nil {
+		t.Error("userResponse failure")
+	}
+
+	if len(ur.ust) != 2 {
+		t.Error("userSummaryType length failure:", len(ur.ust))
+	}
 }

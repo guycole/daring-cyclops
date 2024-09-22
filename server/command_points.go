@@ -3,14 +3,14 @@
 
 package server
 
-type userTimeType struct {
+type userPointType struct {
 	age turnCounterType
 }
 
-func (gt *gameType) timeCommand(ct *commandType) *userTimeType {
-	gt.sugarLog.Debug(ct.command)
+func (gt *gameType) pointsCommand(ct *commandType) *userPointType {
+	gt.sugarLog.Debug("pointsCommand")
 
-	utt := userTimeType{age: gt.currentTurn}
+	upt := userPointType{age: gt.currentTurn}
 
-	return &utt
+	return &upt
 }

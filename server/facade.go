@@ -14,7 +14,7 @@ type facadeType struct {
 }
 
 func newFacade(featureFlags uint32, gameManager *gameManagerType, sugarLog *zap.SugaredLogger) *facadeType {
-	gameManager.runAllGames()
+	gameManager.runAllGames(defaultSleepSeconds)
 
 	return &facadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}
 }

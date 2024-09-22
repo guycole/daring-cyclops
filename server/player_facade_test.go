@@ -12,7 +12,9 @@ import (
 func TestFacadeGamePlayer(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
-	gmt := newGameManager(sugarLog)
+	var maxGames = uint16(5)
+
+	gmt := newGameManager(maxGames, sugarLog)
 	if gmt.playerManager == nil {
 		t.Error("player manager failure")
 	}

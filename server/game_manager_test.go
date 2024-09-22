@@ -12,9 +12,11 @@ import (
 func TestGameManager(t *testing.T) {
 	sugarLog := shared.ZapSetup(true)
 
-	gmt := newGameManager(sugarLog)
+	const maxGames = uint16(5)
+	gmt := newGameManager(maxGames, sugarLog)
 
-	gmt.runAllGames()
+	const sleepSeconds = uint16(0)
+	gmt.runAllGames(sleepSeconds)
 
 	// ensure all games are running
 	gsat := gmt.gameSummary()
@@ -48,11 +50,18 @@ func TestGameManager(t *testing.T) {
 	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
 	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
-	if len(gt.playerMap) != 2 {
-		t.Error("playerMap length failure:", gt.playerMap)
+	temp1 := gt.findPlayerByKey(pt1.key)
+	if temp1.key != pt1.key {
+		t.Error("find player by key failure")
 	}
 
-	if len(gt.shipMap) != 2 {
-		t.Error("shipMap length failure:", gt.shipMap)
+	temp1 = gt.findPlayerByName(pt1.name)
+	if temp1.key != pt1.key {
+		t.Error("find player by name failure")
+	}
+
+	temp1 = gt.findPlayerByShip(roninShipName)
+	if temp1.key != pt1.key {
+		t.Error("find player by ship failure")
 	}
 }

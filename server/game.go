@@ -5,44 +5,13 @@ package server
 
 import (
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
-// player for this game
-type gamePlayerType struct {
-	active   bool
-	joinedAt turnCounterType
-	key      *playerKeyType
-	inbound  map[string]*commandType
-	name     string
-	rank     rankEnum
-	score    uint64
-	ship     shipNameEnum
-	team     teamEnum
-}
-
-func (gpt *gamePlayerType) addInboundCommand(ct *commandType) {
-	// TODO
-}
-
-// convenience factory
-func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
-	gpt := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
-	gpt.inbound = make(map[string]*commandType)
-	gpt.joinedAt = tc
-	return &gpt
-}
-
-const (
-	maxGameTeams       uint16 = 2
-	maxGameTeamPlayers uint16 = 5
-	maxGamePlayers     uint16 = maxGameTeamPlayers * maxGameTeams
-)
-
-// playerArrayType contains all active players
-//type gamePlayerArrayType [maxGamePlayers]*gamePlayerType
+type turnCounterType uint64
 
 type gameKeyType struct {
 	key string
@@ -62,96 +31,104 @@ func newGameKey(key string) *gameKeyType {
 	return &result
 }
 
-type turnCounterType uint64
-
 type gameType struct {
-	currentTurn turnCounterType
-	key         *gameKeyType
-	playerMap   map[string]*gamePlayerType
-	removeGame  bool
-	shipMap     map[shipNameEnum]*shipType
-	sugarLog    *zap.SugaredLogger
+	acheronFlag   bool                // true means acheron active
+	activeFlag    bool                // false means game is over
+	currentTurn   turnCounterType     // monotonic turn counter
+	key           *gameKeyType        // unique game identifier
+	playerArray   gamePlayerArrayType // current players and ships in game
+	scheduleArray scheduleArrayType   // commands sorted by turn counter
+	sleepSeconds  uint16              // delay between turns
+	sugarLog      *zap.SugaredLogger  // logger
 }
 
-func newGame(sugarLog *zap.SugaredLogger) (*gameType, error) {
-	players := make(map[string]*gamePlayerType)
-	ships := make(map[shipNameEnum]*shipType)
-	result := gameType{key: newGameKey(""), removeGame: false, playerMap: players, shipMap: ships, sugarLog: sugarLog}
-	return &result, nil
-}
+func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error) {
+	gt := gameType{acheronFlag: true, activeFlag: true, key: newGameKey(""), sleepSeconds: sleepSeconds, sugarLog: sugarLog}
 
-type gameSummaryType struct {
-	age       turnCounterType
-	blueScore uint64
-	blueShips uint16
-	key       *gameKeyType
-	redScore  uint64
-	redShips  uint16
-}
+	gt.playerArray = newGamePlayerArray()
+	gt.scheduleArray = newScheduleArray()
 
-func newGameSummary(gt *gameType) *gameSummaryType {
-	gst := gameSummaryType{age: gt.currentTurn, key: gt.key}
-
-	for _, val := range gt.playerMap {
-		if val != nil {
-			switch val.team {
-			case blueTeam:
-				gst.blueShips++
-				gst.blueScore += val.score
-			case redTeam:
-				gst.redShips++
-				gst.redScore += val.score
-			}
-		}
+	if sleepSeconds > 0 {
+		sugarLog.Infof("fresh game %s with thread", gt.key.key)
+		go gt.eclectic()
+	} else {
+		sugarLog.Infof("fresh game %s no thread", gt.key.key)
 	}
 
-	return &gst
+	return &gt, nil
+}
+
+func (gt *gameType) eclectic() {
+	for gt.activeFlag {
+		gt.playTurn()
+		time.Sleep(time.Duration(gt.sleepSeconds) * time.Second)
+	}
+}
+
+func (gt *gameType) playTurn() {
+	ndx := gt.currentTurn % turnCounterType(maxScheduleArray)
+	gt.sugarLog.Debugf("playTurn %d %d:", gt.currentTurn, ndx)
+
+	st := gt.scheduleArray[ndx]
+	gt.currentTurn++
+
+	gt.sugarLog.Debugf("len:%d", st.length)
+
+	for current := st.root; current != nil; current = current.next {
+		gt.commandDispatch(current)
+	}
+
+	st.length = 0
+	st.root = nil
+	st.tail = nil
 }
 
 func (gt *gameType) findPlayerByKey(key *playerKeyType) *gamePlayerType {
-	result := gt.playerMap[key.key]
-	return result
+	for _, gpt := range gt.playerArray {
+		if strings.Compare(gpt.key.key, key.key) == 0 {
+			return gpt
+		}
+	}
+
+	return nil
 }
 
 func (gt *gameType) findPlayerByName(name string) *gamePlayerType {
-	for _, val := range gt.playerMap {
-		if val.name == name {
-			return val
+	for _, gpt := range gt.playerArray {
+		if strings.Compare(gpt.name, name) == 0 {
+			return gpt
 		}
 	}
 
 	return nil
 }
 
-func (gt *gameType) findShipByName(name shipNameEnum) *shipType {
-	/*
-		for _, val := range gt.shipMap {
-			if val.name == name {
-				return val
-			}
+func (gt *gameType) findPlayerByShip(name shipNameEnum) *gamePlayerType {
+	for _, gpt := range gt.playerArray {
+		if gpt.ship == name {
+			return gpt
 		}
-	*/
+	}
 
 	return nil
 }
 
-func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team teamEnum) {
-	//ensure there are no stale entries
-	gpt := gt.findPlayerByKey(pt.key)
-	if gpt != nil {
-		gt.sugarLog.Info("delete duplicate player key")
-		delete(gt.playerMap, pt.key.key)
+func (gt *gameType) enqueue(ct *commandType) {
+	gpt := gt.findPlayerByKey(ct.sourcePlayerKey)
+	if gpt == nil {
+		gt.sugarLog.Info("rejecting message from unknown player")
+		return
 	}
 
-	st := gt.findShipByName(ship)
-	if st != nil {
-		gt.sugarLog.Info("delete duplicate ship")
+	if gpt.maxFuture < gt.currentTurn {
+		gpt.maxFuture = gt.currentTurn
 	}
 
-	// convert playerType to gamePlayerType
-	gpt = newGamePlayer(pt.key, pt.name, pt.rank, ship, team, gt.currentTurn)
-	gt.playerMap[pt.key.key] = gpt
+	ndx := gpt.maxFuture % turnCounterType(maxScheduleArray)
+	gt.sugarLog.Infof("schedule command at %d %s %s %s", ndx, legalGameCommands[ct.command].longName, gpt.name, gpt.team.string())
 
-	st, _ = newShip(ship)
-	gt.shipMap[ship] = st
+	st := gt.scheduleArray[ndx]
+	st.scheduleAdd(ct)
+
+	gpt.maxFuture = gpt.maxFuture + legalGameCommands[ct.command].duration
 }
