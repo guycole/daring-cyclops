@@ -32,19 +32,23 @@ func newGameKey(key string) *gameKeyType {
 }
 
 type gameType struct {
-	acheronFlag   bool                // true means acheron active
-	activeFlag    bool                // false means game is over
-	currentTurn   turnCounterType     // monotonic turn counter
-	key           *gameKeyType        // unique game identifier
-	playerArray   gamePlayerArrayType // current players and ships in game
-	scheduleArray scheduleArrayType   // commands sorted by turn counter
-	sleepSeconds  uint16              // delay between turns
-	sugarLog      *zap.SugaredLogger  // logger
+	acheronFlag   bool                    // true means acheron active
+	activeFlag    bool                    // false means game is over
+	catalogMap    map[string]*catalogType // all objects on gameBoard
+	currentTurn   turnCounterType         // monotonic turn counter
+	gameBoard     *boardArrayType         // game board
+	key           *gameKeyType            // unique game identifier
+	playerArray   gamePlayerArrayType     // current players and ships in game
+	scheduleArray scheduleArrayType       // commands sorted by turn counter
+	sleepSeconds  uint16                  // delay between turns
+	sugarLog      *zap.SugaredLogger      // logger
 }
 
 func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error) {
 	gt := gameType{acheronFlag: true, activeFlag: true, key: newGameKey(""), sleepSeconds: sleepSeconds, sugarLog: sugarLog}
 
+	gt.catalogMap = make(map[string]*catalogType)
+	gt.gameBoard = newGameBoard(emptyBoard)
 	gt.playerArray = newGamePlayerArray()
 	gt.scheduleArray = newScheduleArray()
 
