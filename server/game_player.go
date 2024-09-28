@@ -105,6 +105,8 @@ func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team team
 			break
 		}
 	}
+
+	// add to catalog
 }
 
 func (gt *gameType) getOutput(pkt *playerKeyType) commandArrayType {
