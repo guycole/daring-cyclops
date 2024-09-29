@@ -18,17 +18,17 @@ func (bte boardTypeEnum) string() string {
 	return [...]string{"unknown", "empty", "standard"}[bte]
 }
 
-const maxBoardSideX = uint16(75)
-const maxBoardSideY = uint16(75)
+const maxBoardSideRow = uint16(75)
+const maxBoardSideCol = uint16(75)
 
-type boardArrayType [maxBoardSideX][maxBoardSideY]*boardCellType
+type boardArrayType [maxBoardSideRow][maxBoardSideCol]*boardCellType
 
 func newGameBoard(bte boardTypeEnum) *boardArrayType {
 	var bat boardArrayType
 
-	for yy := uint16(0); yy < maxBoardSideY; yy++ {
-		for xx := uint16(0); xx < maxBoardSideX; xx++ {
-			bat[yy][xx] = newBoardCell()
+	for row := uint16(0); row < maxBoardSideRow; row++ {
+		for col := uint16(0); col < maxBoardSideCol; col++ {
+			bat[row][col] = newBoardCell()
 		}
 	}
 
@@ -36,23 +36,17 @@ func newGameBoard(bte boardTypeEnum) *boardArrayType {
 		fmt.Println("fix me only empty board supported")
 	}
 
+	switch bte {
+	case emptyBoard:
+		fmt.Println("generating empty board")
+	case standardBoard:
+		fmt.Println("generating standard board")
+		//              starGatesAdd(&gt.starGates, &gt.board)
+		//              starsAdd(&gt.stars, &gt.board)
+		//              planetsAdd(&gt.planets, &gt.board)
+	default:
+		fmt.Println("unsupported boardType in boardGenerator")
+	}
+
 	return &bat
 }
-
-/*
-func (gt *gameType) boardGenerator() {
-	gt.board = newBoard()
-
-	switch gt.boardType {
-	case emptyBoard:
-			log.Println("generating empty board")
-	case standardBoard:
-			log.Println("generating standard board")
-			//              starGatesAdd(&gt.starGates, &gt.board)
-			//              starsAdd(&gt.stars, &gt.board)
-			//              planetsAdd(&gt.planets, &gt.board)
-	default:
-		log.Println("unsupported boardType in boardGenerator")
-	}
-}
-*/

@@ -3,7 +3,6 @@
 package server
 
 import (
-	"errors"
 	"strings"
 )
 
@@ -43,9 +42,9 @@ var legalShipClasses = [...]string{
 }
 
 type legalShipInventoryType struct {
-	energy    int
-	mines     int
-	torpedoes int
+	energy    uint16
+	mines     uint16
+	torpedoes uint16
 }
 
 // must match order for shipClassEnum
@@ -195,37 +194,25 @@ func findShipName(arg string) shipNameEnum {
 }
 
 type shipType struct {
-	classEnum shipClassEnum
-	condition shipConditionEnum
-	docked    bool
-	nameEnum  shipNameEnum
-	//	position  *locationType
-	owner  string
-	symbol string
-	team   teamEnum
-	uuid   string // ship UUID
-
-	// ship systems as percentage operational (values 100 to 0)
-	computer    int
-	lifeSupport int
-	radio       int
-	shields     int
-	tractorBeam int
-
-	// engines
-	impulseEngines int
-	warpEngines    int
-
-	// weapons
-	phasers      int
-	torpedoTubes int
-
-	// weapons inventory
-	mines     int
-	torpedoes int
-
-	// generic ship energy
-	energy int
+	computer       uint16 // ship system as percentage operational (values 100 to 0)
+	condition      shipConditionEnum
+	dockedFlag     bool
+	energy         uint16 // generic ship power
+	impulseEngines uint16
+	lifeSupport    uint16        // ship systems as percentage operational (values 100 to 0)
+	location       *locationType // current ship location
+	mines          uint16        // inventory
+	name           shipNameEnum
+	phasers        uint16 // ship systems as percentage operational (values 100 to 0)
+	radio          uint16 // ship systems as percentage operational (values 100 to 0)
+	shields        uint16 // ship systems as percentage operational (values 100 to 0)
+	shipClass      shipClassEnum
+	symbol         string
+	torpedoes      uint16 // inventory
+	torpedoTubes   uint16 // ship systems as percentage operational (values 100 to 0)
+	team           teamEnum
+	tractorBeam    uint16 // ship systems as percentage operational (values 100 to 0)
+	warpEngines    uint16 // ship systems as percentage operational (values 100 to 0)
 }
 
 /*
@@ -237,62 +224,26 @@ type shipArrayType [maxShips]*shipType
 */
 
 // newShip convenience function to populate struct
-func newShip(name shipNameEnum) (*shipType, error) {
-	st := shipType{}
-	return &st, nil
-}
+func newShip(name shipNameEnum) *shipType {
+	st := shipType{shipClass: legalShips[name].shipClass, name: name, symbol: legalShips[name].symbol, team: legalShips[name].team}
 
-func newShip2(shipName, shipOwner string, position *locationType) (*shipType, error) {
-	if position == nil {
-		return nil, errors.New("nil position")
-	}
+	st.computer = 100
+	st.condition = greenCondition
+	st.dockedFlag = false
+	st.energy = legalShipInventory[st.shipClass].energy
+	st.impulseEngines = 100
+	st.lifeSupport = 100
+	st.location = randomLocation(maxBoardSideRow, maxBoardSideCol)
+	st.mines = legalShipInventory[st.shipClass].mines
+	st.phasers = 100
+	st.radio = 100
+	st.shields = 100
+	st.torpedoTubes = 100
+	st.torpedoes = legalShipInventory[st.shipClass].torpedoes
+	st.tractorBeam = 100
+	st.warpEngines = 100
 
-	if len(shipName) < 1 {
-		return nil, errors.New("empty ship name")
-	}
-
-	if len(shipOwner) < 1 {
-		return nil, errors.New("empty ship owner")
-	}
-
-	shipEnum := findShipName(shipName)
-	if shipEnum == unknownShipName {
-		return nil, errors.New("unknown ship name")
-	}
-
-	st := shipType{}
-
-	/*
-		st := shipType{condition: greenCondition, owner: shipOwner, position: position}
-		st.nameEnum = shipEnum
-		st.uuid = uuid.NewString()
-
-		legalShip := legalShips[shipEnum]
-		st.classEnum = legalShip.shipClass
-		st.symbol = legalShip.symbol
-		st.team = legalShip.team
-
-		// all systems 100 percent effective
-		st.computer = 100
-		st.lifeSupport = 100
-		st.radio = 100
-		st.shields = 100
-		st.tractorBeam = 100
-
-		st.impulseEngines = 100
-		st.warpEngines = 100
-
-		st.phasers = 100
-		st.torpedoTubes = 100
-
-		// inventory
-		inventory := legalShipInventory[legalShip.shipClass]
-		st.energy = inventory.energy
-		st.mines = inventory.mines
-		st.torpedoes = inventory.torpedoes
-	*/
-
-	return &st, nil
+	return &st
 }
 
 /*

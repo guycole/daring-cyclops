@@ -21,6 +21,15 @@ func newGameManager(maxGames uint16, sugarLog *zap.SugaredLogger) *gameManagerTy
 	return &gmt
 }
 
+// one game two player demo
+func newDemoGameManager(sleepSeconds uint16, sugarLog *zap.SugaredLogger) *gameManagerType {
+	gmt := newGameManager(1, sugarLog)
+	gmt.runAllGames(sleepSeconds)
+	gmt.playerManager.seedTestUsers()
+
+	return gmt
+}
+
 // ensure there are always maxGames running
 func (gmt *gameManagerType) runAllGames(sleepSeconds uint16) {
 	for key, val := range gmt.gameMaps {

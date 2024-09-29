@@ -3,41 +3,25 @@
 
 package server
 
-/*
-type boardTokenEnum int
-
-const (
-	vacantToken boardTokenEnum = iota
-	mineToken
-	planetToken
-	shipToken
-	starGateToken
-	voidToken
-)
-
-func (bte boardTokenEnum) String() string {
-	return [...]string{"vacant", "mine", "planet", "ship", "starGate", "void"}[bte]
-}
-*/
-
 type boardCellType struct {
-	// celestial objects without token uuid
-	acheronVoid bool
-	blackHole   bool
-
-	// if not nil, look in catalog
-	key *catalogKeyType
+	acheronVoidFlag bool // Acheron void is a special type of cell that is impassable
+	blackHoleFlag   bool // Black hole is a special type of cell that is impassable
+	occupiedFlag    bool // True, there is a game token in the cell
 }
 
 func newBoardCell() *boardCellType {
-	result := boardCellType{}
+	result := boardCellType{acheronVoidFlag: false, blackHoleFlag: false, occupiedFlag: false}
 	return &result
 }
 
-func (bc *boardCellType) setAcheronVoid() {
-	bc.acheronVoid = true
+func (bc *boardCellType) isOccupied() bool {
+	return bc.occupiedFlag
 }
 
-func (bc *boardCellType) setBlackHole() {
-	bc.blackHole = true
+func (bc *boardCellType) setOccupiedFlag() {
+	bc.occupiedFlag = true
+}
+
+func (bc *boardCellType) clearOccupiedFlag() {
+	bc.occupiedFlag = false
 }

@@ -15,14 +15,14 @@ type gamePlayerType struct {
 	queueOut  []*commandType  // completed commands awaiting output
 	rank      rankEnum        // player rank
 	score     scoreType       // player score
-	ship      shipNameEnum    // player ship
+	ship      *shipType       // player ship
 	team      teamEnum        // player team
 }
 
 // convenience factory
 func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
-	gpt := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
-	gpt.joinedAt = tc
+	gpt := gamePlayerType{active: true, key: key, joinedAt: tc, name: name, rank: rank, score: 0, team: team}
+	gpt.ship = newShip(ship)
 	return &gpt
 }
 
@@ -73,7 +73,7 @@ func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team team
 		}
 
 		// no duplicate ships
-		if val != nil && val.ship == ship {
+		if val != nil && val.ship.name == ship {
 			gt.sugarLog.Info("duplicate ship")
 			gt.playerArray[ndx] = nil
 		}
@@ -106,7 +106,19 @@ func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team team
 		}
 	}
 
-	// add to catalog
+	// add new player to game
+	gpt := newGamePlayer(pt.key, pt.name, pt.rank, ship, team, gt.currentTurn)
+	for ndx, val := range gt.playerArray {
+		if val == nil {
+			gt.playerArray[ndx] = gpt
+			gt.sugarLog.Infof("new player %s %s %s", gpt.name, gpt.team.string(), gpt.ship.name.string())
+			break
+		}
+	}
+
+	// add ship to board
+	gpt.ship.location = gt.board.findEmptyLocation()
+
 }
 
 func (gt *gameType) getOutput(pkt *playerKeyType) commandArrayType {

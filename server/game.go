@@ -110,7 +110,7 @@ func (gt *gameType) findPlayerByName(name string) *gamePlayerType {
 
 func (gt *gameType) findPlayerByShip(name shipNameEnum) *gamePlayerType {
 	for _, gpt := range gt.playerArray {
-		if gpt.ship == name {
+		if gpt.ship.name == name {
 			return gpt
 		}
 	}

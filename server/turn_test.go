@@ -5,6 +5,7 @@ package server
 
 import (
 	"testing"
+	"time"
 
 	shared "github.com/guycole/daring-cyclops/shared"
 )
@@ -66,4 +67,21 @@ func TestTurn(t *testing.T) {
 
 		gt.scheduleArrayDumper()
 	*/
+}
+
+func TestTurn2(t *testing.T) {
+	sugarLog := shared.ZapSetup(true)
+	sugarLog.Info("turn test2 start xoxoxoxoxoxoxo")
+
+	gmt := newDemoGameManager(uint16(3), sugarLog)
+	gt := gmt.pickGame()
+
+	pt1 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer1))
+	gt.addPlayerToGame(pt1, roninShipName, blueTeam)
+
+	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
+	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
+
+	time.Sleep(time.Duration(10 * time.Second))
+
 }
