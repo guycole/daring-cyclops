@@ -28,10 +28,10 @@ func TestTurn(t *testing.T) {
 	gt := gmt.pickGame()
 	sugarLog.Info("user command test:", gt.key.key)
 
-	pt1 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer1))
+	pt1 := gmt.playerManager.findPlayerByKey(newTokenKey(testPlayer1))
 	gt.addPlayerToGame(pt1, roninShipName, blueTeam)
 
-	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
+	pt2 := gmt.playerManager.findPlayerByKey(newTokenKey(testPlayer2))
 	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
 	// gt.gamePlayerArrayDumper()
@@ -76,12 +76,11 @@ func TestTurn2(t *testing.T) {
 	gmt := newDemoGameManager(uint16(3), sugarLog)
 	gt := gmt.pickGame()
 
-	pt1 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer1))
+	pt1 := gmt.playerManager.findPlayerByKey(newTokenKey(testPlayer1))
 	gt.addPlayerToGame(pt1, roninShipName, blueTeam)
 
-	pt2 := gmt.playerManager.findPlayerByKey(newPlayerKey(testPlayer2))
+	pt2 := gmt.playerManager.findPlayerByKey(newTokenKey(testPlayer2))
 	gt.addPlayerToGame(pt2, tritonShipName, redTeam)
 
 	time.Sleep(time.Duration(10 * time.Second))
-
 }

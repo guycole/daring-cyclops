@@ -66,7 +66,7 @@ func (st *scheduleType) scheduleAdd(ct *commandType) {
 }
 
 // return first command in list which matches player
-func (st *scheduleType) scheduleSelect(target *playerKeyType) *commandType {
+func (st *scheduleType) scheduleSelect(target *tokenKeyType) *commandType {
 	var last, current *commandType
 
 	last = nil

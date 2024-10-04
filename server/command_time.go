@@ -6,7 +6,7 @@ package server
 type timeRequestType struct{}
 
 // convenience factory
-func newTimeRequest(playerKey *playerKeyType) *commandType {
+func newTimeRequest(playerKey *tokenKeyType) *commandType {
 	ct := commandType{command: timeCommand, sourcePlayerKey: playerKey}
 	ct.timeRequest = &timeRequestType{}
 	return &ct

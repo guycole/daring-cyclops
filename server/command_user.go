@@ -6,7 +6,7 @@ package server
 type userRequestType struct{}
 
 // convenience factory
-func newUserRequest(playerKey *playerKeyType) *commandType {
+func newUserRequest(playerKey *tokenKeyType) *commandType {
 	ct := commandType{command: userCommand, sourcePlayerKey: playerKey}
 	ct.userRequest = &userRequestType{}
 	return &ct

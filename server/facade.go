@@ -19,7 +19,7 @@ func newFacade(featureFlags uint32, gameManager *gameManagerType, sugarLog *zap.
 	return &facadeType{featureFlags: featureFlags, gameManager: gameManager, sugarLog: sugarLog}
 }
 
-func (ft *facadeType) addPlayerToGame(gameKey *gameKeyType, playerKey *playerKeyType, playerShip shipNameEnum, playerTeam teamEnum) {
+func (ft *facadeType) addPlayerToGame(gameKey *gameKeyType, playerKey *tokenKeyType, playerShip shipNameEnum, playerTeam teamEnum) {
 	gt := ft.gameManager.findGame(gameKey)
 	pt := ft.gameManager.playerManager.findPlayerByKey(playerKey)
 	gt.addPlayerToGame(pt, playerShip, playerTeam)
@@ -40,6 +40,6 @@ func (ft *facadeType) playerAdd(name string) (*playerType, error) {
 }
 
 // select from global player map
-func (ft *facadeType) playerGet(key *playerKeyType) *playerType {
+func (ft *facadeType) playerGet(key *tokenKeyType) *playerType {
 	return ft.gameManager.playerManager.playerGet(key)
 }

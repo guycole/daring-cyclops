@@ -21,7 +21,7 @@ func newPlayerManager(sugarLog *zap.SugaredLogger) *PlayerManagerType {
 	return &pmt
 }
 
-func (pmt *PlayerManagerType) findPlayerByKey(key *playerKeyType) *playerType {
+func (pmt *PlayerManagerType) findPlayerByKey(key *tokenKeyType) *playerType {
 	result := pmt.playerMap[key.key]
 	return result
 }
@@ -51,7 +51,7 @@ func (pmt *PlayerManagerType) addFreshPlayer(name string) (*playerType, error) {
 	return pt, nil
 }
 
-func (pmt *PlayerManagerType) playerGet(key *playerKeyType) *playerType {
+func (pmt *PlayerManagerType) playerGet(key *tokenKeyType) *playerType {
 	result := pmt.playerMap[key.key]
 	return result
 }
@@ -66,7 +66,7 @@ func (pmt *PlayerManagerType) storeMessage(message *messageType) {
 	destination.messages = message
 }
 
-func (pmt *PlayerManagerType) retrieveMessage(key *playerKeyType) *messageType {
+func (pmt *PlayerManagerType) retrieveMessage(key *tokenKeyType) *messageType {
 	player := pmt.playerGet(key)
 	result := player.messages
 	player.messages = nil

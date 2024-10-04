@@ -6,28 +6,28 @@ package server
 type stubRequestType struct{}
 
 // convenience factory
-func newStub0Request(playerKey *playerKeyType) *commandType {
+func newStub0Request(playerKey *tokenKeyType) *commandType {
 	ct := commandType{command: stubCommand0, sourcePlayerKey: playerKey}
 	ct.stubRequest = &stubRequestType{}
 	return &ct
 }
 
 // convenience factory
-func newStub1Request(playerKey *playerKeyType) *commandType {
+func newStub1Request(playerKey *tokenKeyType) *commandType {
 	ct := commandType{command: stubCommand1, sourcePlayerKey: playerKey}
 	ct.stubRequest = &stubRequestType{}
 	return &ct
 }
 
 // convenience factory
-func newStub2Request(playerKey *playerKeyType) *commandType {
+func newStub2Request(playerKey *tokenKeyType) *commandType {
 	ct := commandType{command: stubCommand2, sourcePlayerKey: playerKey}
 	ct.stubRequest = &stubRequestType{}
 	return &ct
 }
 
 // convenience factory
-func newStub3Request(playerKey *playerKeyType) *commandType {
+func newStub3Request(playerKey *tokenKeyType) *commandType {
 	ct := commandType{command: stubCommand3, sourcePlayerKey: playerKey}
 	ct.stubRequest = &stubRequestType{}
 	return &ct

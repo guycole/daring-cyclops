@@ -7,8 +7,6 @@ import (
 	"errors"
 	"strings"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // rankEnum
@@ -88,28 +86,10 @@ const (
 	testPlayer2 = "daa10cdd-14ce-4996-9518-370b692a059f"
 )
 
-type playerKeyType struct {
-	key string
-}
-
-// convenience factory
-func newPlayerKey(key string) *playerKeyType {
-	var result playerKeyType
-
-	temp := strings.TrimSpace(key)
-	if len(temp) < 36 {
-		result = playerKeyType{key: uuid.NewString()}
-	} else {
-		result = playerKeyType{key: temp}
-	}
-
-	return &result
-}
-
-type playerKeyArrayType []*playerKeyType
+type playerKeyArrayType []*tokenKeyType
 
 type playerType struct {
-	key              *playerKeyType
+	key              *tokenKeyType
 	lastOn           time.Time
 	name             string
 	cumulativePoints scoreType // lifetime total
@@ -122,7 +102,7 @@ type playerType struct {
 
 // convenience factory
 func newPlayer(name string, rank string, uuid string) (*playerType, error) {
-	result := playerType{key: newPlayerKey(uuid)}
+	result := playerType{key: newTokenKey(uuid)}
 
 	temp := strings.TrimSpace(name)
 	if len(temp) == 0 {

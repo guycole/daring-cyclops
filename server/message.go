@@ -29,15 +29,15 @@ func newMessageKey(key string) *messageKeyType {
 
 // player for this game
 type messageType struct {
-	destination *playerKeyType
+	destination *tokenKeyType
 	key         *messageKeyType
 	next        *messageType
 	payload     string
-	source      *playerKeyType
+	source      *tokenKeyType
 }
 
 // convenience factory
-func newMessage(destination *playerKeyType, source *playerKeyType, payload string) *messageType {
+func newMessage(destination *tokenKeyType, source *tokenKeyType, payload string) *messageType {
 	key := newMessageKey("")
 	result := messageType{destination: destination, key: key, payload: payload, source: source}
 	return &result
