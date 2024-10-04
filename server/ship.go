@@ -3,7 +3,6 @@
 package server
 
 import (
-	"errors"
 	"strings"
 )
 
@@ -43,9 +42,9 @@ var legalShipClasses = [...]string{
 }
 
 type legalShipInventoryType struct {
-	energy    int
-	mines     int
-	torpedoes int
+	energy    uint16
+	mines     uint16
+	torpedoes uint16
 }
 
 // must match order for shipClassEnum
@@ -195,348 +194,48 @@ func findShipName(arg string) shipNameEnum {
 }
 
 type shipType struct {
-	classEnum shipClassEnum
-	condition shipConditionEnum
-	docked    bool
-	nameEnum  shipNameEnum
-	//	position  *locationType
-	owner  string
-	symbol string
-	team   teamEnum
-	uuid   string // ship UUID
-
-	// ship systems as percentage operational (values 100 to 0)
-	computer    int
-	lifeSupport int
-	radio       int
-	shields     int
-	tractorBeam int
-
-	// engines
-	impulseEngines int
-	warpEngines    int
-
-	// weapons
-	phasers      int
-	torpedoTubes int
-
-	// weapons inventory
-	mines     int
-	torpedoes int
-
-	// generic ship energy
-	energy int
+	computer       uint16 // ship system as percentage operational (values 100 to 0)
+	condition      shipConditionEnum
+	dockedFlag     bool
+	energy         uint16 // generic ship power
+	impulseEngines uint16
+	key            *tokenKeyType // unique identifier
+	lifeSupport    uint16        // ship systems as percentage operational (values 100 to 0)
+	location       *locationType // current ship location
+	mines          uint16        // inventory
+	name           shipNameEnum
+	phasers        uint16 // ship systems as percentage operational (values 100 to 0)
+	radio          uint16 // ship systems as percentage operational (values 100 to 0)
+	shields        uint16 // ship systems as percentage operational (values 100 to 0)
+	shipClass      shipClassEnum
+	symbol         string
+	torpedoes      uint16 // inventory
+	torpedoTubes   uint16 // ship systems as percentage operational (values 100 to 0)
+	team           teamEnum
+	tractorBeam    uint16 // ship systems as percentage operational (values 100 to 0)
+	warpEngines    uint16 // ship systems as percentage operational (values 100 to 0)
 }
-
-/*
-const maxTeamShips = maxTeamPlayers
-const maxShips = maxTeamShips * 2
-
-// shipArrayType contains all active ships
-type shipArrayType [maxShips]*shipType
-*/
 
 // newShip convenience function to populate struct
-func newShip(name shipNameEnum) (*shipType, error) {
-	st := shipType{}
-	return &st, nil
+func newShip(name shipNameEnum) *shipType {
+	st := shipType{shipClass: legalShips[name].shipClass, name: name, symbol: legalShips[name].symbol, team: legalShips[name].team}
+
+	st.computer = 100
+	st.condition = greenCondition
+	st.dockedFlag = false
+	st.energy = legalShipInventory[st.shipClass].energy
+	st.impulseEngines = 100
+	st.key = newTokenKey("")
+	st.lifeSupport = 100
+	st.location = randomLocation(maxBoardSideRow, maxBoardSideCol)
+	st.mines = legalShipInventory[st.shipClass].mines
+	st.phasers = 100
+	st.radio = 100
+	st.shields = 100
+	st.torpedoTubes = 100
+	st.torpedoes = legalShipInventory[st.shipClass].torpedoes
+	st.tractorBeam = 100
+	st.warpEngines = 100
+
+	return &st
 }
-
-func newShip2(shipName, shipOwner string, position *locationType) (*shipType, error) {
-	if position == nil {
-		return nil, errors.New("nil position")
-	}
-
-	if len(shipName) < 1 {
-		return nil, errors.New("empty ship name")
-	}
-
-	if len(shipOwner) < 1 {
-		return nil, errors.New("empty ship owner")
-	}
-
-	shipEnum := findShipName(shipName)
-	if shipEnum == unknownShipName {
-		return nil, errors.New("unknown ship name")
-	}
-
-	st := shipType{}
-
-	/*
-		st := shipType{condition: greenCondition, owner: shipOwner, position: position}
-		st.nameEnum = shipEnum
-		st.uuid = uuid.NewString()
-
-		legalShip := legalShips[shipEnum]
-		st.classEnum = legalShip.shipClass
-		st.symbol = legalShip.symbol
-		st.team = legalShip.team
-
-		// all systems 100 percent effective
-		st.computer = 100
-		st.lifeSupport = 100
-		st.radio = 100
-		st.shields = 100
-		st.tractorBeam = 100
-
-		st.impulseEngines = 100
-		st.warpEngines = 100
-
-		st.phasers = 100
-		st.torpedoTubes = 100
-
-		// inventory
-		inventory := legalShipInventory[legalShip.shipClass]
-		st.energy = inventory.energy
-		st.mines = inventory.mines
-		st.torpedoes = inventory.torpedoes
-	*/
-
-	return &st, nil
-}
-
-/*
-// shipAdd adds ship to array
-func (sat *shipArrayType) add(st *shipType, bat *boardArrayType) int {
-	log.Printf("shipAdd:%s %s", st.nameEnum.string(), st.uuid)
-
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] == nil {
-			bc := bat[st.position.yy][st.position.xx]
-			bc.setShip(st.symbol, st.uuid)
-			sat[ndx] = st
-			return ndx
-		}
-	}
-
-	return -1
-}
-*/
-
-/*
-// shipCensus returns population of red/blue ships
-func (sat shipArrayType) census() (int, int) {
-	bluePopulation := 0
-	redPopulation := 0
-
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] != nil {
-			switch sat[ndx].team {
-			case blueTeam:
-				bluePopulation++
-			case redTeam:
-				redPopulation++
-			}
-		}
-	}
-
-	return bluePopulation, redPopulation
-}
-*/
-
-/*
-// shipDelete removes ship from array
-func (sat *shipArrayType) delete(target string, bat *boardArrayType) int {
-	log.Printf("shipDelete:%s", target)
-
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] != nil {
-			if strings.Compare(sat[ndx].uuid, target) == 0 {
-				bc := bat[sat[ndx].position.yy][sat[ndx].position.xx]
-				bc.clearShip()
-				sat[ndx] = nil
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-*/
-
-/*
-// shipDump diagnostic
-func (sat shipArrayType) dump() {
-	log.Println("=-=-=-= shipDump =-=-=-=")
-
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] == nil {
-			log.Printf("%d nil", ndx)
-		} else {
-			shipClass := sat[ndx].classEnum.string()
-			shipName := sat[ndx].nameEnum.string()
-			shipTeam := sat[ndx].team.string()
-			log.Printf("%d %s %s %s %s", ndx, shipName, shipClass, shipTeam, sat[ndx].uuid)
-		}
-	}
-
-	log.Println("=-=-=-= shipDump =-=-=-=")
-}
-*/
-
-/*
-// shipFind returns array index for ship by uuid
-func (sat shipArrayType) find(target string) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] != nil {
-			if strings.Compare(sat[ndx].uuid, target) == 0 {
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-*/
-
-/*
-// shipFindByName returns array index for ship by name
-func (sat shipArrayType) findByName(target shipNameEnum) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] != nil {
-			if sat[ndx].nameEnum == target {
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-*/
-
-/*
-// shipFindByOwner returns array index for ship by owner uuid
-func (sat shipArrayType) findByOwner(target string) int {
-	for ndx := 0; ndx < maxShips; ndx++ {
-		if sat[ndx] != nil {
-			if strings.Compare(sat[ndx].owner, target) == 0 {
-				return ndx
-			}
-		}
-	}
-
-	return -1
-}
-*/
-
-/*
-// shipMove
-func (sat *shipArrayType) move(shipID string, newLoc *locationType, bat *boardArrayType) error {
-	log.Printf("shipMove:%s:%d:%d", shipID, newLoc.yy, newLoc.xx)
-
-	ndx := sat.find(shipID)
-	if ndx < 0 {
-		return errors.New("moveShip ship not found")
-	}
-
-	log.Println(sat[ndx])
-
-	bc := bat[sat[ndx].position.yy][sat[ndx].position.xx]
-
-	bc.clearShip()
-
-	// TODO need collision logic
-
-	sat[ndx].position = newLoc
-
-	bc = bat[sat[ndx].position.yy][sat[ndx].position.xx]
-
-	bc.setShip(sat[ndx].symbol, sat[ndx].uuid)
-
-	return nil
-}
-*/
-
-/*
-func (sat *shipArrayType) condition(shipID string) error {
-	log.Printf("condition:%s", shipID)
-
-	ndx := sat.find(shipID)
-	if ndx < 0 {
-		return errors.New("condition ship not found")
-	}
-
-	sat[ndx].condition = greenCondition
-
-	return nil
-}
-*/
-
-/*
-func commandShipCreate(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) error {
-	singleOwner := sat.findByOwner(tnt.name)
-	if singleOwner >= 0 {
-		return errors.New("commandShip duplicate player id")
-	}
-
-	position := bat.randomShipLocation()
-
-	st, err := newShip(tnt.arguments[1], tnt.name, position)
-	if err != nil {
-		return errors.New("commandShip creation failure")
-	}
-
-	duplicateShip := sat.findByName(st.nameEnum)
-	if duplicateShip >= 0 {
-		return errors.New("commandShip duplicate ship name")
-	}
-
-	bluePopulation, redPopulation := sat.census()
-	if st.team == blueTeam {
-		if bluePopulation >= maxTeamShips {
-			return errors.New("commandShip blue team population limit")
-		}
-	} else {
-		if redPopulation >= maxTeamShips {
-			return errors.New("commandShip red team population limit")
-		}
-	}
-
-	sat.add(st, bat)
-
-	return nil
-}
-*/
-
-/*
-func commandShipDelete(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) error {
-	owner := sat.findByOwner(tnt.name)
-	if owner < 0 {
-		return errors.New("deleteShip player id not found")
-	}
-
-	sat.delete(sat[owner].uuid, bat)
-
-	return nil
-}
-*/
-
-/*
-func commandShipMove(tnt *turnNodeType, bat *boardArrayType, sat *shipArrayType) (*RequestType, error) {
-	ndx := sat.findByOwner(tnt.name)
-	if ndx < 0 {
-		return nil, errors.New("moveShip player id not found")
-	}
-
-	newLocation := stringLocation(tnt.arguments[1], tnt.arguments[2])
-	if newLocation == nil {
-		return nil, errors.New("moveShip bad location")
-	}
-
-	err := sat.move(sat[ndx].uuid, newLocation, bat)
-	if err != nil {
-		return nil, err
-	}
-
-	err = sat.condition(sat[ndx].uuid)
-	return nil, err
-
-	/////
-	var commands argumentArrayType
-	commands[0] = "pong"
-
-	ct := newRequest(tnt.name, tnt.request, 1, commands)
-
-	return ct, nil
-}
-*/

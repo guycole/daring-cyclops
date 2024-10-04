@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
 	"go.uber.org/zap"
 )
 
@@ -32,22 +33,20 @@ func newGameKey(key string) *gameKeyType {
 }
 
 type gameType struct {
-	acheronFlag   bool                    // true means acheron active
-	activeFlag    bool                    // false means game is over
-	catalogMap    map[string]*catalogType // all objects on gameBoard
-	currentTurn   turnCounterType         // monotonic turn counter
-	gameBoard     *boardArrayType         // game board
-	key           *gameKeyType            // unique game identifier
-	playerArray   gamePlayerArrayType     // current players and ships in game
-	scheduleArray scheduleArrayType       // commands sorted by turn counter
-	sleepSeconds  uint16                  // delay between turns
-	sugarLog      *zap.SugaredLogger      // logger
+	acheronFlag   bool                // true means acheron active
+	activeFlag    bool                // false means game is over
+	currentTurn   turnCounterType     // monotonic turn counter
+	gameBoard     *boardArrayType     // game board
+	key           *gameKeyType        // unique game identifier
+	playerArray   gamePlayerArrayType // current players and ships in game
+	scheduleArray scheduleArrayType   // commands sorted by turn counter
+	sleepSeconds  uint16              // delay between turns
+	sugarLog      *zap.SugaredLogger  // logger
 }
 
 func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error) {
 	gt := gameType{acheronFlag: true, activeFlag: true, key: newGameKey(""), sleepSeconds: sleepSeconds, sugarLog: sugarLog}
 
-	gt.catalogMap = make(map[string]*catalogType)
 	gt.gameBoard = newGameBoard(emptyBoard)
 	gt.playerArray = newGamePlayerArray()
 	gt.scheduleArray = newScheduleArray()
@@ -87,7 +86,7 @@ func (gt *gameType) playTurn() {
 	st.tail = nil
 }
 
-func (gt *gameType) findPlayerByKey(key *playerKeyType) *gamePlayerType {
+func (gt *gameType) findPlayerByKey(key *tokenKeyType) *gamePlayerType {
 	for _, gpt := range gt.playerArray {
 		if strings.Compare(gpt.key.key, key.key) == 0 {
 			return gpt
@@ -109,7 +108,7 @@ func (gt *gameType) findPlayerByName(name string) *gamePlayerType {
 
 func (gt *gameType) findPlayerByShip(name shipNameEnum) *gamePlayerType {
 	for _, gpt := range gt.playerArray {
-		if gpt.ship == name {
+		if gpt.ship.name == name {
 			return gpt
 		}
 	}

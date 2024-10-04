@@ -3,12 +3,6 @@
 
 package server
 
-import (
-	"strings"
-
-	"github.com/google/uuid"
-)
-
 type commandGameEnum int
 
 // must match order for legalGameCommands
@@ -128,30 +122,12 @@ func findGameCommand(arg string) commandGameEnum {
 	return commandGameEnum(unknownCommand)
 }
 
-type commandKeyType struct {
-	key string
-}
-
-// convenience factory
-func newCommandKey(key string) *commandKeyType {
-	var result commandKeyType
-
-	temp := strings.TrimSpace(key)
-	if len(temp) < 36 {
-		result = commandKeyType{key: uuid.NewString()}
-	} else {
-		result = commandKeyType{key: temp}
-	}
-
-	return &result
-}
-
 type commandType struct {
-	key                   *commandKeyType
+	key                   *tokenKeyType
 	command               commandGameEnum
 	destinationPlayerKeys playerKeyArrayType
 	next                  *commandType
-	sourcePlayerKey       *playerKeyType
+	sourcePlayerKey       *tokenKeyType
 	//pointsRequest         *pointsRequestType
 	//pointsResponse        *pointsResponseType
 	stubRequest  *stubRequestType
@@ -165,8 +141,8 @@ type commandType struct {
 type commandArrayType []*commandType
 
 // convenience factory
-func newCommand(command commandGameEnum, playerKey *playerKeyType) *commandType {
-	result := commandType{command: command, key: newCommandKey(""), sourcePlayerKey: playerKey}
+func newCommand(command commandGameEnum, playerKey *tokenKeyType) *commandType {
+	result := commandType{command: command, key: newTokenKey(""), sourcePlayerKey: playerKey}
 	return &result
 }
 

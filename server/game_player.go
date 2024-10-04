@@ -9,20 +9,20 @@ type scoreType uint64
 type gamePlayerType struct {
 	active    bool            // false means player should be removed
 	joinedAt  turnCounterType // turn counter when player joined
-	key       *playerKeyType  // unique player identifier
+	key       *tokenKeyType   // unique player identifier
 	maxFuture turnCounterType // future command turn
 	name      string          // player name
 	queueOut  []*commandType  // completed commands awaiting output
 	rank      rankEnum        // player rank
 	score     scoreType       // player score
-	ship      shipNameEnum    // player ship
+	ship      *shipType       // player ship
 	team      teamEnum        // player team
 }
 
 // convenience factory
-func newGamePlayer(key *playerKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
-	gpt := gamePlayerType{active: true, key: key, name: name, rank: rank, score: 0, ship: ship, team: team}
-	gpt.joinedAt = tc
+func newGamePlayer(key *tokenKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
+	gpt := gamePlayerType{active: true, key: key, joinedAt: tc, name: name, rank: rank, score: 0, team: team}
+	gpt.ship = newShip(ship)
 	return &gpt
 }
 
@@ -73,7 +73,7 @@ func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team team
 		}
 
 		// no duplicate ships
-		if val != nil && val.ship == ship {
+		if val != nil && val.ship.name == ship {
 			gt.sugarLog.Info("duplicate ship")
 			gt.playerArray[ndx] = nil
 		}
@@ -105,8 +105,31 @@ func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team team
 			break
 		}
 	}
+
+	// add new player to game
+	gpt := newGamePlayer(pt.key, pt.name, pt.rank, ship, team, gt.currentTurn)
+	for ndx, val := range gt.playerArray {
+		if val == nil {
+			gt.playerArray[ndx] = gpt
+			gt.sugarLog.Infof("new player %s %s %s", gpt.name, gpt.team.string(), gpt.ship.name.string())
+			break
+		}
+	}
+
+	gt.moveTo(gpt.ship)
 }
 
-func (gt *gameType) getOutput(pkt *playerKeyType) commandArrayType {
+func (gt *gameType) moveFrom(lt *locationType) {
+	gt.gameBoard[lt.row][lt.col].tokenKey = nil
+	gt.gameBoard[lt.row][lt.col].tokenType = emptyToken
+}
+
+func (gt *gameType) moveTo(st *shipType) {
+	gt.sugarLog.Infof("moveTo %s row:%d col:%d", st.name.string(), st.location.row, st.location.col)
+	gt.gameBoard[st.location.row][st.location.col].tokenKey = st.key
+	gt.gameBoard[st.location.row][st.location.col].tokenType = shipToken
+}
+
+func (gt *gameType) getOutput(pkt *tokenKeyType) commandArrayType {
 	return nil
 }
