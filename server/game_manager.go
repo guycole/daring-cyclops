@@ -40,7 +40,7 @@ func (gmt *gameManagerType) runAllGames(sleepSeconds uint16) {
 	}
 
 	for len(gmt.gameMaps) < int(gmt.maxGames) {
-		gt, err := newGame(sleepSeconds, gmt.sugarLog)
+		gt, err := newGame(sleepSeconds, gmt.sugarLog, false)
 
 		if err == nil {
 			gmt.sugarLog.Infof("runAllGames: adding %s", gt.key.key)
@@ -51,7 +51,7 @@ func (gmt *gameManagerType) runAllGames(sleepSeconds uint16) {
 	}
 }
 
-func (gmt *gameManagerType) findGame(key *gameKeyType) *gameType {
+func (gmt *gameManagerType) findGame(key *tokenKeyType) *gameType {
 	result := gmt.gameMaps[key.key]
 	return result
 }
