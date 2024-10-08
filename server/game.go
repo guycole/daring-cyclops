@@ -7,13 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
-
 	"go.uber.org/zap"
 )
 
 type turnCounterType uint64
 
+/*
 type gameKeyType struct {
 	key string
 }
@@ -31,21 +30,23 @@ func newGameKey(key string) *gameKeyType {
 
 	return &result
 }
+*/
 
 type gameType struct {
-	acheronFlag   bool                // true means acheron active
-	activeFlag    bool                // false means game is over
+	acheronFlag   bool                // true, acheron active
+	activeFlag    bool                // false, game is over
 	currentTurn   turnCounterType     // monotonic turn counter
 	gameBoard     *boardArrayType     // game board
-	key           *gameKeyType        // unique game identifier
+	key           *tokenKeyType       // unique game identifier
 	playerArray   gamePlayerArrayType // current players and ships in game
 	scheduleArray scheduleArrayType   // commands sorted by turn counter
 	sleepSeconds  uint16              // delay between turns
 	sugarLog      *zap.SugaredLogger  // logger
+	webHookFlag   bool                // true, share updates w/game_manager
 }
 
-func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger) (*gameType, error) {
-	gt := gameType{acheronFlag: true, activeFlag: true, key: newGameKey(""), sleepSeconds: sleepSeconds, sugarLog: sugarLog}
+func newGame(sleepSeconds uint16, sugarLog *zap.SugaredLogger, webHookFlag bool) (*gameType, error) {
+	gt := gameType{acheronFlag: true, activeFlag: true, key: newTokenKey(""), sleepSeconds: sleepSeconds, sugarLog: sugarLog, webHookFlag: webHookFlag}
 
 	gt.gameBoard = newGameBoard(emptyBoard)
 	gt.playerArray = newGamePlayerArray()

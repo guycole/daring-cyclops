@@ -39,7 +39,7 @@ func (gt *gameType) userCommand(ct *commandType) *commandType {
 		gt.sugarLog.Debug("not nil player")
 
 		//gt.sugarLog.Info(val.name)
-		temp := userSummaryType{active: val.active, name: val.name, rank: val.rank, score: val.score, team: val.team}
+		temp := userSummaryType{active: val.activeFlag, name: val.name, rank: val.rank, score: val.score, team: val.team}
 		temp.age = gt.currentTurn - val.joinedAt
 		results = append(results, &temp)
 		gt.sugarLog.Debug(results)

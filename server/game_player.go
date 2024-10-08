@@ -7,21 +7,21 @@ type scoreType uint64
 
 // player for this game
 type gamePlayerType struct {
-	active    bool            // false means player should be removed
-	joinedAt  turnCounterType // turn counter when player joined
-	key       *tokenKeyType   // unique player identifier
-	maxFuture turnCounterType // future command turn
-	name      string          // player name
-	queueOut  []*commandType  // completed commands awaiting output
-	rank      rankEnum        // player rank
-	score     scoreType       // player score
-	ship      *shipType       // player ship
-	team      teamEnum        // player team
+	activeFlag bool            // false means player should be removed
+	joinedAt   turnCounterType // turn counter when player joined
+	key        *tokenKeyType   // unique player identifier
+	maxFuture  turnCounterType // future command turn
+	name       string          // player name
+	queueOut   []*commandType  // completed commands awaiting output
+	rank       rankEnum        // player rank
+	score      scoreType       // player score
+	ship       *shipType       // player ship
+	team       teamEnum        // player team
 }
 
 // convenience factory
 func newGamePlayer(key *tokenKeyType, name string, rank rankEnum, ship shipNameEnum, team teamEnum, tc turnCounterType) *gamePlayerType {
-	gpt := gamePlayerType{active: true, key: key, joinedAt: tc, name: name, rank: rank, score: 0, team: team}
+	gpt := gamePlayerType{activeFlag: true, key: key, joinedAt: tc, name: name, rank: rank, score: 0, team: team}
 	gpt.ship = newShip(ship)
 	return &gpt
 }
@@ -61,7 +61,7 @@ func (gt *gameType) gamePlayerArrayDumper() {
 	gt.sugarLog.Debug("====> player array dump <====")
 }
 
-func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team teamEnum) {
+func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team teamEnum) *gamePlayerType {
 	// ensure there are no stale entries
 
 	var blue_population, red_population uint16
@@ -117,6 +117,25 @@ func (gt *gameType) addPlayerToGame(pt *playerType, ship shipNameEnum, team team
 	}
 
 	gt.moveTo(gpt.ship)
+
+	return gpt
+}
+
+func (gt *gameType) evictPlayer(gpt *gamePlayerType) {
+	gt.sugarLog.Infof("evicting player %s %s %s", gpt.name, gpt.team.string(), gpt.ship.name.string())
+
+	gt.gameBoard[gpt.ship.location.row][gpt.ship.location.col].tokenKey = nil
+	gt.gameBoard[gpt.ship.location.row][gpt.ship.location.col].tokenType = emptyToken
+}
+
+func (gt *gameType) testForPlayerEviction() {
+	for ndx, gpt := range gt.playerArray {
+		if gpt != nil && !gpt.activeFlag {
+			gt.evictPlayer(gpt)
+		}
+
+		gt.playerArray[ndx] = nil
+	}
 }
 
 func (gt *gameType) moveFrom(lt *locationType) {

@@ -10,7 +10,7 @@ type gameSummaryType struct {
 	age       turnCounterType
 	blueScore scoreType
 	blueShips uint16
-	key       *gameKeyType
+	key       *tokenKeyType
 	redScore  scoreType
 	redShips  uint16
 }
