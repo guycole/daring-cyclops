@@ -1,0 +1,15 @@
+name: push1
+
+on:
+  push:
+    branchs:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  push1:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "on push"
