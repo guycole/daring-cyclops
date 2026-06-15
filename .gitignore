@@ -26,6 +26,19 @@ go.work.sum
 
 # env file
 .env
+.env*
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Local tooling
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Editor/IDE
 # .idea/

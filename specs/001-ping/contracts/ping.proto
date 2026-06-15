@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package cyclops.ping.v1;
+
+option go_package = "github.com/guycole/daring-cyclops/gen/proto/ping/v1;pingv1";
+
+import "google/protobuf/timestamp.proto";
+
+service PingService {
+  rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message PingRequest {}
+
+message PingResponse {
+  string server_version = 1;
+  google.protobuf.Timestamp server_time = 2;
+}
