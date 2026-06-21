@@ -454,14 +454,11 @@ The help on individual commands may be read from a help file.	The legal commands
 
 - Anything after ; (semicolon) is treated as a comment and is ignored (but TELL rescans the line and takes the text after the first ; as the message to send).
 
-- <ESC> (escape, or altmode) entered as the first character in
-  response to the command prompt (even before ^H, ^U, or ^R) repeats
-  the previous command.  This is useful when building a planet,
-  docking, repairing, firing torpedoes, etc. Altmode can't be used to
-  repeat a TELL command.
+- `ESC` (Escape, or *Altmode*) entered as the first character in response to the command prompt (even before `^H`, `^U`, or `^R`) repeats the previous command.  This is useful when building a planet, docking, repairing, firing torpedoes, and other repetitive actions.  **Note:** Altmode cannot be used to repeat a `TELL` command.
+
 - Any ship name can be abbreviated to one character.
-- Any command or keyword can be shortened to the shortest unambiguous
-  abbreviation, which is never more than two characters.
+
+- Any command or keyword can be shortened to the shortest unambiguous abbreviation, which is never more than two characters.
 
 
 ### 4.1 RELATIVE, ABSOLUTE Or COMPUTED COORDINATES
