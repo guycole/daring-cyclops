@@ -448,7 +448,7 @@ The help on individual commands may be read from a help file.	The legal commands
   - `<ESC>` (Escape)
   - `^Z` (Control-Z)
 
-- ^G toggles echo. At the beginning of each input line, echoing is turned on. Typing ^G turns it off, the next ^G turns it back on, etc. Echoing is always turned back on at the end of an input line, or if ^U is typed.
+- `^G` toggles echo. At the beginning of each input line, echoing is turned on. Typing `^G` turns it off, the next `^G` turns it back on, etc. Echoing is always turned back on at the end of an input line, or if `^U` is typed.
 
 - Multiple commands may be given on a single command line by separating the commands with / (slash).  If the TELL command is given, it must be last on the line.
 
@@ -464,49 +464,31 @@ The help on individual commands may be read from a help file.	The legal commands
 ### 4.1 RELATIVE, ABSOLUTE Or COMPUTED COORDINATES
 
 
-- Many commands require a coordinate as an argument (PHASERS,
-  TORPEDOES, CAPTURE, BUILD, etc.). The required coordinate(s) can be
-  specified in one of three ways:
+- Many commands require a coordinate as an argument (PHASERS, TORPEDOES, CAPTURE, BUILD, etc.). The required coordinate(s) can be specified in one of three ways:
 
-  Absolute - the default coordinate input type, which is simply an
-    absolute vertical position followed by an absolute horizontal
-    position.  The coordinate may be preceded by keyword ABSOLUTE,
-    but this isn't necessary unless the default coordinate input type
-    has been changed by SET ICDEF RELATIVE.
+  Absolute - the default coordinate input type, which is simply an absolute vertical position followed by an absolute horizontal position.  The coordinate may be preceded by keyword ABSOLUTE, but this isn't necessary unless the default coordinate input type has been changed by SET ICDEF RELATIVE.
 
-  Relative - the keyword RELATIVE, followed by a relative vertical
-    distance and a relative horizontal distance. A positive distance
-    is either up or right, and negative is either down or left. The
-    absolute coordinate is computed by adding the relative distances
-    to your current position. The keyword RELATIVE isn't needed if
-    the default coordinate input type has been changed by SET ICDEF
-    RELATIVE.
+  Relative - the keyword RELATIVE, followed by a relative vertical distance and a relative horizontal distance. A positive distance is either up or right, and negative is either down or left. The absolute coordinate is computed by adding the relative distances to your current position. The keyword RELATIVE isn't needed if the default coordinate input type has been changed by SET ICDEF RELATIVE.
 
-  Computed - the keyword COMPUTED followed by a ship name. The
-    coordinate used is the location of the given ship. This type of
-    coordinate computation is available only to captains controlling
-    their ships through slow terminals(< 1200 baud), and requires an
-    operational computer.
+  Computed - the keyword COMPUTED followed by a ship name. The coordinate used is the location of the given ship. This type of coordinate computation is available only to captains controlling their ships through slow terminals(< 1200 baud), and requires an operational computer.
 
-
-The keyword ABSOLUTE, RELATIVE, or COMPUTED is only given one time
-for each set of coordinates. For instance, the TORPEDO command can
-accept up to three coordinates, but the keyword describing the
-coordinate input type is given only once, and all coordinates must
-be of the same type.
+The keyword ABSOLUTE, RELATIVE, or COMPUTED is only given one time for each set of coordinates. For instance, the TORPEDO command can accept up to three coordinates, but the keyword describing the coordinate input type is given only once, and all coordinates must be of the same type.
 
 
 5.O GENERAL OUTPUT INFORMATION
 
-The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text
-output throughout the game. In particular, medium or short hit
-messages received during battle are greatly reduced in length when
-compared to the long format. Unfortunately, these shorter forms are
-not as self-explanatory as the long form. The following are some
-equivalent Long, medium and short hit messages:
+The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text output throughout the game. In particular, medium or short hit messages received during battle are greatly reduced in length when compared to the long format. Unfortunately, these shorter forms are not as self-explanatory as the long form. The following are some equivalent Long, medium and short hit messages:
 
+```text
 - GarGoyle @22-31, +83.6% makes 285.3 unit torpedo hit on
   Viper displaced to 20-31, +72.1%
+
+  G @22-31, +83.6% 285.3 unit T  V -->20-31, +72.1%
+
+  G 22-31 +83  285T  V  >20-31 +72
+```
+
+- GarGoyle @22-31, +83.6% makes 285.3 unit torpedo hit on Viper displaced to 20-31, +72.1%
 
   G @22-31, +83.6% 285.3 unit T  V -->20-31, +72.1%
 
