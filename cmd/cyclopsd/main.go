@@ -9,8 +9,10 @@ import (
 	"time"
 
 	pingv1 "github.com/guycole/daring-cyclops/gen/proto/ping/v1"
+	sessionv1 "github.com/guycole/daring-cyclops/gen/proto/session/v1"
 	"github.com/guycole/daring-cyclops/internal/buildinfo"
 	pingserver "github.com/guycole/daring-cyclops/internal/server/ping"
+	sessionserver "github.com/guycole/daring-cyclops/internal/server/session"
 	"google.golang.org/grpc"
 )
 
@@ -45,6 +47,9 @@ func run(args []string) error {
 
 	grpcServer := grpc.NewServer()
 	pingv1.RegisterPingServiceServer(grpcServer, pingserver.NewService(buildinfo.EffectiveVersion(), time.Now))
+
+	registry := sessionserver.NewRegistry()
+	sessionv1.RegisterSessionServiceServer(grpcServer, sessionserver.NewService(registry))
 
 	if err := grpcServer.Serve(listener); err != nil {
 		return fmt.Errorf("serve grpc: %w", err)
