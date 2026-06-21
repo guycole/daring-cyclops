@@ -222,7 +222,7 @@ There are four classes of ships available in MegaWars.
           Shields        +100.0%  5000.0 units
           Radio        On
 
-The normal range of a SCOUT is 14 sectors and a maximum range of 16 sectors is possible with a probability of some damage.
+    The normal range of a SCOUT is 14 sectors and a maximum range of 16 sectors is possible with a probability of some damage.
 
 2.  FIGHTER  The Fighter class ship is the workhorse of the fleet and may be manned by any player. Cadets are issued trainer class fighters which have heavy shields but reduced fire power. This helps the beginner from giving up his/her life too soon! A sample FIGHTER STATUS follows:
 
@@ -297,8 +297,8 @@ NOTE
 
 The above maximum range varies according to ship type. For example.
 
-| Ship Type | Normal Range | Maximum Range* |
-|-----------|-------------:|---------------:|
+| Ship Type | Normal Range | Maximum Range * |
+|-----------|-------------:|----------------:|
 | Scout     | 14           | 16 |
 | Fighter   | 6            | 8  |
 | Miner     | 4            | 6  |
@@ -326,198 +326,114 @@ The above maximum range varies according to ship type. For example.
 ### 2.5 Ship Attributes
 
 
-     In addition to the individual devices discussed above, a newly
-commissioned ship (or a fully repaired and rearmed older ship)
-possesses the following attributes:
+In addition to the individual devices discussed above, a newly commissioned ship (or a fully repaired and rearmed older ship) possesses the following attributes:
 
-                                 NOTE
+NOTE: The attributes below may be increased or decreased according to ship type.
 
-               The attributes below may be increased or
-               decreased according to ship type.
+1. 5,000 units of ship energy. Ship energy is used during movement and phaser firing. It is also decreased each time the ship gets hit with phasers or photon torpedoes. If this quantity ever reaches zero, the ship is dead. A ship possessing 1,000 units of ship energy or less automatically goes to yellow alert, and a warning bell sounds after every move.
 
-     1. 5,000 units of ship energy. Ship energy is used during
-        movement and phaser firing. It is also decreased each time
-        the ship gets hit with phasers or photon torpedoes. If this
-        quantity ever reaches zero, the ship is dead. A ship
-        possessing 1,000 units of ship energy or less automatically
-        goes to yellow alert, and a warning bell sounds after every
-        move.
+2. 2,500 units of shield energy for Fighter-class ships. This energy is stored in the ship's shields (whether up or down), and is separate from the ship energy. However, energy may be transferred between these two energy reserves as needed. If shields are up, their energy is decreased each time the ship gets hit. Miner Class ships have 3,500 units of shield energy; Trainers, Scouts and Flagships have 5,000 units of shield energy.
 
-     2. 2,500 units of shield energy for Fighter-class ships. This
-        energy is stored in the ship's shields (whether up or down),
-        and is separate from the ship energy. However, energy may be
-        transferred between these two energy reserves as needed. If
-        shields are up, their energy is decreased each time the ship
-        gets hit. Miner Class ships have 3,500 units of shield
-        energy; Trainers, Scouts and Flagships have 5,000 units of
-        shield energy.
-
-     3. Zero units of ship damage. During battle, a ship collects
-        hits from enemy	installations and ships.  if these
-        accumulated hits ever reach 2,500 units of damage or greater,
-        the ship is destroyed. Ship damage may be reduced only by
-        docking.
+3. Zero units of ship damage. During battle, a ship collects hits from enemy	installations and ships.  if these accumulated hits ever reach 2,500 units of damage or greater, the ship is destroyed. Ship damage may be reduced only by docking.
 
 
 ### 2.6 MegaWars Enemy Categories
 
 
-     The galaxy is arranged in a grid of 75 by 75 sectors.  Players
-can move freely throughout the galaxy in search of enemies, which come
-in several categories:
+The galaxy is arranged in a grid of 75 by 75 sectors.  Players can move freely throughout the galaxy in search of enemies, which come in several categories:
 
 
-     1. Acheron. This can be the most dangerous thing to come up
-        against, and fortunately there is a maximum of one Acheron in
-        the game at any given time. The Acheron moves around
-        concealed by his cloaking device until he comes across a
-        suitable target (Coalition or Empire ship or base) which he
-        immediately proceeds to attack. An infinite supply of
-        torpedoes and energy make him a formidable foe. If you kill
-        one, another will eventually appear somewhere in the galaxy.
-        However, when there are greater than three players the
-        Acheron will not reappear.
+1. Acheron. This can be the most dangerous thing to come up against, and fortunately there is a maximum of one Acheron in the game at any given time. The Acheron moves around concealed by his cloaking device until he comes across a suitable target (Coalition or Empire ship or base) which he immediately proceeds to attack. An infinite supply of torpedoes and energy make him a formidable foe. If you kill one, another will eventually appear somewhere in the galaxy. However, when there are greater than three players the Acheron will not reappear.
 
-     2. Enemy ship. This is the second most dangerous thing to come
-        across, since all enemy ships are backed by Colonist or Kryon
-        intelligence. All ships are created equal, and so the
-        outcome of a clash between two ships is usually due to skill
-        on its captain's part, although some other factors do come
-        into play.
+2. Enemy ship. This is the second most dangerous thing to come across, since all enemy ships are backed by Colonist or Kryon intelligence. All ships are created equal, and so the outcome of a clash between two ships is usually due to skill on its captain's part, although some other factors do come into play.
 
-     3. Enemy base. These aren't dangerous unless you come within
-        range (five sectors) since they are immobile. If you are
-        foolish enough to get within range, however, their
-        overwhelming phaser power will quickly pound you into rubble!
-        Destroying a base is useful primarily because this removes it
-        from use by your enemy (bases are used as supply stations
-        and as a refuge in times of stress). A damaged starbase will
-        slowly build itself back to full strength if it is not
-        completely destroyed.
+3. Enemy base. These aren't dangerous unless you come within range (five sectors) since they are immobile. If you are foolish enough to get within range, however, their overwhelming phaser power will quickly pound you into rubble! Destroying a base is useful primarily because this removes it from use by your enemy (bases are used as supply stations and as a refuge in times of stress). A damaged starbase will slowly build itself back to full strength if it is not completely destroyed.
 
-     4. Enemy planet. These are just like enemy bases, except that
-        they are weaker (how much weaker depends on how many
-        fortifications the enemy has built on them), and they can be
-        captured.  Their firing range is only two sectors, and they
-        can re-supply the enemy less rapidly than can a base.
+4. Enemy planet. These are just like enemy bases, except that they are weaker (how much weaker depends on how many fortifications the enemy has built on them), and they can be captured.  Their firing range is only two sectors, and they can re-supply the enemy less rapidly than can a base.
 
-     5. Neutral planet. While these aren't strictly classified as
-        enemies, they will take pot shots at you (their range is also
-        two sectors), so be wary of them. You can capture neutral
-        planets and win them over to your side.
-
+5. Neutral planet. While these aren't strictly classified as enemies, they will take pot shots at you (their range is also two sectors), so be wary of them. You can capture neutral planets and win them over to your side.
 
 
 ## 3.0 MEGAWARS COMMAND SUMMARY
 
 
-     The MegaWars Command Instrument System accepts English-like
-commands.  For example, if you wished to list all enemy bases in the
-game, the command "LIST ENEMY BASES" would be typed.  However, when
-playing the game, all commands can be abbreviated to two characters,
-and some can be abbreviated to one character (you can use the shortest
-unambiguous abbreviation). For a list of commands type
+The MegaWars Command Instrument System accepts English-like commands.  For example, if you wished to list all enemy bases in the game, the command "LIST ENEMY BASES" would be typed.  However, when playing the game, all commands can be abbreviated to two characters, and some can be abbreviated to one character (you can use the shortest unambiguous abbreviation). For a list of commands type
 
-          HELP *
+HELP *
 
 and for a description of an individual commands type
 
-          HELP command
+HELP command
 
-The help on individual commands may be read from a help file.	The
-legal commands are:
+The help on individual commands may be read from a help file.	The legal commands are:
 
-     1. BASES -- List information on friendly and known enemy bases.
+1. BASES -- List information on friendly and known enemy bases.
 
-     2. BUILD -- Develop installations on a planet, and eventually
-        build it into a base. The planet must first be captured.
+2. BUILD -- Develop installations on a planet, and eventually build it into a base. The planet must first be captured.
 
-     3. CAPTURE -- Win a neutral or enemy planet over to your side.
+3. CAPTURE -- Win a neutral or enemy planet over to your side.
 
-     4. DAMAGES -- List damaged devices and their current status.
+4. DAMAGES -- List damaged devices and their current status.
 
-     5. DOCK -- Dock at an adjacent base or planet. This increases
-        your energy, replenishes your torpedoes, repairs your ship a
-        little, and reduces your ship damage.
+5. DOCK -- Dock at an adjacent base or planet. This increases your energy, replenishes your torpedoes, repairs your ship a little, and reduces your ship damage.
 
-     6. DROP -- The DROP command is available for MINER class ships
-        only. It allows a MINEr to deploy a mine at a specific
-        location.
+6. DROP -- The DROP command is available for MINER class ships only. It allows a MINEr to deploy a mine at a specific location.
 
-     7. ENERGY -- Transfer energy between two·ships.
+7. ENERGY -- Transfer energy between two·ships.
 
-     8. GATE -- The GATE command allows a ship to use a stargate.
-        The shields must be lowered and the stargate must have
-        sufficient energy for the transfer relative to the ship's
-        class.
+8. GATE -- The GATE command allows a ship to use a stargate. The shields must be lowered and the stargate must have sufficient energy for the transfer relative to the ship's class.
 
-     9. GRIPE -- Record bugs, comments, suggestion, etc. in a file
-        which is periodically reviewed by the game designers.
+9. GRIPE -- Record bugs, comments, suggestion, etc. in a file which is periodically reviewed by the game designers.
 
-    10. HELP -- List or describe the legal commands.
+10. HELP -- List or describe the legal commands.
 
-    11. IMPULSE -- Move using impulse engines.
+11. IMPULSE -- Move using impulse engines.
 
-    12. LIST -- List various information about ships, bases, and
-        planets.
+12. LIST -- List various information about ships, bases, and planets.
 
-    13. MINES -- Photon mines are dropped by MINER class ships and
-        are displayed as a # on your console. Dropped mines are
-        deadly to both teams and all ships except MINERS.
+13. MINES -- Photon mines are dropped by MINER class ships and are displayed as a # on your console. Dropped mines are deadly to both teams and all ships except MINERS.
 
+14. MOVE -- Move using warp engines.
 
-    14. MOVE -- Move using warp engines.
+15. NEWS -- Tell about any new features or enhancements described in a file that may be read while in MegaWars PRE-GAME.
 
-    15. NEWS -- Tell about any new features or enhancements described
-        in a file that may be read while in MegaWars PRE-GAME.
+16. PHASERS --Fire phasers at a target.
 
-    16. PHASERS --Fire phasers at a target.
+17. PLANETS -- List information on friendly and known enemy and neutral planets.
 
-    17. PLANETS -- List information on friendly and known enemy and
-        neutral planets.
+18. POINTS -- List your score breakdown so far.
 
-    18. POINTS -- List your score breakdown so far.
+19. QUIT -- Get out of the game.
 
-    19. QUIT -- Get out of the game.
+20. RADIO -- Turn ship's sub-space radio on or off; ignore or restore communications from individual ships.
 
-    20. RADIO -- Turn ship's sub-space radio on or off; ignore or
-        restore communications from individual ships.
+21. REPAIR -- Repair your damaged devices a little.
 
-    21. REPAIR -- Repair your damaged devices a little.
+22. SCAN -- Display the galaxy with the default range set to maximum (10 sectors in each direction from your ship).
 
-    22. SCAN -- Display the galaxy with the default range set to
-        maximum (10 sectors in each direction from your ship).
+23. SET -- Set various input and output defaults.
 
-    23. SET -- Set various input and output defaults.
+24. SHIELDS -- Transfer energy to or from your shields; raise or lower your shields.
 
-    24. SHIELDS -- Transfer energy to or from your shields; raise or
-        lower your shields.
+25. SRSCAN -- Display the galaxy with a default range of seven sectors (one greater than the maximum warp factor).
 
-    25. SRSCAN -- Display the galaxy with a default range of seven
-        sectors (one greater than the maximum warp factor).
+26. STATUS -- List your ship's current status and supply levels.
 
-    26. STATUS -- List your ship's current status and supply levels.
+27. SUMMARY -- List various information on ships, bases, and planets.
 
-    27. SUMMARY -- List various information on ships, bases, and
-        planets.
+28. TARGETS -- List targets (enemies within range) and their current locations.
 
-    28. TARGETS -- List targets (enemies within range) and their
-        current locations.
+29. TELL -- Send messages to other ships using the sub-space radio.
 
-    29. TELL -- Send messages to other ships using the sub-space
-        radio.
+30. TIME -- List information on run time and elapsed time.
 
-    30. TIME -- List information on run time and elapsed time.
+31. TORPEDOES -- Fire photon torpedoes at a target.
 
-    31. TORPEDOES -- Fire photon torpedoes at a target.
+32. TRACTOR -- Use tractor beam to tow friendly ships.
 
-    32. TRACTOR -- Use tractor beam to tow friendly ships.
+33. TYPE -- List current input, output, and game characteristics.
 
-    33. TYPE -- List current input, output, and game characteristics.
-
-    34. USERS -- List the names and other information known about the
-       players currently in the game.
-
+34. USERS -- List the names and other information known about the players currently in the game.
 
 
 ## 4.0 GENERAL INPUT INFORMATION
