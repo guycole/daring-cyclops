@@ -45,18 +45,11 @@ MegaWars Commander's Manual
 ## 1.0 INTRODUCTION
 
 
-From the dark sister of Algol they came - unprovoked and
-undaunted in their determination to conquer, enslave and rule. From Algol they attacked and enslaved Perseus, conquered Capella and swept through Andromeda before we saw them. That was 700 years ago. MegaWars began without warning - without any regard for peace or
-civilization - when they belittled Algol. For 700 years the Kryons have now exported their culture of slavery and dictatorship; and for 700 years we Colonists of the Galaxy have fought and repelled their every thrust.
+From the dark sister of Algol they came - unprovoked and undaunted in their determination to conquer, enslave and rule. From Algol they attacked and enslaved Perseus, conquered Capella and swept through Andromeda before we saw them. That was 700 years ago. MegaWars began without warning - without any regard for peace or civilization - when they belittled Algol. For 700 years the Kryons have now exported their culture of slavery and dictatorship; and for 700 years we Colonists of the Galaxy have fought and repelled their every thrust.
 
-Some say that they came from the Great Void expelled and chased by the Acherons, an enemy more powerful then even the Kryons dare be. Like the wandering River Styx, the Acherons seek out all matter in their path and empty it into the Great Void. And so MegaWars continues; not with one enemy but with two! The Kryons seek to conquer and enslave all civilizations, but the Acheron, who abhor the
-very existence of matter, now wander, annihilating all life, friend or foe, atomizing all matter in their path, and attempting to erase not only our universe but our very souls. So be it. We Colonists will fight to the last soul.
+Some say that they came from the Great Void expelled and chased by the Acherons, an enemy more powerful then even the Kryons dare be. Like the wandering River Styx, the Acherons seek out all matter in their path and empty it into the Great Void. And so MegaWars continues; not with one enemy but with two! The Kryons seek to conquer and enslave all civilizations, but the Acheron, who abhor the very existence of matter, now wander, annihilating all life, friend or foe, atomizing all matter in their path, and attempting to erase not only our universe but our very souls. So be it. We Colonists will fight to the last soul.
 
-Cestus was a ninth generation Colonist. Born on the space
-frigate Nimrod and weaned on the Command Instrument Screen, Cestus knew MegaWars well. His father died twelve years ago in the demise of Altair and it was only by ransom that Altair was reclaimed. Now at the helm of his own star frigate, Cestus sought not only adventure,
-but revenge. His father commanded the Nimrod on its last encounter.  The Nimrod, shields weakened, but winning the battle against a Kryon starcruiser, was blitzed from behind by a cloaked Acheron. His father tried to abort his previously stacked phaser commands and transfer
-more shield energy aft; but he was.too late; the Acheron's greatest weapon was that cloaking device. The Nimrod, a captain and a crew of 12,000 were lost in the Great Void. Cestus vowed at the Fleet Academy, "Death to the Acheron and to the Kryon Empire - or be it
-mine".
+Cestus was a ninth generation Colonist. Born on the space frigate Nimrod and weaned on the Command Instrument Screen, Cestus knew MegaWars well. His father died twelve years ago in the demise of Altair and it was only by ransom that Altair was reclaimed. Now at the helm of his own star frigate, Cestus sought not only adventure, but revenge. His father commanded the Nimrod on its last encounter.  The Nimrod, shields weakened, but winning the battle against a Kryon starcruiser, was blitzed from behind by a cloaked Acheron. His father tried to abort his previously stacked phaser commands and transfer more shield energy aft; but he was.too late; the Acheron's greatest weapon was that cloaking device. The Nimrod, a captain and a crew of 12,000 were lost in the Great Void. Cestus vowed at the Fleet Academy, "Death to the Acheron and to the Kryon Empire - or be it mine".
 
 Cestus pulled his battle seat closer to his Command Instrument Screen as he responded to the ship's now familiar interrogation of "ID:" and "Password:". He waited as the current news and updates moved across his screen and then he typed "Go HOM60" into his CIS console. Immediately CIS displayed "Request Recorded" as it began transferring control to the frigate's battle computer. Cestus pulled his chair even closer and flexed his fingers as he waited for CIS to complete the transfer. "Time is relative", he mused, "it's amazing how long 10 seconds appears to be when you have a 'quest' to fulfill". "How many missions has it been now?", he asked himself as he mechanically responded to the the battle computer's preliminary interrogations. "Fifty-nine? Sixty?" It didn't matter anymore. Cestus knew he could not leave his frigate now; he had a vow to keep, a nation to avenge and, whatever the cost, the Colonist Coalition to
 champion.
@@ -147,45 +140,23 @@ be their starcruisers that whimper across the stars!"
 --:123456789012345678901234567890123456789012345678901234567890123456789012345
 
 
-2.O OVERVIEW
+## 2.O OVERVIEW
 
-     MegaWars is a real-time space battle game designed to be played
-by 1 to 10 people. The object of the game is to destroy all enemy
-bases and ships, and capture all enemy planets before the enemy does
-the same to you. Each person plays on a separate terminal, and enters
-the game by selecting the MegaWars menu selection on DISPLAY page
-HOM-60. Players are free to enter and leave the game as desired,
-since each has his/her own job and therefore won't interfere with the
-other players.
 
-     Besides the enemy (Coalition or Empire), the following may also
-be a threat to your well-being.
+MegaWars is a real-time space battle game designed to be played by 1 to 10 people. The object of the game is to destroy all enemy bases and ships, and capture all enemy planets before the enemy does the same to you. Each person plays on a separate terminal, and enters the game by selecting the MegaWars menu selection on DISPLAY page HOM-60. Players are free to enter and leave the game as desired, since each has his/her own job and therefore won't interfere with the other players.
 
-     1.  Acherons are nasty beasts that beginners are better off
-         without. However, if you're the only person playing, the
-         Acheron is your only competition. Acherons tend to make for
-         shorter. games but when there are three or less players, an
-         Acheron will be included. After the fourth player joins the
-         game, a Acheron will not be re-created once he is destroyed.
+Besides the enemy (Coalition or Empire), the following may also be a threat to your well-being.
 
-     2.  Black holes are annoying, since if you are displaced into
-         one, you're dead. They also tend to gobble up stray
-         torpedoes. There is a 25 percent chance of black holes being
-         included in the game.
+1.  Acherons are nasty beasts that beginners are better off without. However, if you're the only person playing, the Acheron is your only competition. Acherons tend to make for shorter. games but when there are three or less players, an Acheron will be included. After the fourth player joins the game, a Acheron will not be re-created once he is destroyed.
+
+2.  Black holes are annoying, since if you are displaced into one, you're dead. They also tend to gobble up stray torpedoes. There is a 25 percent chance of black holes being included in the game.
 
 
 ### 2.1 How To Enter MegaWars
 
 
-     There are two primary opposing forces in the galaxy -- Colonists
-(Coalition) and Kryons (Empire). As you enter the game for the first
-time, you get to choose which side you'll join and you may select from
-up to four separate games. When you first enter MegaWars, the
-following menu is displayed. It allows you to examine up to four
-games and lists each team's points and number of players in that game.
-If the game is not currently being played, it is listed as "* OPEN *".
-Selections one through three use a standard galaxy map (shown later)
-and selection four provides a totally random galaxy map.
+There are two primary opposing forces in the galaxy -- Colonists (Coalition) and Kryons (Empire). As you enter the game for the first time, you get to choose which side you'll join and you may select from up to four separate games. When you first enter MegaWars, the following menu is displayed. It allows you to examine up to four games and lists each team's points and number of players in that game. If the game is not currently being played, it is listed as "* OPEN *".
+Selections one through three use a standard galaxy map (section 1.1) and selection four provides a totally random galaxy map.
 
           MegaWars   Version 1.0
                       Coalition   Empire
@@ -198,16 +169,9 @@ and selection four provides a totally random galaxy map.
           Enter # (l to 4):
 
 
-     As shown above, Selection No. 1 is game 182 and currently has
-seven players (three on the Coalition and four on the Empire). The
-game is also listed as 45 minutes old and the team's respective scores
-are shown. Selections two and four are also currently being played.
-Selection 3 is currently open. Note that selection No. four is also
-filled with 10 players.
+As shown above, Selection No. 1 is game 182 and currently has seven players (three on the Coalition and four on the Empire). The game is also listed as 45 minutes old and the team's respective scores are shown. Selections two and four are also currently being played. Selection 3 is currently open. Note that selection No. four is also filled with 10 players.
 
-     After you choose No. 1 and enter the game you will be briefed on
-the all-time High score, your current rank and cumulative points
-attained from past battles.
+After you choose No. 1 and enter the game you will be briefed on the all-time High score, your current rank and cumulative point attained from past battles.
 
           The All-time High Score is 633700
              by   Admiral CESTUS      [70006,111]
@@ -223,17 +187,9 @@ attained from past battles.
           Enter HELp, PREgame, or blank
           line:
 
-     After selecting the game that you wish to join, you may type
-HELP, PREgame a blank line to begin the game. The Pregame area
-allows you to read the help files, to report problems to the
-CompuServe MegaWars GamesMaster, to order this MegaWars Commander's
-Manual, or to examine the current game's point scores in more detail.
-The Pregame area will be covered in more detail in Chapter 6.
+After selecting the game that you wish to join, you may type HELP, PREgame a blank line to begin the game. The Pregame area allows you to read the help files, to report problems to the CompuServe MegaWars GamesMaster, to order this MegaWars Commander's Manual, or to examine the current game's point scores in more detail. The Pregame area will be covered in more detail in Chapter 6.
 
-     Assuming your simply press you <ENTER> or <RETURN> key and enter
-the game you will then choose your team, ship type, and ship name from
-those provided. Note that not all ship types may be available to a
-beginner.
+Assuming your simply press you <ENTER> or <RETURN> key and enter the game you will then choose your team, ship type, and ship name from those provided. Note that not all ship types may be available to a beginner.
 
 
 ### 2.2 Ranks
