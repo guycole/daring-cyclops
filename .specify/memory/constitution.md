@@ -31,6 +31,8 @@ The following principles are mandatory unless explicitly amended:
 - Clients are responsible for user interaction and presentation, but must not be trusted as authoritative for game state.
 - Game state, simulation time, scheduled events, and player actions must be isolated per game instance.
 - The server must run on Linux and support both local or LAN-hosted play and cloud-hosted deployment, including AWS.
+- The server must be packaged and deployed as a Docker container.
+- Backing services (PostgreSQL and Redis) must also be deployable as Docker containers for local and development environments.
 - Cloud infrastructure, especially AWS infrastructure, must be managed declaratively with Terraform.
 - Non-cloud deployments must also use reproducible, version-controlled deployment artifacts and configuration.
 
@@ -65,9 +67,11 @@ Daring Cyclops is governed by virtual time rather than wall-clock time for gamep
 ---
 
 ## 7. Persistence and Data Boundaries
-- Database and persistence technology are not yet fixed.
-- The architecture must isolate persistence concerns behind clear interfaces so storage strategy can evolve without rewriting core game logic.
-- Any long-term decision about persistence, recovery, or historical game data must be captured in a tracked specification before becoming a hard dependency.
+- **PostgreSQL** is the designated store for durable data: player identity, cumulative scores, GRIPE records, NEWS entries, tournament configurations, and game history.
+- **Redis** is the designated store for ephemeral, high-frequency data: active session state, ship slots, kill queues, and pub/sub game events.
+- Both stores must be accessed through well-defined Go interfaces so implementations can be swapped (e.g., in-memory stubs for unit tests, real stores for integration and production).
+- Early feature phases may use in-memory implementations of these interfaces; the interfaces themselves must be defined before any feature that requires persistence.
+- Any schema migration or data model change for PostgreSQL must be tracked in a specification before implementation.
 - If hosted deployments require persistence, backup and restore expectations must be documented before production use.
 
 ---
