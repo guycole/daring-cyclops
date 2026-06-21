@@ -440,7 +440,13 @@ The help on individual commands may be read from a help file.	The legal commands
 
 - Input words may be separated by spaces, tabs, or commas.
 
-- The input line can be·terminated with <CR>, <LF>, <VT>, <FF>, <ESC>, or ^Z.
+- The input line can be terminated with:
+  - `<CR>` (Carriage Return)
+  - `<LF>` (Line Feed)
+  - `<VT>` (Vertical Tab)
+  - `<FF>` (Form Feed)
+  - `<ESC>` (Escape)
+  - `^Z` (Control-Z)
 
 - ^G toggles echo. At the beginning of each input line, echoing is turned on. Typing ^G turns it off, the next ^G turns it back on, etc. Echoing is always turned back on at the end of an input line, or if ^U is typed.
 
