@@ -1,10 +1,5 @@
 # MegaWars Commander's Manual
 
-> CompuServe Incorporated • Copyright 1982 • CS‑520
-
-## About This Edition
-
-This edition has been reformatted for GitHub. Original content has been preserved where practical while improving heading structure, navigation, and readability.
 ## Command Reference
 
 - [7.0 Megawars Command Syntax](#70-megawars-command-syntax)
@@ -46,75 +41,30 @@ This edition has been reformatted for GitHub. Original content has been preserve
 
 MegaWars Commander's Manual
 
-CompuServe Incorporated
-Copyright, 1982
-CS-520
-
-
 
 ## 1.0 INTRODUCTION
 
 
-     From the dark sister of Algol they came - unprovoked and
-undaunted in their determination to conquer, enslave and rule. From
-Algol they attacked and enslaved Perseus, conquered Capella and swept
-through Andromeda before we saw them. That was 700 years ago.
-MegaWars began without warning - without any regard for peace or
-civilization - when they belittled Algol. For 700 years the Kryons
-have now exported their culture of slavery and dictatorship; and for
-700 years we Colonists of the Galaxy have fought and repelled their
-every thrust.
+From the dark sister of Algol they came - unprovoked and
+undaunted in their determination to conquer, enslave and rule. From Algol they attacked and enslaved Perseus, conquered Capella and swept through Andromeda before we saw them. That was 700 years ago. MegaWars began without warning - without any regard for peace or
+civilization - when they belittled Algol. For 700 years the Kryons have now exported their culture of slavery and dictatorship; and for 700 years we Colonists of the Galaxy have fought and repelled their every thrust.
 
-     Some say that they came from the Great Void expelled and chased
-by the Acherons, an enemy more powerful then even the Kryons dare be.
-Like the wandering River Styx, the Acherons seek out all matter in
-their path and empty it into the Great Void. And so MegaWars
-continues; not with one enemy but with two! The Kryons seek to
-conquer and enslave all civilizations, but the Acheron, who abhor the
-very existence of matter, now wander, annihilating all life, friend or
-foe, atomizing all matter in their path, and attempting to erase not
-only our universe but our very souls. So be it. We Colonists will
-fight to the last soul.
+Some say that they came from the Great Void expelled and chased by the Acherons, an enemy more powerful then even the Kryons dare be. Like the wandering River Styx, the Acherons seek out all matter in their path and empty it into the Great Void. And so MegaWars continues; not with one enemy but with two! The Kryons seek to conquer and enslave all civilizations, but the Acheron, who abhor the
+very existence of matter, now wander, annihilating all life, friend or foe, atomizing all matter in their path, and attempting to erase not only our universe but our very souls. So be it. We Colonists will fight to the last soul.
 
-     Cestus was a ninth generation Colonist. Born on the space
-frigate Nimrod and weaned on the Command Instrument Screen, Cestus
-knew MegaWars well. His father died twelve years ago in the demise of
-Altair and it was only by ransom that Altair was reclaimed. Now at
-the helm of his own star frigate, Cestus sought not only adventure,
-but revenge. His father commanded the Nimrod on its last encounter.
-The Nimrod, shields weakened, but winning the battle against a Kryon
-starcruiser, was blitzed from behind by a cloaked Acheron. His father
-tried to abort his previously stacked phaser commands and transfer
-more shield energy aft; but he was.too late; the Acheron's greatest
-weapon was that cloaking device. The Nimrod, a captain and a crew of
-12,000 were lost in the Great Void. Cestus vowed at the Fleet
-Academy, "Death to the Acheron and to the Kryon Empire - or be it
+Cestus was a ninth generation Colonist. Born on the space
+frigate Nimrod and weaned on the Command Instrument Screen, Cestus knew MegaWars well. His father died twelve years ago in the demise of Altair and it was only by ransom that Altair was reclaimed. Now at the helm of his own star frigate, Cestus sought not only adventure,
+but revenge. His father commanded the Nimrod on its last encounter.  The Nimrod, shields weakened, but winning the battle against a Kryon starcruiser, was blitzed from behind by a cloaked Acheron. His father tried to abort his previously stacked phaser commands and transfer
+more shield energy aft; but he was.too late; the Acheron's greatest weapon was that cloaking device. The Nimrod, a captain and a crew of 12,000 were lost in the Great Void. Cestus vowed at the Fleet Academy, "Death to the Acheron and to the Kryon Empire - or be it
 mine".
 
-     Cestus pulled his battle seat closer to his Command Instrument
-Screen as he responded to the ship's now familiar interrogation of
-"ID:" and "Password:". He waited as the current news and updates
-moved across his screen and then he typed "Go HOM60" into his CIS
-console. Immediately CIS displayed "Request Recorded" as it began
-transferring control to the frigate's battle computer. Cestus pulled
-his chair even closer and flexed his fingers as he waited for CIS to
-complete the transfer. "Time is relative", he mused, "it's amazing
-how long 10 seconds appears to be when you have a 'quest' to fulfill".
-"How many missions has it been now?", he asked himself as he
-mechanically responded to the the battle computer's preliminary
-interrogations. "Fifty-nine? Sixty?" It didn't matter anymore.
-Cestus knew he could not leave his frigate now; he had a vow to keep,
-a nation to avenge and, whatever the cost, the Colonist Coalition to
+Cestus pulled his battle seat closer to his Command Instrument Screen as he responded to the ship's now familiar interrogation of "ID:" and "Password:". He waited as the current news and updates moved across his screen and then he typed "Go HOM60" into his CIS console. Immediately CIS displayed "Request Recorded" as it began transferring control to the frigate's battle computer. Cestus pulled his chair even closer and flexed his fingers as he waited for CIS to complete the transfer. "Time is relative", he mused, "it's amazing how long 10 seconds appears to be when you have a 'quest' to fulfill". "How many missions has it been now?", he asked himself as he mechanically responded to the the battle computer's preliminary interrogations. "Fifty-nine? Sixty?" It didn't matter anymore. Cestus knew he could not leave his frigate now; he had a vow to keep, a nation to avenge and, whatever the cost, the Colonist Coalition to
 champion.
 
-
-Cestus felt his shoulders press firmly against the ribs of of his
-battle chair as his ship lunged forward into warp drive. "Concentrate
-now, this time - yes, this time - I will be ready. Merlyn and Ninja
-and KYBD are clever enemies, but this time - yes, this time - it will
+Cestus felt his shoulders press firmly against the ribs of of his battle chair as his ship lunged forward into warp drive. "Concentrate now, this time - yes, this time - I will be ready. Merlyn and Ninja and KYBD are clever enemies, but this time - yes, this time - it will
 be their starcruisers that whimper across the stars!"
 
-MegaWars Galaxy Map
+## 1.1 MegaWars Galaxy Map
 
 --:         111111111122222222223333333333444444444455555555556666666666777777
 --:123456789012345678901234567890123456789012345678901234567890123456789012345
