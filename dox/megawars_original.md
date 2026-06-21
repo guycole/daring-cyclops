@@ -195,45 +195,23 @@ Assuming your simply press you <ENTER> or <RETURN> key and enter the game you wi
 ### 2.2 Ranks
 
 
-     There are four ranks of players in MegaWars as follows:
+There are four ranks of players in MegaWars as follows:
 
-     1.  CADET  Cadets are always placed in a trainer
-     class fighter. However, as beginners, they are given
-     increased shield capacity in lieu of phaser power and they
-     carry a lighter photon torpedo. They inflict only 50 percent
-     as much damage as do higher ranking players and their scores
-     are subsequently reduced by 50 percent. Once a cadet has
-     attained a cumulative score of 10,000 points, he/she is
-     promoted to the rank of Lieutenant.
+1.  CADET  Cadets are always placed in a trainer class fighter. However, as beginners, they are given increased shield capacity in lieu of phaser power and they carry a lighter photon torpedo. They inflict only 50 percent as much damage as do higher ranking players and their scores are subsequently reduced by 50 percent. Once a cadet has attained a cumulative score of 10,000 points, he/she is promoted to the rank of Lieutenant.
 
+2.  LIEUTENANT  A Lieutenant has the option of commanding either a SCOUT or a FIGHTER class ship. In addition, scoring is normal (100%). A cumulative score of 100,000 points promotes the Lieutenant to Captain.
 
-     2.  LIEUTENANT  A Lieutenant has the option of
-     commanding either a SCOUT or a FIGHTER class ship. In
-     addition, scoring is normal (100%). A cumulative score of
-     100,000 points promotes the Lieutenant to Captain.
+3.  CAPTAIN  Captains are permitted to command a SCOUT, a FIGHTER, or a MINER class ship. Scoring is normal. After a Captain has attained a cumulative score of 500,000 points he/she is promoted to the rank of Admiral.
 
-     3.  CAPTAIN  Captains are permitted to command a
-     SCOUT, a FIGHTER, or a MINER class ship. Scoring is normal.
-     After a Captain has attained a cumulative score of 500,000
-     points he/she is promoted to the rank of Admiral.
-
-     4.  ADMIRAL  An Admiral may pilot any class ship
-     including the FLAGSHIP providing no one else on the chosen
-     team has a flagship. There may only be one flagship per team
-     at any time.
+4.  ADMIRAL  An Admiral may pilot any class ship including the FLAGSHIP providing no one else on the chosen team has a flagship. There may only be one flagship per team at any time.
 
 
 ### 2.3 Ship Types
 
 
-     There are four classes of ships available in MegaWars.
+There are four classes of ships available in MegaWars.
 
-     1.  SCOUT  A Scout class ship may be commanded by
-     anyone above the rank of Cadet. Scouts have increased shield
-     energy and warp drive range and lower hitting power. The
-     primary use of a scout is reconnaissance; as they can travel
-     great distances and radio their findings back to the main
-     fleet. The following is a typical SCOUT STATUS.
+1.  SCOUT  A Scout class ship may be commanded by anyone above the rank of Cadet. Scouts have increased shield energy and warp drive range and lower hitting power. The primary use of a scout is reconnaissance; as they can travel great distances and radio their findings back to the main fleet. The following is a typical SCOUT STATUS.
 
           Stardate         21
           Condition    Docked+Green
@@ -244,16 +222,9 @@ Assuming your simply press you <ENTER> or <RETURN> key and enter the game you wi
           Shields        +100.0%  5000.0 units
           Radio        On
 
-     The normal range of a SCOUT is 14 sectors and a maximum range
-     of 16 sectors is possible with a probability of some damage.
+The normal range of a SCOUT is 14 sectors and a maximum range of 16 sectors is possible with a probability of some damage.
 
-     2.  FIGHTER  The Fighter class ship is the
-     workhorse of the fleet and may be manned by any player.
-     Cadets are issued trainer class fighters which have heavy
-     shields but reduced fire power. This helps the beginner from
-     giving up his/her life too soon! A sample FIGHTER STATUS
-     follows:
-
+2.  FIGHTER  The Fighter class ship is the workhorse of the fleet and may be manned by any player. Cadets are issued trainer class fighters which have heavy shields but reduced fire power. This helps the beginner from giving up his/her life too soon! A sample FIGHTER STATUS follows:
 
           Stardate         22
           Condition    Docked+Green
@@ -264,15 +235,9 @@ Assuming your simply press you <ENTER> or <RETURN> key and enter the game you wi
           Shields        +100.0%  2500.0 units
           Radio        On
 
-     The normal range of a FIGHTER is six sectors and a maximum
-     range of eight sectors.
+The normal range of a FIGHTER is six sectors and a maximum range of eight sectors.
 
-     3.  MINER  A Miner is a converted merchant ship
-     conscripted for the duration of MegaWars. They are used to
-     deploy and retrieve Photon Mines. Either a Captain or an
-     Admiral may command a miner. A MINER is primarily a
-     defensive ship used to lay traps for the enemy. A sample
-     MINER STATUS follows:
+3.  MINER  A Miner is a converted merchant ship conscripted for the duration of MegaWars. They are used to deploy and retrieve Photon Mines. Either a Captain or an Admiral may command a miner. A MINER is primarily a defensive ship used to lay traps for the enemy. A sample MINER STATUS follows:
 
           Stardate         23
           Condition    Docked+Green
@@ -284,14 +249,9 @@ Assuming your simply press you <ENTER> or <RETURN> key and enter the game you wi
           Shields        +100.0%  3500.0 units
           Radio        On
 
-     The warp drive range of a MINER is four sectors but a maximum
-     range of six sectors is possible with some risk.
+The warp drive range of a MINER is four sectors but a maximum range of six sectors is possible with some risk.
 
-     4.  FLAGSHIP  Flagships are reserved for Admirals
-     only. A Flagship is essentially a movable Starbase and
-     features very heavy shields and extra total energy. In
-     addition, other ships may dock and be replenished by a
-     flagship. A typical FLAGSHIP STATUS follows:
+4.  FLAGSHIP  Flagships are reserved for Admirals only. A Flagship is essentially a movable Starbase and features very heavy shields and extra total energy. In addition, other ships may dock and be replenished by a flagship. A typical FLAGSHIP STATUS follows:
 
           Stardate         27
           Condition    Docked+Green
@@ -303,55 +263,34 @@ Assuming your simply press you <ENTER> or <RETURN> key and enter the game you wi
           Shields        +100.0%  3500.0 units
           Radio        On
 
-     The normal range for a FLAGSHIP is four sectors, however they
-     may move a maximum of six sectors with some risk of damage.
+The normal range for a FLAGSHIP is four sectors, however they may move a maximum of six sectors with some risk of damage.
 
 
-     Ship Names
+Ship Names
 
-Team          SCOUT     FIGHTER    MINER     FLAGSHIP
---------------------------------------------------------
-COLONISTS     LAZOR     LEVANT     LYNX      LOTUS
-(COALITION)   NIKE      NIMROD     NAPIER    NEMESIS
-              RAPIER    RONIN      RIGEL     RELIANT
-              SABER     SCORPION   SPARTAN   SHOGUN
-              VANIR     VIPER      VOYAGER   VEGA
---------------------------------------------------------
-KRYON EMPIRE  DIRK      DEMON      DELPHOS   DAGON
-              GRIFFIN   GARGOYLE   GIBBET    GORDON
-              HORNET    HUNTER     HANSEN    HYDRA
-              TALON     TRITON     TIRADE    TENDRIL
-              WASP      WOLF       WIGHT     WELINK
---------------------------------------------------------
 
-     Due to continuous espionage activities, present front-line ships
-of the Coalition and the Kryon Empire are identical in strength and
-weaponry. These ships can move from sector to sector using either
-warp or impulse engines, can attack enemy installations and ships
-using either photon torpedoes or phasers, and can defend themselves
-against such attack using their deflector shields. All ships also
-ppossess sub-space radios which keep them in touch with friendly
-starbases and other ships.
+| Team                  | Scout   | Fighter  | Miner   | Flagship |
+|-----------------------|---------|----------|---------|----------|
+| Colonists (Coalition) | Lazor   | Levant   | Lynx    | Lotus    |
+|                       | Nike    | Nimrod   | Napier  | Nemesis  |
+|                       | Rapier  | Ronin    | Rigel   | Reliant  |
+|                       | Saber   | Scorpion | Spartan | Shogun   |
+|                       | Vanir   | Viper    | Voyager | Vega     |
+| Kryon Empire          | Dirk    | Demon    | Delphos | Dagon    |
+|                       | Griffin | Gargoyle | Gibbet  | Gordon   |
+|                       | Hornet  | Hunter   | Hansen  | Hydra    |
+|                       | Talon   | Triton   | Tirade  | Tendril  |
+|                       | Wasp    | Wolf     | Wight   | Welink   |
+
+Due to continuous espionage activities, present front-line ships of the Coalition and the Kryon Empire are identical in strength and weaponry. These ships can move from sector to sector using either warp or impulse engines, can attack enemy installations and ships using either photon torpedoes or phasers, and can defend themselves against such attack using their deflector shields. All ships also ppossess sub-space radios which keep them in touch with friendly starbases and other ships.
 
 
 ### 2.4 SHIP DEVICES
 
 
-     The various devices of a ship are subject to damage. This damage
-may be due to enemy attack or to overuse. These damages, unlike total
-ship damage (see ship attributes below), may be repaired while
-underway. If damage on a device is less than 300 units, its
-performance is degraded. If damage is 300 er more units, the device
-is inoperative. A ship possesses the following devices:
+The various devices of a ship are subject to damage. This damage may be due to enemy attack or to overuse. These damages, unlike total ship damage (see ship attributes below), may be repaired while underway. If damage on a device is less than 300 units, its performance is degraded. If damage is 300 er more units, the device is inoperative. A ship possesses the following devices:
 
-     1. Warp Engines -- These engines are the normal mode of travel
-     for starships.	The maximum speed is warp factor six, with
-     warps five and six risking potential damage to the engines.
-     If warp engines are damaged (less than 300 units) the maximum
-     speed is warp factor three. One warp unit is equivalent to
-     one horizontal or one vertical grid movement. One diagonal
-     movement is equivalent to one horizontal or one vertical grid
-     movement.
+1. Warp Engines -- These engines are the normal mode of travel for starships. The maximum speed is warp factor six, with warps five and six risking potential damage to the engines. If warp engines are damaged (less than 300 units) the maximum speed is warp factor three. One warp unit is equivalent to one horizontal or one vertical grid movement. One diagonal movement is equivalent to one horizontal or one vertical grid movement.
 
 
 NOTE
