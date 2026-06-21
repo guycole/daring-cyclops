@@ -436,22 +436,18 @@ The help on individual commands may be read from a help file.	The legal commands
 
 ## 4.0 GENERAL INPUT INFORMATION
 
+- Only the first five characters of each input word are stored.	Any characters beyond that are ignored.
 
-- Only the first five characters of each input word are stored.	Any
-  characters beyond that are ignored.
 - Input words may be separated by spaces, tabs, or commas.
-- The input line can be·terminated with <CR>, <LF>, <VT>, <FF>, <ESC>,
-  or ^Z.
-- ^G toggles echo. At the beginning of each input line, echoing is
-  turned on. Typing ^G turns it off, the next ^G turns it back on,
-  etc. Echoing is always turned back on at the end of an input line,
-  or if ^U is typed.
-- Multiple commands may be given on a single command line by
-  separating the commands with / (slash).  If the TELL command is
-  given, it must be last on the line.
-- Anything after ; (semicolon) is treated as a comment and is ignored
-  (but TELL rescans the line and takes the text after the first ; as
-  the message to send).
+
+- The input line can be·terminated with <CR>, <LF>, <VT>, <FF>, <ESC>, or ^Z.
+
+- ^G toggles echo. At the beginning of each input line, echoing is turned on. Typing ^G turns it off, the next ^G turns it back on, etc. Echoing is always turned back on at the end of an input line, or if ^U is typed.
+
+- Multiple commands may be given on a single command line by separating the commands with / (slash).  If the TELL command is given, it must be last on the line.
+
+- Anything after ; (semicolon) is treated as a comment and is ignored (but TELL rescans the line and takes the text after the first ; as the message to send).
+
 - <ESC> (escape, or altmode) entered as the first character in
   response to the command prompt (even before ^H, ^U, or ^R) repeats
   the previous command.  This is useful when building a planet,
