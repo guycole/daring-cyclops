@@ -235,7 +235,7 @@ The normal range of a SCOUT is 14 sectors and a maximum range of 16 sectors is p
           Shields        +100.0%  2500.0 units
           Radio        On
 
-The normal range of a FIGHTER is six sectors and a maximum range of eight sectors.
+    The normal range of a FIGHTER is six sectors and a maximum range of eight sectors.
 
 3.  MINER  A Miner is a converted merchant ship conscripted for the duration of MegaWars. They are used to deploy and retrieve Photon Mines. Either a Captain or an Admiral may command a miner. A MINER is primarily a defensive ship used to lay traps for the enemy. A sample MINER STATUS follows:
 
@@ -249,7 +249,7 @@ The normal range of a FIGHTER is six sectors and a maximum range of eight sector
           Shields        +100.0%  3500.0 units
           Radio        On
 
-The warp drive range of a MINER is four sectors but a maximum range of six sectors is possible with some risk.
+    The warp drive range of a MINER is four sectors but a maximum range of six sectors is possible with some risk.
 
 4.  FLAGSHIP  Flagships are reserved for Admirals only. A Flagship is essentially a movable Starbase and features very heavy shields and extra total energy. In addition, other ships may dock and be replenished by a flagship. A typical FLAGSHIP STATUS follows:
 
@@ -263,7 +263,7 @@ The warp drive range of a MINER is four sectors but a maximum range of six secto
           Shields        +100.0%  3500.0 units
           Radio        On
 
-The normal range for a FLAGSHIP is four sectors, however they may move a maximum of six sectors with some risk of damage.
+    The normal range for a FLAGSHIP is four sectors, however they may move a maximum of six sectors with some risk of damage.
 
 
 Ship Names
@@ -295,59 +295,32 @@ The various devices of a ship are subject to damage. This damage may be due to e
 
 NOTE
 
-     The above maximum range varies according to ship
-     type. For example.
+The above maximum range varies according to ship type. For example.
 
-       SHIP TYPE   Normal Range   Maximum Range *
-       SCOUT            14             16
-       FIGHTER           6              8
-       MINER             4              6
-       FLAGSHIP          4              6
-       * Ranges above Normal risk damage to
-         the Warp Drive Engines.
+| Ship Type | Normal Range | Maximum Range* |
+|-----------|-------------:|---------------:|
+| Scout     | 14           | 16 |
+| Fighter   | 6            | 8  |
+| Miner     | 4            | 6  |
+| Flagship  | 4            | 6  |
 
-     2. Impulse Engines -- These engines are basically for emergency
-     use while the warp engines are critically damaged. Impulse
-     engines move the ship at warp factor one or two sectors
-     maximum.
+\* Ranges above the normal range risk damage to the warp drive engines.
 
-     3. Photon Torpedo Tubes -- Used to fire photon torpedoes. If
-     these tubes are damaged, the accuracy of torpedo bursts is
-     impaired. The maximum torpedo range is 10 sectors.
+2. Impulse Engines -- These engines are basically for emergency use while the warp engines are critically damaged. Impulse engines move the ship at warp factor one or two sectors maximum.
 
-     4. Phaser Banks -- Each ship possesses two phaser banks, with a
-     single phaser control. Damage to this phaser control or to
-     the ship's computer reduces the strength of the phaser hit.
+3. Photon Torpedo Tubes -- Used to fire photon torpedoes. If these tubes are damaged, the accuracy of torpedo bursts is impaired. The maximum torpedo range is 10 sectors.
 
-     5. Deflector Shields -- The deflector shields of a ship protect
-     it from damage from phaser and photon torpedo hits, and
-     shield it from the energy released when a star goes nova.
-     The percent shield strength indicates the percent of the
-     incoming hit which will be nullified. In addition, strong
-     deflector shields may deflect photon torpedoes with little or
-     no damage. NOTE: If a ship's shields are up, the amount of
-     energy expended during movement is doubled. A ship does not
-     have to lower shields to fire phasers or torpedoes.
+4. Phaser Banks -- Each ship possesses two phaser banks, with a single phaser control. Damage to this phaser control or to the ship's computer reduces the strength of the phaser hit.
 
-     6. Computer -- The ship's computer is used for computed firing,
-     computation during ship movement, and for phaser control. If
-     the computer is inoperative, navigation during warp and
-     impulse movement becomes inexact.
+5. Deflector Shields -- The deflector shields of a ship protect it from damage from phaser and photon torpedo hits, and shield it from the energy released when a star goes nova. The percent shield strength indicates the percent of the incoming hit which will be nullified. In addition, strong deflector shields may deflect photon torpedoes with little or no damage. NOTE: If a ship's shields are up, the amount of energy expended during movement is doubled. A ship does not have to lower shields to fire phasers or torpedoes.
 
-     7. Life Support -- If the life support units of a starship are
-     inoperative, the ship must either repair this damage or dock
-     within five stardates.  If this is not accomplished, the crew
-     will die.
+6. Computer -- The ship's computer is used for computed firing, computation during ship movement, and for phaser control. If the computer is inoperative, navigation during warp and impulse movement becomes inexact.
 
-     8. Sub-Space Radio -- The sub-space radio is used to communicate
-     with other ships of either side. Bases under attack also use
-     the sub-space radio to call for help and notify their team's
-     ships of their destruction.
+7. Life Support -- If the life support units of a starship are inoperative, the ship must either repair this damage or dock within five stardates.  If this is not accomplished, the crew will die.
 
+8. Sub-Space Radio -- The sub-space radio is used to communicate with other ships of either side. Bases under attack also use the sub-space radio to call for help and notify their team's ships of their destruction.
 
-     9. Tractor Beam -- The ship's tractor beam is used primarily to
-     tow damaged friendly ships away from danger. The beam cannot
-     be used unless both ships have lowered their shields
+9. Tractor Beam -- The ship's tractor beam is used primarily to tow damaged friendly ships away from danger. The beam cannot be used unless both ships have lowered their shields
 
 
 ### 2.5 Ship Attributes
