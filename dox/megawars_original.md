@@ -480,40 +480,32 @@ The keyword ABSOLUTE, RELATIVE, or COMPUTED is only given one time for each set 
 The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text output throughout the game. In particular, medium or short hit messages received during battle are greatly reduced in length when compared to the long format. Unfortunately, these shorter forms are not as self-explanatory as the long form. The following are some equivalent Long, medium and short hit messages:
 
 ```text
-- GarGoyle @22-31, +83.6% makes 285.3 unit torpedo hit on
-  Viper displaced to 20-31, +72.1%
+- GarGoyle @22-31, +83.6% makes 285.3 unit torpedo hit on Viper displaced to 20-31, +72.1%
 
   G @22-31, +83.6% 285.3 unit T  V -->20-31, +72.1%
 
   G 22-31 +83  285T  V  >20-31 +72
 ```
 
-- GarGoyle @22-31, +83.6% makes 285.3 unit torpedo hit on Viper displaced to 20-31, +72.1%
-
-  G @22-31, +83.6% 285.3 unit T  V -->20-31, +72.1%
-
-  G 22-31 +83  285T  V  >20-31 +72
-
-- Emp planet(3) @15-16 makes 155.5 unit phaser hit on
-  Wasp @15-17, 66.8%
+```text
+- Emp planet(3) @15-16 makes 155.5 unit phaser hit on Wasp @15-17, 66.8%
 
   -@3 @15-16 155.5 unit P  W @15-17, 66.8%
 
   -@3 15-16 155P W  15-17 +66
 
   Note: The -@3 indicates an Empire planet built three times.
+```
 
-- Star @22-31 +4,+2 makes 301.2 unit hit on
-  Demon displaced to 20-31 +2,+2, -72.1%
+```text
+- Star @22-31 +4,+2 makes 301.2 unit hit on Demon displaced to 20-31 +2,+2, -72.1%
 
   * @22-31 +4,+2 301.2 unit N  D  -->20-31 +2,+2, -72.1%
 
   * 22-31 +4,+2 301N D >20-31 +2,+2, -72
 
-  Note: The relative coordinates appear due to a SET OCDEF BOTH
-  command. The Demon's shields are 72.1 percent of max strength, but
-  down (-72.1 percent).
-
+  Note: The relative coordinates appear due to a SET OCDEF BOTH command. The Demon's shields are 72.1 percent of max strength, but down (-72.1 percent).
+```
 
 
 ## 6.0 THE MEGAWARS PRE-GAME FEATURE
