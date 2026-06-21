@@ -477,7 +477,7 @@ The keyword ABSOLUTE, RELATIVE, or COMPUTED is only given one time for each set 
 
 5.O GENERAL OUTPUT INFORMATION
 
-The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text output throughout the game. In particular, medium or short hit messages received during battle are greatly reduced in length when compared to the long format. Unfortunately, these shorter forms are not as self-explanatory as the long form. The following are some equivalent Long, medium and short hit messages:
+The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text output throughout the game. In particular, medium or short hit messages received during battle are greatly reduced in length when compared to the long format. Unfortunately, these shorter forms are not as self-explanatory as the long form. The following are some equivalent long, medium and short hit messages:
 
 ```text
 - GarGoyle @22-31, +83.6% makes 285.3 unit torpedo hit on Viper displaced to 20-31, +72.1%
@@ -513,15 +513,16 @@ The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text output thro
 
 MegaWars provides a Pre-game feature to allow:
 - New players to view the help file without entering the current game.
-- Experienced players to check the status of a current game before
-  choosing a side and ship.
+- Experienced players to check the status of a current game before choosing a side and ship.
 - Players to submit gripes without entering the game.
 
 The commands currently active within the Pre-game section are:
 
-     Activate     CHronicles     Exit     GRipe     Help
-     HIstory      HOnor roll	 News     Points    Quit
-     Set          Summary        Time     Type      Users
+  | Command  | Command    | Command  | Command  | Command |
+  |----------|------------|----------|----------|---------|
+  | Activate | CHronicles | Exit.    | GRipe    | Help    |
+  | HIstory  | HOnor Roll | News     | Points   | Quit    |
+  | Set      | Summary    | Time     | Type     | Users   |
 
 The ACTIVATE command (valid only in the pre-game) is used to exit the
 pre-game section and enter the normal ship setup stage. The pre-game
