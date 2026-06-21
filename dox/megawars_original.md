@@ -293,18 +293,16 @@ The various devices of a ship are subject to damage. This damage may be due to e
 1. Warp Engines -- These engines are the normal mode of travel for starships. The maximum speed is warp factor six, with warps five and six risking potential damage to the engines. If warp engines are damaged (less than 300 units) the maximum speed is warp factor three. One warp unit is equivalent to one horizontal or one vertical grid movement. One diagonal movement is equivalent to one horizontal or one vertical grid movement.
 
 
-NOTE
+    NOTE: The above maximum range varies according to ship type. For example.
 
-The above maximum range varies according to ship type. For example.
+    | Ship Type | Normal Range | Maximum Range * |
+    |-----------|-------------:|----------------:|
+    | Scout     | 14           | 16 |
+    | Fighter   | 6            | 8  |
+    | Miner     | 4            | 6  |
+    | Flagship  | 4            | 6  |
 
-| Ship Type | Normal Range | Maximum Range * |
-|-----------|-------------:|----------------:|
-| Scout     | 14           | 16 |
-| Fighter   | 6            | 8  |
-| Miner     | 4            | 6  |
-| Flagship  | 4            | 6  |
-
-\* Ranges above the normal range risk damage to the warp drive engines.
+    \* Ranges above the normal range risk damage to the warp drive engines.
 
 2. Impulse Engines -- These engines are basically for emergency use while the warp engines are critically damaged. Impulse engines move the ship at warp factor one or two sectors maximum.
 
