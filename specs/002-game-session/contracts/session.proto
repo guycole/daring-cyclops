@@ -1,0 +1,259 @@
+syntax = "proto3";
+
+package cyclops.session.v1;
+
+option go_package = "github.com/guycole/daring-cyclops/gen/proto/session/v1;sessionv1";
+
+import "google/protobuf/timestamp.proto";
+
+// ---------------------------------------------------------------------------
+// Enumerations
+// ---------------------------------------------------------------------------
+
+enum SessionState {
+  SESSION_STATE_UNSPECIFIED = 0;
+  // No ship has been activated; game options have been set by the first player.
+  SESSION_STATE_WAITING = 1;
+  // At least one ship is active in the session.
+  SESSION_STATE_ACTIVE = 2;
+  // Victory condition met; no further gameplay commands are accepted.
+  SESSION_STATE_ENDED = 3;
+}
+
+enum GameMode {
+  GAME_MODE_UNSPECIFIED = 0;
+  // Standard randomised game.
+  GAME_MODE_REGULAR = 1;
+  // Seeded game; the same tournament_name produces the same initial galaxy.
+  GAME_MODE_TOURNAMENT = 2;
+}
+
+enum Side {
+  SIDE_UNSPECIFIED = 0;
+  // Human / Federation side.
+  SIDE_FEDERATION = 1;
+  // Klingon / Empire side.
+  SIDE_EMPIRE = 2;
+}
+
+enum PlayerState {
+  PLAYER_STATE_UNSPECIFIED = 0;
+  // Slot has no player.
+  PLAYER_STATE_UNOCCUPIED = 1;
+  // Player connected and side-selected; has not activated a ship.
+  PLAYER_STATE_LOBBY = 2;
+  // Player's ship is live in the game.
+  PLAYER_STATE_ACTIVE = 3;
+  // Player's ship was destroyed; waiting for respawn countdown.
+  PLAYER_STATE_KILL_QUEUE = 4;
+}
+
+// ---------------------------------------------------------------------------
+// Shared message types
+// ---------------------------------------------------------------------------
+
+// Game options set once by the first player. Immutable after creation.
+message SessionConfig {
+  GameMode game_mode = 1;
+  // Required when game_mode is TOURNAMENT. The server derives the seed from
+  // this name; the raw seed is never accepted from clients.
+  string tournament_name = 2;
+  // Whether the Romulan NPC is present. Default: true.
+  bool romulans_enabled = 3;
+  // Whether black holes are placed in the galaxy. Default: false.
+  bool black_holes_enabled = 4;
+  // Simulation ticks a killed player must wait before returning to the lobby.
+  // Default: 120. Set to 0 in tests for instant respawn.
+  int32 respawn_wait_ticks = 5;
+}
+
+// Summary of a game session, returned by ListSessions.
+message SessionSummary {
+  string session_id = 1;
+  SessionState state = 2;
+  SessionConfig config = 3;
+  int32 federation_active = 4;
+  int32 empire_active = 5;
+  int32 federation_lobby = 6;
+  int32 empire_lobby = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+// State of one ship slot within a session.
+message ShipSlot {
+  int32 slot_index = 1;
+  Side side = 2;
+  string ship_name = 3;
+  string player_name = 4;
+  PlayerState player_state = 5;
+}
+
+// An entry in the kill queue for a destroyed player.
+message KillQueueEntry {
+  string player_name = 1;
+  Side side = 2;
+  string ship_name = 3;
+  // Simulation stardate at time of death.
+  double killed_at_stardate = 4;
+  // Simulation stardate after which the player may re-enter the lobby.
+  double eligible_at_stardate = 5;
+}
+
+// Full state of a session, returned by GetSessionStatus.
+message SessionStatus {
+  string session_id = 1;
+  SessionState state = 2;
+  SessionConfig config = 3;
+  double current_stardate = 4;
+  repeated ShipSlot federation_slots = 5;
+  repeated ShipSlot empire_slots = 6;
+  repeated KillQueueEntry kill_queue = 7;
+}
+
+// ---------------------------------------------------------------------------
+// Service
+// ---------------------------------------------------------------------------
+
+service SessionService {
+  // Create a new game session. The caller is the first player and must supply
+  // game options. Returns the new session ID and confirms configuration.
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse);
+
+  // List all sessions currently hosted by the server with their state and
+  // roster counts. Clients use this to find a session to join.
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse);
+
+  // Join an existing session. The caller supplies their name and preferred
+  // side. The server enforces capacity and balance rules and places the
+  // player in the lobby state.
+  rpc JoinSession(JoinSessionRequest) returns (JoinSessionResponse);
+
+  // Execute a lobby command. Only valid while the caller's player_state is
+  // PLAYER_STATE_LOBBY. Returns the command result as a string.
+  rpc LobbyCommand(LobbyCommandRequest) returns (LobbyCommandResponse);
+
+  // Activate a ship and transition the player from lobby to active play.
+  // Only valid while the caller's player_state is PLAYER_STATE_LOBBY.
+  rpc ActivateShip(ActivateShipRequest) returns (ActivateShipResponse);
+
+  // Return the kill queue countdown for a player waiting to respawn.
+  // Only meaningful when the caller's player_state is PLAYER_STATE_KILL_QUEUE.
+  rpc GetKillQueueStatus(GetKillQueueStatusRequest) returns (GetKillQueueStatusResponse);
+
+  // Return the full current status of a session: state, config, all ship
+  // slots, and the kill queue.
+  rpc GetSessionStatus(GetSessionStatusRequest) returns (GetSessionStatusResponse);
+}
+
+// ---------------------------------------------------------------------------
+// Request / Response messages
+// ---------------------------------------------------------------------------
+
+message CreateSessionRequest {
+  // Name of the creating player.
+  string player_name = 1;
+  // Game options chosen by the first player.
+  SessionConfig config = 2;
+}
+
+message CreateSessionResponse {
+  // Server-generated UUID for the new session.
+  string session_id = 1;
+  // Confirmed configuration (server may apply defaults for zero-value fields).
+  SessionConfig config = 2;
+}
+
+message ListSessionsRequest {
+  // If true, include sessions in the ENDED state. Default: false.
+  bool include_ended = 1;
+}
+
+message ListSessionsResponse {
+  repeated SessionSummary sessions = 1;
+}
+
+message JoinSessionRequest {
+  string session_id = 1;
+  string player_name = 2;
+  // Preferred side. The server may redirect to the other side if the
+  // requested side is full or the teams are too unbalanced.
+  Side preferred_side = 3;
+}
+
+message JoinSessionResponse {
+  // The side the server actually assigned (may differ from preferred_side).
+  Side assigned_side = 1;
+  // True if the server redirected the player from their preferred side.
+  bool side_redirected = 2;
+  // Human-readable explanation when side_redirected is true.
+  string redirect_reason = 3;
+  // Whether the session has Romulans and black holes, for lobby display.
+  bool romulans_enabled = 4;
+  bool black_holes_enabled = 5;
+}
+
+// Lobby commands available before a player activates a ship.
+// ACTIVATE is handled by ActivateShip, not LobbyCommand.
+enum LobbyCommand {
+  LOBBY_COMMAND_UNSPECIFIED = 0;
+  LOBBY_COMMAND_HELP = 1;
+  LOBBY_COMMAND_NEWS = 2;
+  LOBBY_COMMAND_USERS = 3;
+  LOBBY_COMMAND_POINTS = 4;
+  LOBBY_COMMAND_SUMMARY = 5;
+  LOBBY_COMMAND_TIME = 6;
+  LOBBY_COMMAND_GRIPE = 7;
+  LOBBY_COMMAND_QUIT = 8;
+}
+
+message LobbyCommandRequest {
+  string session_id = 1;
+  string player_name = 2;
+  LobbyCommand command = 3;
+  // Optional free-text argument (e.g., gripe text).
+  string argument = 4;
+}
+
+message LobbyCommandResponse {
+  // Human-readable output for the command.
+  string output = 1;
+  // True if this command ended the player's session (e.g., QUIT).
+  bool session_ended = 2;
+}
+
+message ActivateShipRequest {
+  string session_id = 1;
+  string player_name = 2;
+  // Optional preferred ship name. If empty or unavailable, the server
+  // assigns any open slot on the player's side.
+  string preferred_ship_name = 3;
+}
+
+message ActivateShipResponse {
+  // The ship name actually assigned.
+  string ship_name = 1;
+  Side side = 2;
+  // The session transitions to ACTIVE on the first successful ActivateShip.
+  SessionState session_state = 3;
+}
+
+message GetKillQueueStatusRequest {
+  string session_id = 1;
+  string player_name = 2;
+}
+
+message GetKillQueueStatusResponse {
+  bool in_kill_queue = 1;
+  double current_stardate = 2;
+  double eligible_at_stardate = 3;
+  // Remaining ticks until eligible. Zero means the player may re-enter now.
+  int32 ticks_remaining = 4;
+}
+
+message GetSessionStatusRequest {
+  string session_id = 1;
+}
+
+message GetSessionStatusResponse {
+  SessionStatus status = 1;
+}
