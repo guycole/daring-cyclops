@@ -14,7 +14,7 @@
 - [3.0 MegaWars Command Summary](#30-megawars-command-summary)
 - [4.0 General Input Information](#40-general-input-information)
   - [4.1 Relative, Absolute Or Computed Coordinates](#41-relative-absolute-or-computed-coordinates)
-- [5.0 General Output Information](#5o-general-output-information)
+- [5.0 General Output Information](#50-general-output-information)
 - [6.0 The MegaWars Pre-Game Feature](#60-the-megawars-pre-game-feature)
 - [7.0 MegaWars Command Syntax](#70-megawars-command-syntax)
   - [7.1 Bases](#71-bases)
