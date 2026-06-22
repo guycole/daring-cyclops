@@ -1061,11 +1061,11 @@ SET input and output parameters
 ```text
 Keyword   Value     Description
 -------   -----     -----------
-Name	    name      Change name (shows in USERS).
+Name      name      Change name (shows in USERS).
 Output    Long      Default. Use longest output format.
           Medium    Use medium output format.
           Short     Use short (cryptic) output format.
-Scan	    Long      Default. Use long format scans.
+Scan      Long      Default. Use long format scans.
           Short     Use 1 character symbols instead of 2.
 Prompt    Normal    Default. Use "COMMAND: " prompt.
           Informative Use "> " for prompt.  
@@ -1124,235 +1124,137 @@ SH T -500  Transfer 500 units of energy FROM shields
 
 ### 7.27 SRSCAN
 
-
 Short Range SCAN
 
-**Syntax**
+**Syntax** SRscan [Up|Down|Right|Left|Corner] [\<range\>|\<vr\>\<hr\>] [W]
 
-```text
-SRscan [Up|Down|Right|Left|Corner] [<range>|<vr><hr>] [W]
-```
-
-
-Equivalent to SCAN, but with a default scan range of seven sectors.
-For complete information on sensor scans, see the help on SCAN.
-
+Equivalent to SCAN, but with a default scan range of seven sectors. For complete information on sensor scans, see the help on SCAN.
 
 
 ### 7.28 STATUS
 
-
 Show ship STATUS
 
-**Syntax**
+**Syntax** STatus [Condition|Location|Torpedoes|Energy|Damage|Shields|Radio]
 
-```text
-
-```
-
-STatus [Condition|Location|Torpedoes|Energy|Damage|Shields|Radio]
-
-Show the current stardate, plus the status of any of the ship
-attributes: ship condition, location, number of torpedoes, ship
-energy, ship damage, shield energy, and radio condition. Ship
-condition can be green, yellow (low on energy), or red (in battle).
-Radio condition is either on or off.
+Show the current stardate, plus the status of any of the ship attributes: ship condition, location, number of torpedoes, ship energy, ship damage, shield energy, and radio condition. Ship condition can be green, yellow (low on energy), or red (in battle). Radio condition is either on or off.
 
 #### Examples
 
-
-ST     Give full status report.
-ST T   Report how many torpedoes remain on board.
-ST E D SH Report the ship energy, the ship damage, and the
-          shield condition (energy, percent, up/down).
-ST L    Report the current ship location.
+```text
+ST        Give full status report.
+ST T      Report how many torpedoes remain on board.
+ST E D SH Report the ship energy, the ship damage, and the shield condition 
+          (energy, percent, up/down).
+ST L      Report the current ship location.
+```
 
 
 ### 7.29 SUMMARY
 
-
 Give SUMMARY on number of ships, bases, and planets
 
-**Syntax**
+**Syntax** summary [(keywords)]
 
-```text
-summary [(keywords)]
-```
-
-
-Give any of the information available from the LIST command, but give
-only a summary by default. See the help on LIST for more information
-and the complete set of keywords that can be used to modify SUMMARY
-output.
+Give any of the information available from the LIST command, but give only a summary by default. See the help on LIST for more information and the complete set of keywords that can be used to modify SUMMARY output.
 
 #### Examples
 
-
-SUM     Tell how many ships, bases, and planets are in the
-        game (broken down into friendly, enemy, and neutral
-        categories).
-SUM EN  Tell how many enemies are in the game (number of
-        Acherons, enemy ships, enemy bases, and enemy
-        planets).
+```text
+SUM     Tell how many ships, bases, and planets are in the game 
+        (broken down into friendly, enemy, and neutral categories).
+SUM EN  Tell how many enemies are in the game (number of Acherons, 
+        enemy ships, enemy bases, and enemy planets).
+```
 
 
 ### 7.30 TARGETS
 
-
 List information on TARGETS
 
-**Syntax**
+**Syntax** TArgets [\<keywords\>]
 
-```text
-TArgets [<keywords)]
-```
-
-
-Primarily for locating targets during battle, when a SCAN would be too
-
-
-time consuming. List location and shield percent of any enemy ship,
-base, or planet in range; name of any enemy ship in game (including
-the Acheron); or location and number of builds of any known enemy
-planet.  TARGETS is equivalent to a LIST command with a default range
-of 10 sectors and a default team of "enemy".
+Primarily for locating targets during battle, when a SCAN would be too time consuming. List location and shield percent of any enemy ship, base, or planet in range; name of any enemy ship in game (including the Acheron); or location and number of builds of any known enemy planet.  TARGETS is equivalent to a LIST command with a default range of 10 sectors and a default team of "enemy".
 
 #### Examples
 
-
+```text
 TA     List all targets within 10 sectors.
 TA 10  Equivalent to "TA".
 TA 5   List all targets within 5 sectors.
+```
 
 
 ### 7.31 TELL
 
-
 TELL another ship something using the sub-space radio
 
-**Syntax**
+**Syntax** TEll All|COalition|COlonist|Empire|Kryon|ENemy|FRiendly|\<ship names\>;\<msg\>
 
-```text
-TEll All|COalition|COlonist|Empire|Kryon|ENemy|FRiendly|<ship names>;<msg>
-```
-
-
-Send messages to one or several of the players currently in the game,
-with no range limitation.  Players who have turned their radios off,
-or have a critically damaged sub-space radio cannot be sent to. The
-TELL command cannot be repeated using the ESCAPE key (no junk mail!).
+Send messages to one or several of the players currently in the game, with no range limitation.  Players who have turned their radios off, or have a critically damaged sub-space radio cannot be sent to. The TELL command cannot be repeated using the ESCAPE key (no junk mail!).
 
 #### Examples
 
-
+```text
 TE V;Hello!     Send "Hello!" to the Viper.
 TE KR;DROP DEAD Send "DROP DEAD" to all Kryons.
 TE V,R;HELP ME  Send "HELP ME" to the Viper and Reliant.
+```
 
 
 ### 7.32 TIME
 
-
 List various TIMEs
 
-**Syntax**
+**Syntax** TIme
 
-```text
-TIme
-```
-
-
-List time since game started; time since your ship entered the game;
-run time for your job so far this game; total run time since login;
-and current time of day.
-
+List time since game started; time since your ship entered the game; run time for your job so far this game; total run time since login; and current time of day.
 
 
 ### 7.33 TORPEDOES
 
-
 Fire photon TORPEDO burst
 
-**Syntax**
+**Syntax** TOrpedo [Absolute|Relative|Computed] n \<vl\>\<hl\> [\<v2\>\<h2\> [\<v3\>\<h3\>]]
 
-```text
-TOrpedo [Absolute|Relative|Computed] n <vl><hl> [<v2><h2> [<v3><h3>]]
-```
-
-
-A photon torpedo is aimed along a path in physical space, thus any
-object lying along its path will intercept the torpedo. One, two, or
-three torpedoes may be fired with one command, and the torpedoes may
-be individually targeted, or fired at a common location. The minimum
-range of a torpedo is eight sectors, but some will travel 10 sectors
-before self-destructing. Torpedoes may be deflected from the desired
-track by a number of different factors, including your ship's shield
-strength, computer and torpedo tube damage, and torpedo misfires. A
-torpedo misfire also aborts the remainder of the burst, and sometimes
-damages the torpedo tubes as well. Torpedoes can cause stars to go
-nova, and can also destroy planets (if no enemy installations remain
-intact). "Accidental" hits on friendly ships, bases, or planets are
-automatically neutralized. A torpedo burst uses no ship energy.
-Firing torpedoes (or getting hit by one) puts you on red alert.
+A photon torpedo is aimed along a path in physical space, thus any object lying along its path will intercept the torpedo. One, two, or three torpedoes may be fired with one command, and the torpedoes may be individually targeted, or fired at a common location. The minimum range of a torpedo is eight sectors, but some will travel 10 sectors before self-destructing. Torpedoes may be deflected from the desired track by a number of different factors, including your ship's shield strength, computer and torpedo tube damage, and torpedo misfires. A torpedo misfire also aborts the remainder of the burst, and sometimes damages the torpedo tubes as well. Torpedoes can cause stars to go nova, and can also destroy planets (if no enemy installations remain intact). "Accidental" hits on friendly ships, bases, or planets are automatically neutralized. A torpedo burst uses no ship energy. Firing torpedoes (or getting hit by one) puts you on red alert.
 
 #### Examples
 
-
+```text
 TO 1 12 24         Fire one torpedo at sector 12-24.
 TO 3 12 24         Fire three torpedoes at sector 12-24.
-TO 3 6 7 8 7 9 12  Fire on e torpoedo at sector 6-7, one at 8-7, and one
-                   at 9-12.
-TO 3 12 24 13 39   Fire one torpedo at sector 12-24, and two at sector
-                   13-39.
+TO 3 6 7 8 7 9 12  Fire on e torpoedo at sector 6-7, one at 8-7, and one at 9-12.
+TO 3 12 24 13 39   Fire one torpedo at sector 12-24, and two at sector 13-39.
 TO A 3 12 24       Equivalent to "TO 3 12 24"
-TOR 2 2 -5         Fire two torpedoes at sector 22-25, assuming your
-                   location is 20-30
+TOR 2 2 -5         Fire two torpedoes at sector 22-25, assuming your location is 20-30
 TO C 3 TRITON      Fire three torpedoes at the Triton.
 TO C 1 R           Fire one torpedo at the Reliant.
+```
 
 
 ### 7.34 TRACTOR
 
-
 TRACTOR beam
 
-**Syntax**
+**Syntax** TRactor <ship name> or TRactor Off
 
-```text
-TRactor <ship name> or TRactor Off
-```
-
-
-Tow another ship of the same team. The two ships must be located in
-adjacent sectors and both ships must have their shields lowered. Once
-such a beam is applied, either ship can pull the other behind it using
-warp or impulse engines. Energy consumption for the towing ship is
-three times the normal rate for movement with the shields down. The
-ship being towed will end the move trailing the lead ship. If either
-ship raises deflector shields, the tractor beam is automatically cut.
-The tractor beam will also be broken if either ship is hit by a
-torpedo or damaged by a nova.
-
+Tow another ship of the same team. The two ships must be located in adjacent sectors and both ships must have their shields lowered. Once such a beam is applied, either ship can pull the other behind it using warp or impulse engines. Energy consumption for the towing ship is three times the normal rate for movement with the shields down. The ship being towed will end the move trailing the lead ship. If either ship raises deflector shields, the tractor beam is automatically cut. The tractor beam will also be broken if either ship is hit by a torpedo or damaged by a nova.
 
 #### Examples
 
-
-TR   Break any existing tractor beam
+```text
+TR      Break any existing tractor beam
 TR OFF  Equivalent to "TR"
 TR V    Apply tractor beam to the Viper.
+```
 
 
 ### 7.35 TYPE
 
-
 TYPE game, input, and output settings
 
-**Syntax**
-
-```text
-TYpe OPtion|OUtput
-```
-
+**Syntax** TYpe OPtion|OUtput
 
 Type the current game OPTION and OUTPUT settings.
 
@@ -1371,168 +1273,81 @@ The OUTPUT settings are:
 
 #### Examples
 
-
+```text
 TY OP List the option settings.
 TY OU List the output settings.
+```
 
 
 ### 7.36 USERS
 
-
 List USERS
 
-**Syntax**
+**Syntax** Users
 
-```text
-Users
-```
-
-
-List all ships currently in the game.  Include ship name, captain (may
-be changed by SET NAME), TTY speed, PPN, TTY number, and job number.
-If the output format is set to medium or short, omit the TTY and job
-numbers. If the output format is set to short, omit the TTY speed and
-PPN (include only the ship name and captain).
-
+List all ships currently in the game.  Include ship name, captain (may be changed by SET NAME), TTY speed, PPN, TTY number, and job number. If the output format is set to medium or short, omit the TTY and job numbers. If the output format is set to short, omit the TTY speed and PPN (include only the ship name and captain).
 
 
 ## 8.0 GENERAL HINTS.
 
+- When in doubt, use the on-line help system. See the help on HELP for more information. When in a game, entering the HELP command will remove you temporarily from the game while you read the help requested. Your. ship will be replaced with a black hole. However, you cannot get Help while under. RED alert!
 
-- When in doubt, use the on-line help system. See the help on HELP
-  for more information. When in a game, entering the HELP command
-  will remove you temporarily from the game while you read the help
-  requested. Your. ship will be replaced with a black hole. However,
-  you cannot get Help while under. RED alert!
-- If the output starts piling up in the middle of a battle, type ^O
-  (CTL-O). None of your commands will be executed unt.il output is
-  finished, so it's sometimes better just to ignore the hit messages
-  so your attack or run commands can be executed immediately.
-- Use multiple commands per line (separate commands with /). Once
-  you're in a danger area, things can happen faster than you can react
-  to them. Plan your. action ahead of time, before you enter a danger
-  area.
-- If some unexpected action happens, such as an enemy finding you, and
-  you have several stacked commands (either from a multiple command
-  line or typing ahead), type ^C to abort all stacked commands
-  (especially if it involves time consuming commands such as BUILD, or
-  commands that generate a lot of output, such as SCAN). You can then
-  proceed to remedy the situation by giving your unexpected visitor a
-  good beating.
-- If you're on a slow terminal, use computed coordinates, and move
-  around a lot if you're fighting someone on a fast terminal.
-  Computed coordinates are the primary advantage slow terminals have
-  over the fast ones (computed coordinates give slow terminals a
-  fantastic tactical advantage over fast terminals when used
-  properly).
-- Use <ESC> to repeat commands (see the help on ESCAPE). It's just a
-  convenience when building planets, etc., but in battle, and combined
-  with multiple commands per line and/or computed coordinates (such as
-  PH C B/M R 1 0 or TO 1 32 45), it can make or break your career as
-  a starship captain.
-- Don't get within range of an enemy base, unless you enjoy being
-  pounded into rubble. You can kill a base just as well from one
-  sector outside it's range (use the WARNING keyword on SCAN to see
-  the the range of an enemy base).
-- Don't waste your energy and torpedoes firing at friendly ships and
-  bases. If you're not sure if it's friendly or not, type HELP SCAN
-  for a list of what's what. You can also use the TARGETS command to
-  see which enemies are lurking about (see the help on TARGETS and
-  LIST).
-- Don't make a habit of sitting next to stars; photon torpedoes can
-  turn them into novas, which are extremely destructive. Conversely,
-  if you notice an enemy ship or base adjacent to a star, take
-  advantage of the situation!
-- One sure way to locate enemy ships is to watch for newly captured
-  enemy planets by using the PLANETS or LIST command.
-- In general, don't waste photon torpedoes battering at a target with
-  85-100 percent shields. The chances are good that they will just be
-  deflected harmlessly away. Use your phasers to weaken the shields,
-  then use torpedoes to finish him off. This is especially true when
-  attempting to destroy an enemy starbase.
-  Use the SET command to personalize the output to your. own tastes.
+- If the output starts piling up in the middle of a battle, type ^O (CTL-O). None of your commands will be executed unt.il output is finished, so it's sometimes better just to ignore the hit messages so your attack or run commands can be executed immediately.
 
+- Use multiple commands per line (separate commands with /). Once you're in a danger area, things can happen faster than you can react to them. Plan your. action ahead of time, before you enter a danger area.
 
-  The input and output settings will be preserved and used the next
-  time you enter MegaWars. They are initially preset according to
-  your rank; generally the lower your rank, the longer (and more
-  English-like) the message output.
-- To always see the range and direction of any object listed (in hit
-  messages, output from the LIST command, etc.), SET OCDEF BOTH. (The
-  range is the magnitude of either delta v or delta h, whichever is
-  larger.)
+- If some unexpected action happens, such as an enemy finding you, and you have several stacked commands (either from a multiple command line or typing ahead), type ^C to abort all stacked commands (especially if it involves time consuming commands such as BUILD, or commands that generate a lot of output, such as SCAN). You can then proceed to remedy the situation by giving your unexpected visitor a good beating.
+
+- If you're on a slow terminal, use computed coordinates, and move around a lot if you're fighting someone on a fast terminal. Computed coordinates are the primary advantage slow terminals have over the fast ones (computed coordinates give slow terminals a fantastic tactical advantage over fast terminals when used properly).
+
+- Use <ESC> to repeat commands (see the help on ESCAPE). It's just a convenience when building planets, etc., but in battle, and combined with multiple commands per line and/or computed coordinates (such as PH C B/M R 1 0 or TO 1 32 45), it can make or break your career as a starship captain.
+
+- Don't get within range of an enemy base, unless you enjoy being pounded into rubble. You can kill a base just as well from one sector outside it's range (use the WARNING keyword on SCAN to see the the range of an enemy base).
+
+- Don't waste your energy and torpedoes firing at friendly ships and bases. If you're not sure if it's friendly or not, type HELP SCAN for a list of what's what. You can also use the TARGETS command to see which enemies are lurking about (see the help on TARGETS and LIST).
+
+- Don't make a habit of sitting next to stars; photon torpedoes can turn them into novas, which are extremely destructive. Conversely, if you notice an enemy ship or base adjacent to a star, take advantage of the situation!
+
+- One sure way to locate enemy ships is to watch for newly captured enemy planets by using the PLANETS or LIST command.
+
+- In general, don't waste photon torpedoes battering at a target with 85-100 percent shields. The chances are good that they will just be deflected harmlessly away. Use your phasers to weaken the shields, then use torpedoes to finish him off. This is especially true when attempting to destroy an enemy starbase.
+
+- Use the SET command to personalize the output to your. own tastes. The input and output settings will be preserved and used the next time you enter MegaWars. They are initially preset according to your rank; generally the lower your rank, the longer (and more English-like) the message output.
+
+- To always see the range and direction of any object listed (in hit messages, output from the LIST command, etc.), SET OCDEF BOTH. (The range is the magnitude of either delta v or delta h, whichever is larger.)
 
 
 ### 8.1 PAUSES - Commands That Take Real Time
 
+Many of the commands are designed to take a certain amount of real time. This is done to help equalize the game when there are different speed terminals and different speed typists in the game. Some commands take a constant amount of time, and some are based on the speed of the slowest terminal in the game.
 
-Many of the commands are designed to take a certain amount of real
-time. This is done to help equalize the game when there are different
-speed terminals and different speed typists in the game. Some
-commands take a constant amount of time, and some are based on the
-speed of the slowest terminal in the game.
+| Command  | Duration    |
+|----------|-------------|
+| BUILD    | 5–7 seconds |
+| CAPTURE  | 5 seconds after all enemy builds are removed |
+| DOCK     | 2–4 seconds |
+| IMPULSE  | 2–4 seconds |
+| MOVE     | 2–4 seconds |
+| REPAIR   | `(0.08 × repair size)` seconds (`× 0.5` if docked) |
 
-BUILD     5 to 7 seconds
-CAPTURE	  5 seconds after all enemy builds are removed
-DOCK      2 to 4 seconds
-IMPULSE   2 to 4 seconds
-MOVE      2 to 4 seconds
-REPAIR    (0.08 * repair size) seconds (* O.5 if docked)
+You have two phaser banks, each of which must be cooled off after it's fired before it can be used again. Each phaser bank takes three to six seconds plus the amount of phaser damage / 100 to cool off. For instance, if there was a 300 baud terminal in the game, and your phasers had 200 units of damage, each of your phaser banks would take 6 + 2 = 8 seconds to cool off after being fired. Therefore, you could fire once every four seconds, or twic.e every eight seconds.
 
-You have two phaser banks, each of which must be cooled off after it's
-fired before it can be used again. Each phaser bank takes three to
-six seconds plus the amount of phaser damage / 100 to cool off. For
-instance, if there was a 300 baud terminal in the game, and your
-phasers had 200 units of damage, each of your phaser banks would take
-6 + 2 = 8 seconds to cool off after being fired. Therefore, you could
-fire once every four seconds, or twic.e every eight seconds.
-
-After each burst of torpedoes the tubes must be reloaded before being
-used again. It takes two to four seconds plus the amount of torpedo
-tube damage / 100 to load a torpedo. For instance, if there was a 300
-baud terminal in the game, your torpedoes had 200 units of damage, and
-you had just fired three torpedoes, it would take 3 * (4 + 2) = 18
-seconds before you could fire torpedoes again.
+After each burst of torpedoes the tubes must be reloaded before being used again. It takes two to four seconds plus the amount of torpedo tube damage / 100 to load a torpedo. For instance, if there was a 300 baud terminal in the game, your torpedoes had 200 units of damage, and you had just fired three torpedoes, it would take 3 * (4 + 2) = 18 seconds before you could fire torpedoes again.
 
 
 ### 8.2 Use Of CONTROL C
 
+If you're in command input wait (MegaWars is waiting for you to type a command), typing a ^C will abort the game and return you to menu mode. When you abort the game in this manner, your ship is returned to the pool of available ships. You will be able to continue unless a new player has taken your ship or someone has moved into the spot you occupied.
 
-If you're in command input wait (MegaWars is waiting for you to type a
-command), typing a ^C will abort the game and return you to menu mode.
-When you abort the game in this manner, your ship is returned to the
-pool of available ships. You will be able to continue unless a new
+If you're not in a command input wait state when you type ^C, any stacked commands (commands that you typed in ahead of time that haven't been executed yet) will be aborted, and a series of bells will be output.
 
-
-player has taken your ship or someone has moved into the spot you
-occupied.
-
-If you're not in a command input wait state when you type ^C,
-any stacked commands (commands that you typed in ahead of time that
-haven't been executed yet) will be aborted, and a series of bells will
-be output.
-
-NOTE: A ship under RED alert conditions cannot be returned to the
-monitor level except by using the QUIT command.
+NOTE: A ship under RED alert conditions cannot be returned to the monitor level except by using the QUIT command.
 
 
 ### 8.3 VOID
 
+The Great Void is the result of Acheron activity. The Acherons, in their quest for universal stasis of the entropy, are methodically destroying everything which they encounter. It is rumored that the Acherons have retained some bases within the Void, but they are rendered invisible by a mysterious device. The Acheron vessels themselves carry a similar device which is capable of rendering them invisible at times. When using this device, the Acheron ship will not appear on the SCan display, and the computers are unable to lock on for a phaser fire. The only known defense is either use of a Stargate, which the Acherons avoid, or firing a Photon Torpedo through the Acheron's sector.
 
-The Great Void is the result of Acheron activity. The Acherons, in
-their quest for universal stasis of the entropy, are methodically
-destroying everything which they encounter. It is rumored that the
-Acherons have retained some bases within the Void, but they are
-rendered invisible by a mysterious device. The Acheron vessels
-themselves carry a similar device which is capable of rendering them
-invisible at times. When using this device, the Acheron ship will not
-appear on the SCan display, and the computers are unable to lock on
-for a phaser fire. The only known defense is either use of a
-Stargate, which the Acherons avoid, or firing a Photon Torpedo through
-the Acheron's sector.
+Due to the unknown dangers which may lurk inside, all vessels are equipped to prohibit entry into the Void.
 
-Due to the unknown dangers which may lurk inside, all vessels are
-equipped to prohibit entry into the Void.
-
-There have been reports that the Acheron's device has been found and
-been made to function. If you find it, use it wisely!
+There have been reports that the Acheron's device has been found and been made to function. If you find it, use it wisely!
