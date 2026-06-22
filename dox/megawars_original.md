@@ -554,7 +554,8 @@ The following conventions are used in the detailed descriptions:
 
 List various BASE information 
 
-Syntax: BAses [(keywords)]
+
+**Syntax:** BAses [(keywords)]
 
 List location and shield percent of friendly bases; location of known
 enemy bases; or count of bases of either side within a specified
@@ -583,7 +584,7 @@ BA 34 26    List the location and shield percent of friendly base at 34-26
 
 BUILD fortifications on a captured planet
 
-Syntax: BUild [Absolute|Relative] <vpos> <hpos>
+**Syntax:** BUild [Absolute|Relative] \<vpos\> \<hpos\>
 
 A fortified planet hits harder and is more resistant to destruction by
 the enemy. A planet can normally be built up to 4 times. As your
@@ -594,9 +595,9 @@ only 10 starbases can be functional per team at any one time.
 #### Examples
 
 ```text
-BU 32 12     Build the planet at sector 32-12.
-BU A 32 12   Equivalent to "BU 32 12"
-BU R 1 1     Build the planet at sector 32-12, if your present location is 31-11.
+BU 32 12    Build the planet at sector 32-12.
+BU A 32 12  Equivalent to "BU 32 12"
+BU R 1 1    Build the planet at sector 32-12, if your present location is 31-11.
 ```
 
 ### 7.3 CAPTURE
@@ -604,12 +605,7 @@ BU R 1 1     Build the planet at sector 32-12, if your present location is 31-11
 
 CAPTURE a neutral or enemy planet
 
-**Syntax**
-
-```text
-CApture [Absolute!Relative] <vpos> (hpos>
-```
-
+**Syntax** CApture [Absolute|Relative] \<vpos\> \<hpos\>
 
 At the start of the game, all planets are neutral (they fire at
 everyone!).  Once captured by either side, they fire only at enemy
@@ -621,12 +617,11 @@ present.  Also, 50 units of ship energy are lost for each build.
 
 #### Examples
 
-
-CA 12 32     Capture planet at 12-32.
-CA A 12 32   Equivalent to "CA 12 32".
-CA R 1 1     Capture planet at sector 12-32, if your present
-             location is 11-31.
-
+```text
+CA 12 32    Capture planet at 12-32.
+CA A 12 32  Equivalent to "CA 12 32".
+CA R 1 1    Capture planet at sector 12-32, if your present location is 11-31.
+```
 
 
 ### 7.4 CHRONICLES
@@ -634,11 +629,7 @@ CA R 1 1     Capture planet at sector 12-32, if your present
 
 Display the Chronicles of past MegaWars games
 
-**Syntax**
-
-```text
-Chronicles
-```
+**Syntax** Chronicles
 
 
 The summarized results of each MegaWars game is recorded in the
@@ -655,11 +646,7 @@ available only in the Pre-game.
 
 DAMAGE report
 
-**Syntax**
-
-```text
-DAmages [<device names)]
-```
+**Syntax** DAmages [\<device names\>]
 
 
 List damaged ship devices and the amount of damage to each.  The
@@ -671,12 +658,11 @@ only be reduced by the DOCK command.
 
 #### Examples
 
-
-DA           List all damaged devices and their current damages.
-DA SH T      List damages for SHields and Torpedo tubes.
-DA PH RA C   List damages for PHasers, sub-space RAdio, and
-             Computer.
-
+```text
+DA          List all damaged devices and their current damages.
+DA SH T     List damages for SHields and Torpedo tubes.
+DA PH RA C  List damages for PHasers, sub-space RAdio, and Computer.
+```
 
 ### 7.6 DOCK
 
