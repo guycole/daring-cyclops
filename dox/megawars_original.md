@@ -557,15 +557,7 @@ List various BASE information
 
 **Syntax:** BAses [(keywords)]
 
-List location and shield percent of friendly bases; location of known
-enemy bases; or count of bases of either side within a specified
-range or the entire galaxy. The default range is the entire galaxy,
-and the default side is friendly bases only. See the help for LIST
-for more information and the complete set of keywords that can be used
-to modify BASES output. There can be a maximum of 10 Bases per team
-at any one time.  Planets may be BUILT (fortified) four times and then
-the fifth BUILD will turn the planet into a BASE (if your team has
-less than 10 bases).
+List location and shield percent of friendly bases; location of known enemy bases; or count of bases of either side within a specified range or the entire galaxy. The default range is the entire galaxy, and the default side is friendly bases only. See the help for LIST for more information and the complete set of keywords that can be used to modify BASES output. There can be a maximum of 10 Bases per team at any one time.  Planets may be BUILT (fortified) four times and then the fifth BUILD will turn the planet into a BASE (if your team has less than 10 bases).
 
 #### Examples
 
@@ -586,11 +578,7 @@ BUILD fortifications on a captured planet
 
 **Syntax:** BUild [Absolute|Relative] \<vpos\> \<hpos\>
 
-A fortified planet hits harder and is more resistant to destruction by
-the enemy. A planet can normally be built up to 4 times. As your
-team's starbases are destroyed by enemy action, a fifth build will
-complete the construction of a new starbase on the planet. Again,
-only 10 starbases can be functional per team at any one time.
+A fortified planet hits harder and is more resistant to destruction by the enemy. A planet can normally be built up to 4 times. As your team's starbases are destroyed by enemy action, a fifth build will complete the construction of a new starbase on the planet. Again, only 10 starbases can be functional per team at any one time.
 
 #### Examples
 
@@ -607,13 +595,7 @@ CAPTURE a neutral or enemy planet
 
 **Syntax** CApture [Absolute|Relative] \<vpos\> \<hpos\>
 
-At the start of the game, all planets are neutral (they fire at
-everyone!).  Once captured by either side, they fire only at enemy
-ships, and can be DOCKed at to refuel and rearm, just like a base
-(except a planet can only supply half the resources that a base can).
-Enemy planets can also be captured. When capturing an enemy planet, 1
-second is added to the normal pause time of 5 seconds for each BUILD
-present.  Also, 50 units of ship energy are lost for each build.
+At the start of the game, all planets are neutral (they fire at everyone!).  Once captured by either side, they fire only at enemy ships, and can be DOCKed at to refuel and rearm, just like a base (except a planet can only supply half the resources that a base can). Enemy planets can also be captured. When capturing an enemy planet, 1 second is added to the normal pause time of 5 seconds for each BUILD present.  Also, 50 units of ship energy are lost for each build.
 
 #### Examples
 
@@ -632,13 +614,7 @@ Display the Chronicles of past MegaWars games
 **Syntax** Chronicles
 
 
-The summarized results of each MegaWars game is recorded in the
-Chronicles. This command will display the results of the most recent
-game first, giving the start and end times, the points scored by the
-Coalition and Kryon forces, the number of ships each side used, and
-the highest scoring player in the game. You may stop the display at
-any time by entering either control-C or control-P. This command is
-available only in the Pre-game.
+The summarized results of each MegaWars game is recorded in the Chronicles. This command will display the results of the most recent game first, giving the start and end times, the points scored by the Coalition and Kryon forces, the number of ships each side used, and the highest scoring player in the game. You may stop the display at any time by entering either control-C or control-P. This command is available only in the Pre-game.
 
 
 ### 7.5 DAMAGES
@@ -649,12 +625,7 @@ DAMAGE report
 **Syntax** DAmages [\<device names\>]
 
 
-List damaged ship devices and the amount of damage to each.  The
-condition of all or just selected devices may be examined.  The damage
-command lists DEVICE DAMAGE only; it does not report total ship
-damage as shown with the STATUS command. A distinction is that DEVICE
-DAMAGE may be reduced by the REPAIR command, while ship damage can
-only be reduced by the DOCK command.
+List damaged ship devices and the amount of damage to each.  The condition of all or just selected devices may be examined.  The damage command lists DEVICE DAMAGE only; it does not report total ship damage as shown with the STATUS command. A distinction is that DEVICE DAMAGE may be reduced by the REPAIR command, while ship damage can only be reduced by the DOCK command.
 
 #### Examples
 
@@ -672,21 +643,14 @@ DOCK at a friendly base, planet, or flagship
 **Syntax** DOck [Status [\<device names\>]]
 
 
-
-Refuel, repair, and rearm your ship, and set your ship's condition to
-green.	While docked, any repairs are accelerated, and you have an
-"infinite" supply of torpedoes.  If you have no damages and are
-completely refueled and rearmed, DOCKing will have no effect on your
-ship. A STATUS command string can be appended to a DOCK order.  The
-following table lists the maximum resources available per move when
-DOCKing at a base or planet:
+Refuel, repair, and rearm your ship, and set your ship's condition to green.	While docked, any repairs are accelerated, and you have an "infinite" supply of torpedoes.  If you have no damages and are completely refueled and rearmed, DOCKing will have no effect on your ship. A STATUS command string can be appended to a DOCK order.  The following table lists the maximum resources available per move when DOCKing at a base or planet:
 
   | Resource                     | Base  | Planet |
   |------------------------------|------:|-------:|
   | Ship Energy                  | +1000 | +500   |
   | Shield Energy                | +500  | +250   |
-  | Photon Torpedoes             | +10   | +5.    |
-  | Life Support Reserves        | +5    | +5.    |
+  | Photon Torpedoes             | +10   | +5     |
+  | Life Support Reserves        | +5    | +5     |
   | Ship Damage                  | -100  | -50    |
   | Ship Damage (Already Docked) | -200  | -100   |
 
@@ -703,71 +667,46 @@ DO ST SH T    Dock, show ship's shield strength and number of torpedoes on board
 
 Drop a mine
 
-**Syntax**
-
-```text
-DRop [Absolute!Relative] <vpos> <hpos>
-```
+**Syntax** DRop [Absolute|Relative] \<vpos\> \<hpos\>
 
 
-The DRop command moves your Miner ship under Impulse drive to the
-given new position and leaves a Photon Mine in its wake (at the old
-location).
+The DRop command moves your Miner ship under Impulse drive to the given new position and leaves a Photon Mine in its wake (at the old location).
 
-Photon Mines may be dropped by a Miner-class ship by using the Drop
-command.  They will appear in the SCan display as #. Once a mine has
-been dropped, any ship, other than a miner, which moves into or
-through the mine's sector will receive a hit which is the equivalent
-of a Photon Torpedo, regardless of the team which dropped it. When a
-Miner hits a mine, the mine is deactivated and taken aboard.
+Photon Mines may be dropped by a Miner-class ship by using the Drop command.  They will appear in the SCan display as #. Once a mine has been dropped, any ship, other than a miner, which moves into or through the mine's sector will receive a hit which is the equivalent of a Photon Torpedo, regardless of the team which dropped it. When a Miner hits a mine, the mine is deactivated and taken aboard.
 
 #### Examples
 
-
-DR 37 45    Move to sector 37-45 and leave a mine at old location.
-DR A 37 45  Equivalent to "DR 37 45".
-DR R 1 -1   Move to sector 37-45, if your ship's present location
-            is 36-46.
-
+```text
+DR 37 45   Move to sector 37-45 and leave a mine at old location.
+DR A 37 45 Equivalent to "DR 37 45".
+DR R 1 -1  Move to sector 37-45, if your ship's present location is 36-46.
+```
 
 ### 7.8 ENERGY
 
 
 Transfer ENERGY to a friendly ship
 
-**Syntax**
-
-```text
-Energy <ship name> <units of energy to transfer>
-```
+**Syntax** Energy \<ship name\> \<units of energy to transfer\>
 
 
-The receiving ship must be located in an adjacent sector. 10 percent
-
-
-of the energy transferred will be lost due to broadcast dissipation.
-If you attempt to send more energy than the other ship can store (ie
-5000 units), the transfer will automatically be reduced to the maximum
+The receiving ship must be located in an adjacent sector. 10 percent of the energy transferred will be lost due to broadcast dissipation. If you attempt to send more energy than the other ship can store (i.e. 5000 units), the transfer will automatically be reduced to the maximum
 possible.
 
 Example:
 
-E I 1000  Transfer 1,000 units of energy to the Intrepid. The
-          Intrepid will receive 900 units of-energy.
+```text
+E I 1000  Transfer 1,000 units of energy to the Intrepid. The Intrepid will receive 900 units of-energy.
 
           (Ten percent will be lost during the transfer.)
-
+```
 
 ### 7.9 EXIT
 
 
 EXIT the game
 
-**Syntax**
-
-```text
-EXit
-```
+**Syntax** EXit
 
 
 Exit the game before normal end and return to Calling Menu.
@@ -776,21 +715,16 @@ Exit the game before normal end and return to Calling Menu.
 ### 7.10 GAte
 
 
-Use a Stargate Syntax: GAte
+Use a Stargate 
 
-The GAte command allows you to use a Stargate to rapidly move to
-another Stargate across several sectors. You must be adjacent to a
-Stargate (X in the SCan output) and your shields must be down. The
-receiving Stargate chosen depends on the relative location of your
-ship to the adjacent Stargate. In addition, the receiving gate must
-be within 35 sectors, and both gates must have sufficient energy to
-effect the transfer. Transferring will deplete both gates' energy
-supplies according to your ship's class.
+**Syntax** GAte
+
+The GAte command allows you to use a Stargate to rapidly move to another Stargate across several sectors. You must be adjacent to a Stargate (X in the SCan output) and your shields must be down. The receiving Stargate chosen depends on the relative location of your ship to the adjacent Stargate. In addition, the receiving gate must be within 35 sectors, and both gates must have sufficient energy to effect the transfer. Transferring will deplete both gates energy supplies according to your ship's class.
 
 
 #### Examples
 
-
+```text
 Consider. the following diagram:
 
 .....B...   .......    'X' = Stargates
@@ -802,30 +736,17 @@ Consider. the following diagram:
 ...................          B    Arrive at C.
 ...........X.......          D    Arrive at E
 ............E......          F    Arrive at G
-
+```
 
 ### 7.11 GRIPE
 
 
 Suhmit a GRIPE
 
-**Syntax**
-
-```text
-Gripe
-```
+**Syntax** Gripe
 
 
-Add a comment, bug report, suggestion, etc. to the top of the file
-that wi11 be forwarded to the MegaWars GamesMaster. Type in your
-comments, then ^Z (CTL-Z) to exit and continue the game, or ^C (CTL-C)
-to abort and not send the gripe. Each gripe is preceded with a header
-that includes the version number, date, time, ship name, user name,
-TTY speed, PPN, TTY number, job number, and whether or not Acherons
-and/or black holes are included in the game. Unless you are currently
-under red alert, GRIPE will protect you from enemy attack. Gripes are
-appreciated and will help us to improve the game. However,
-individuals replies cannot be answered.
+Add a comment, bug report, suggestion, etc. to the top of the file that wi11 be forwarded to the MegaWars GamesMaster. Type in your comments, then ^Z (CTL-Z) to exit and continue the game, or ^C (CTL-C) to abort and not send the gripe. Each gripe is preceded with a header that includes the version number, date, time, ship name, user name, TTY speed, PPN, TTY number, job number, and whether or not Acherons and/or black holes are included in the game. Unless you are currently under red alert, GRIPE will protect you from enemy attack. Gripes are appreciated and will help us to improve the game. However, individuals replies cannot be answered.
 
 
 ### 7.12 HELP
