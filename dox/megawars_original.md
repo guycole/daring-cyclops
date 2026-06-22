@@ -959,12 +959,12 @@ Categories in POINTS breakdown:
 - Planets captured (100 points each).
 - Bases built (1000 points each).
 - Acherons damaged/destroyed.
-- Stars destroyed (-SO points each).
+- Stars destroyed (-5O points each).
 - Planets destroyed (-100 points each).
 - Total points scored.
 - Total number of ships commissioned.
 - Total score / number of players.
-- Total score/ stardates. Examples:
+- Total score / stardates. Examples:
 
 #### Examples
 
@@ -998,7 +998,7 @@ RA U W         Allow radio messages sent by the Wolf to be received.
 
 REPAIR device damage
 
-**Syntax** REpair [<units)]
+**Syntax** REpair [\<units\>]
 
 Repair damaged ship devices. If a ship suffers a critical hit to a device, REPAIR can be used to restore the device to full (or partial) working order. A REPAIR removes the specified units of damage from each damaged device, in addition to the normal repair rate of 30 units per turn. If the ship is DOCKED, the pause time for the specified REPAIR is reduced by half of that needed while in flight. If the repair size is not specified, REPAIR defaults to a 4 second repair (50 units + 50 more if docked). REPAIR does NOT reduce the SHIP damage; it only reduces device damage. (See Section 7.5 also).
 
@@ -1045,101 +1045,81 @@ SC 4            Scan universe within four sectors.
 SC 4 4          Equivalent to "SC 4".
 SC 2 8          Scan up to 5 rows and 17 columns, centered on the present ship location.
 SC U 4 7        Show only upper half of normal "SC 4 7" scan.
-SC C -5 -5      Scan the region bounded by the present ship location
-                and the location (-5,-5) sectors away (puts ship in upper right corner of the scan).
+SC C -5 -5      Scan the region bounded by the present ship location and the 
+                location (-5,-5) sectors away (puts ship in upper right 
+                corner of the scan).
 SC W            Same as "SC", plus shows danger zones around enemy bases and planets.
 ```
 
-### 7.25 SET
 
+### 7.25 SET
 
 SET input and output parameters
 
-**Syntax**
+**Syntax** SEt \<keyword\> \<value\>
 
 ```text
-SEt <keyword) <value)
+Keyword   Value     Description
+-------   -----     -----------
+Name	    name      Change name (shows in USERS).
+Output    Long      Default. Use longest output format.
+          Medium    Use medium output format.
+          Short     Use short (cryptic) output format.
+Scan	    Long      Default. Use long format scans.
+          Short     Use 1 character symbols instead of 2.
+Prompt    Normal    Default. Use "COMMAND: " prompt.
+          Informative Use "> " for prompt.  
+            Precede the ">" with:
+              S if shields are down or < 10 percent.
+              E if ship energy < 1000 (yellow alert).
+              D if ship damage > 2000.
+              nL if life support is critically damaged (n stardates of reserves).
+OCdef     Absolute  Default. Display all coordinates in absolute format (vpos-hpos).
+          Relative  Display coordinates relative to your location (dv,dh).
+          Both      Display coordinates in both absolute and relative form.
+Icdef     Absolute  Default. All input coordinates default to absolute.
+          Relative  Input coordinates default to relative.
+SHip      SCcout
+          FIghter
+          Miner
+          FLagship
+            The SEt SHip command allows the player to change ship types 
+            without leaving the current game. The rules are:
+              1.  Rank must be a Lieutenant, Captain or Admiral.
+              2.  Current ship must be DOCKED
+              3.  Must have commanded current ship for at least 15 minutes 
+                  (real time) in this game.
+              4.  SET SHIP will automatically DOCK ship and report STATUS 
+                  of new ship.
+              5.  A SET SHIP command will reduce the player's points by 10 percent, 
+                  but will not affect the team's point totals.
 ```
-
-
-Keyword Value   Description
-------- -----   -----------
-Name	name    Change name (shows in USERS).
-Output  Long    Default. Use longest output format.
-        Medium  Use medium output format.
-        Short   Use short (cryptic) output format.
-Scan	Long    Default. Use long format scans.
-        Short   Use 1 character symbols instead of 2.
-Prompt  Normal  Default. Use "COMMAND: " prompt.
-        Informative Use "> " for prompt.  Precede the ">" with:
-                S if shields are down or < 10 percent.
-                E if ship energy < 1000 (yellow alert).
-                D if ship damage > 2000.
-                nL if life support is critically damaged (n stardates
-                of reserves).
-OCdef   Absolute  Default. Display all coordinates in absolute format
-                  (vpos-hpos).
-        Relative  Display coordinates relative to your location
-                  (dv,dh).
-        Both      Display coordinates in both absolute and relative
-                  form.
-Icdef   Absolute  Default. All input coordinates default to absolute.
-        Relative  Input coordinates default to relative.
-
-SHip    SCcout
-        FIghter
-        Miner
-        FLagship
-                  The SEt SHip command allows the player to change ship
-                  types without leaving the current game. The rules
-                  are:
-                  1. Rank must be a Lieutenant, Captain or Admiral.
-                  2. Current ship must be DOCKED
-                  3. Must have commanded current ship for at least
-
-
-
-                     fifteen minutes (real time) in this game.
-                  4. SET SHIP will automatically DOCK ship and report
-                     STATUS of new ship.
-                  5. A SET SHIP c.ommand will reduce the player's points
-                     by 10 percent, but will not affect the team's point
-                     totals.
 
 #### Examples
 
-
+```text
 SE PR I    Switch to informative prompt.
 SE OU S    Set output format to short.
 SE N THOR  Change your name in USERS to THOR.
+```
 
 
 ### 7.26 SHIELDS
 
-
 SHIELD control
 
-**Syntax**
+**Syntax** SHields Up|Down or SHields Transfer \<energy\>
 
-```text
-SHields Up|Down or SHields Transfer <energy>
-```
-
-
-Raise or lower ship shields, or transfer energy between ship and
-shield energy reserves. Raising shields consumes 100 units of ship
-energy, lowering them or transfering energy is "free".  NOTE: Shield
-condition is displayed as: +n percent for shields up, n percent of
-full strength, or -n percent, for shields down, n percent of full
-strength.
+Raise or lower ship shields, or transfer energy between ship and shield energy reserves. Raising shields consumes 100 units of ship energy, lowering them or transfering energy is "free".  NOTE: Shield condition is displayed as: +n percent for shields up, n percent of full strength, or -n percent, for shields down, n percent of full strength.
 
 #### Examples
 
-
-SH U  Raise shields.
-SH D  Lower shields.
-SH T 500  Transfer 500 units of energy TO shields
+```text
+SH U       Raise shields.
+SH D       Lower shields.
+SH T 500   Transfer 500 units of energy TO shields
 SH T -500  Transfer 500 units of energy FROM shields
+```
 
 
 ### 7.27 SRSCAN
