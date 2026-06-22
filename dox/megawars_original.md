@@ -456,7 +456,7 @@ The help on individual commands may be read from a help file.	The legal commands
 
 ### 4.1 RELATIVE, ABSOLUTE Or COMPUTED COORDINATES
 
-- Many commands require a coordinate as an argument (PHASERS, TORPEDOES, CAPTURE, BUILD, etc.). The required coordinate(s) can be specified in one of three ways:
+Many commands require a coordinate as an argument (PHASERS, TORPEDOES, CAPTURE, BUILD, etc.). The required coordinate(s) can be specified in one of three ways:
 
   Absolute - the default coordinate input type, which is simply an absolute vertical position followed by an absolute horizontal position.  The coordinate may be preceded by keyword ABSOLUTE, but this isn't necessary unless the default coordinate input type has been changed by SET ICDEF RELATIVE.
 
@@ -621,7 +621,6 @@ DA PH RA C  List damages for PHasers, sub-space RAdio, and Computer.
 
 ### 7.6 DOCK
 
-
 DOCK at a friendly base, planet, or flagship
 
 **Syntax** DOck [Status [\<device names\>]]
@@ -780,9 +779,9 @@ In addition to the Honor Roll, MegaWars maintains the record of the all-time hig
 
 ### 7.15 IMPULSE
 
-**Syntax** Impulse [Absolute|Relative|Computed] \<vpos\> \<hpos\>
-
 Move using IMPULSE engines
+
+**Syntax** Impulse [Absolute|Relative|Computed] \<vpos\> \<hpos\>
 
 Move one sector vertically, horizontally, or diagonally (equivalent to warp factor one). Ship condition changes to green.
 
@@ -880,147 +879,79 @@ LI CL ST       List the closest Stargate.
 
 ### 7.17 MOVE
 
-
 MOVE using warp drive
 
-**Syntax**
+**Syntax** Move [Absolute|Relative|Computed] \<vpos\> \<hpos\>
 
-```text
-Move [Absolute|Relative|Computed] <vpos> <hpos>
-```
-
-
-Maximum speed is warp factor six, which will move you six sectors per
-turn.  Maximum SAFE speed is warp factor four; warp factors five and
-six risk potential warp engine damage. Energy consumption per move is
-
-
-proportional to the square of the warp factor.  If the ship's shields
-are up during this movement, the energy consumption is doubled.
-Moving changes your ship's condition to green.
+Maximum speed is warp factor six, which will move you six sectors per turn.  Maximum SAFE speed is warp factor four; warp factors five and six risk potential warp engine damage. Energy consumption per move is proportional to the square of the warp factor.  If the ship's shields are up during this movement, the energy consumption is doubled. Moving changes your ship's condition to green.
 
 #### Examples
 
-
+```text
 M 37 45        Move to sector 37-45.
 MA 37 45       Equivalent to "M 37 45".
 MR 4 -5 M C W  "Ram" the Wolf. No actual collision occurs, but your
                ship ends up adjacent to the Wolf's current position.
+```
 
 
 ### 7.18 NEWS
 
-
 Display the NEWS file
 
-**Syntax**
+**Syntax** NEws
 
-```text
-NEws
-```
-
-
-Display the file which contains information on any new features,
-enhancements, bug fixes, etc for. each version of MegaWar.
+Display the file which contains information on any new features, enhancements, bug fixes, etc for. each version of MegaWar.
 
 
 ### 7.19 PHASERS
 
-
 Fire PHASERS at an enemy ship, base, or planet
 
-**Syntax**
+**Syntax** PHasers [Absolute|Relative|Computed] [energy] \<vpos\> \<hpos\>
 
-```text
-PHasers [Absolute|Relative|Computed) [energy] <vpos> <hpos)
-```
-
-
-Phasers must be directed at a specific target, and only one target may
-be specified per command.  Obstacles seemingly in the path of the
-phaser blast are unaffected, since the energy ray is not a
-line-of-sight weapon.  The size of the hit is inversely proportional
-to the distance from the target.  Maximum range is 10 sectors
-vertically, horizontally, or diagonally.  Each phaser blast consumes
-200 units of ship energy, unless a specific amount of energy is given
-(the specified energy must be between SO and 500 units, inclusive).
-The phaser banks have roughly a 5 percent chance of damage with a
-default (200 unit) blast, with the probability of damage reaching
-nearly 65 percent with a maximum (500 unit) blast.  The severity of
-the resulting damage is also dependent on the size of the blast.
-Also, if your ship's shields are up, a high-speed shield control is
-used to quickly lower and then restore the shields during the fire.
-This procedure consumes another 200 units of ship energy. The weapons
-officer on board your ship will cancel all phaser blasts directed
-against friendly ships, bases, or planets.  Firing phasers (or getting
-hit by phasers) puts you on red alert.  NOTE: Although phasers can
-damage enemy planetary installations (BUILDs), they CANNOT destroy the
-
-
-planet itself.
+Phasers must be directed at a specific target, and only one target may be specified per command.  Obstacles seemingly in the path of the phaser blast are unaffected, since the energy ray is not a line-of-sight weapon.  The size of the hit is inversely proportional to the distance from the target.  Maximum range is 10 sectors vertically, horizontally, or diagonally.  Each phaser blast consumes 200 units of ship energy, unless a specific amount of energy is given (the specified energy must be between SO and 500 units, inclusive). The phaser banks have roughly a 5 percent chance of damage with a default (200 unit) blast, with the probability of damage reaching nearly 65 percent with a maximum (500 unit) blast.  The severity of the resulting damage is also dependent on the size of the blast. Also, if your ship's shields are up, a high-speed shield control is used to quickly lower and then restore the shields during the fire. This procedure consumes another 200 units of ship energy. The weapons officer on board your ship will cancel all phaser blasts directed against friendly ships, bases, or planets.  Firing phasers (or getting hit by phasers) puts you on red alert.  NOTE: Although phasers can damage enemy planetary installations (BUILDs), they CANNOT destroy the planet itself.
 
 #### Examples
 
-
+```text
 PH 12 32       Phaser target at sector 12-32.
 PH A 12 32     Equivalent to "PH 12 32".
-PH R 2 -3      Phaser target at sector 12-32, if your location is
-               10-35.
+PH R 2 -3      Phaser target at sector 12-32, if your location is 10-35.
 PH C TRITON    Phaser the Triton (if in range).
-PH CT          Same as PH C TRITON (ship names can be abbreviated to
-               one character).
-PH 300 12 32   Phaser target at sector 12-32, using 300 units of
-               energy.
+PH CT          Same as PH C TRITON (ship names can be abbreviated to one character).
+PH 300 12 32   Phaser target at sector 12-32, using 300 units of energy.
+```
 
 
 ### 7.20 PLANETS
 
-
 List various PLANET information
 
-**Syntax**
+**Syntax** PLanets [\<keywords\>]
 
-```text
-PLanets [<keywords>]
-```
-
-
-List location and number of builds for all known planets, and a
-summary of planets within a specified range or the entire galaxy. The
-default range is 10 sectors, and the default side is every side. See
-the help for LIST for more information and the complete set of
-keywords that can be used to modify PLANETS output.
+List location and number of builds for all known planets, and a summary of planets within a specified range or the entire galaxy. The default range is 10 sectors, and the default side is every side. See the help for LIST for more information and the complete set of keywords that can be used to modify PLANETS output.
 
 #### Examples
 
-
+```text
 PL             List all planets within 10 sectors.
 PL SUM         Give summary of all planets in game.
 PL ALL NEU     List all known neutral planets.
 PL ALL CAP     List all known captured planets.
 PL ALL 20      List all known planets within a radius of 20 sectors.
+```
 
 
 ### 7.21 POINTS
 
-
 List POINTS scored so far this game
 
-**Syntax**
+**Syntax** POints [Me|I|COalition|COlonist|Empire|Kryon|Acheron|All]
 
-```text
-POints [Me|I|COalition|COlonist|Empire|Kryon|Acheron|All]
-```
-
-
-Itemize the current point breakdown. Information can be obtained
-concerning the points scored by your individual ship, your team, the
-opposition, the Acherons, or any combination of the above. If the
-Acheron aliens are not involved in the game, the Acheron keyword will
-be ignored.
+Itemize the current point breakdown. Information can be obtained concerning the points scored by your individual ship, your team, the opposition, the Acherons, or any combination of the above. If the Acheron aliens are not involved in the game, the Acheron keyword will be ignored.
 
 Categories in POINTS breakdown:
-
 
 - Damage to enemies.
 - Enemies destroyed (500 points each).
@@ -1030,7 +961,6 @@ Categories in POINTS breakdown:
 - Acherons damaged/destroyed.
 - Stars destroyed (-SO points each).
 - Planets destroyed (-100 points each).
-
 - Total points scored.
 - Total number of ships commissioned.
 - Total score / number of players.
@@ -1038,94 +968,57 @@ Categories in POINTS breakdown:
 
 #### Examples
 
-
+```text
 PO             List points for your ship.
 PO ME          Equivalent to "PO".
 PO KRY COA     List the score of the two teams.
 PO ALL         List all the scoring information available.
+```
 
 
 ### 7.22 RADIO
 
+Turn sub-space RADIO on or off, or set to ignore or restore communications from individual ships.
 
-Turn sub-space RADIO on or off, or set to ignore or restore
-communications from individual ships.
+**Syntax** RAdio ON|OFf or RAdio Gag|Ungag \<ship name\>
 
-**Syntax**
-
-```text
-RAdio ON|OFf or RAdio Gag|Ungag <ship name>
-```
-
-
-Turn your ship's sub-space radio on or off, thus controlling whether
-or not you'll receive any messages from other ships or your bases; or
-suppress or restore messages originating from specific ships.
+Turn your ship's sub-space radio on or off, thus controlling whether or not you'll receive any messages from other ships or your bases; or suppress or restore messages originating from specific ships.
 
 #### Examples
 
-
+```text
 RA ON          Turn sub-space radio ON.
 RA OFF         Turn sub-space radio OFF.
 RA G R         Suppress all radio messages sent by the RELIANT.
 RA U W         Allow radio messages sent by the Wolf to be received.
+```
 
 
 ### 7.23 REPAIR
 
-
 REPAIR device damage
 
-**Syntax**
+**Syntax** REpair [<units)]
 
-```text
-REpair [<units)]
-```
-
-
-Repair damaged ship devices. If a ship suffers a critical hit to a
-device, REPAIR can be used to restore the device to full (or partial)
-
-
-working order. A REPAIR removes the specified units of damage from
-each damaged device, in addition to the normal repair rate of 30 units
-per turn. If the ship is DOCKED, the pause time for the specified
-REPAIR is reduced by half of that needed while in flight. If the
-repair size is not specified, REPAIR defaults to a 4 second repair (50
-units + 50 more if docked). REPAIR does NOT reduce the SHIP damage;
-it only reduces device damage. (See Section 7.5 also).
+Repair damaged ship devices. If a ship suffers a critical hit to a device, REPAIR can be used to restore the device to full (or partial) working order. A REPAIR removes the specified units of damage from each damaged device, in addition to the normal repair rate of 30 units per turn. If the ship is DOCKED, the pause time for the specified REPAIR is reduced by half of that needed while in flight. If the repair size is not specified, REPAIR defaults to a 4 second repair (50 units + 50 more if docked). REPAIR does NOT reduce the SHIP damage; it only reduces device damage. (See Section 7.5 also).
 
 #### Examples
 
-
+```text
 RE 100	Remove up to 100 units of device damage.
-RE	Same as "RE 100" if DOCKED, else same as "RE 50".
+RE	    Same as "RE 100" if DOCKED, else same as "RE 50".
+```
 
 
 ### 7.24 SCAN
 
-
 Full range SCAN
 
-**Syntax**
+**Syntax** SCan [Up|Down|Right|Left|Corner] [(range)|\<vr\>\<hr\>] [W]
+
+Display a selected portion of the nearby universe. If no range is specified, SCAN defaults to a square scan range of ten sectors from the present ship location. The keywords UP, DOWN, RIGHT, LEFT, and CORNER modify this to include only the part of this original square specified (relative to the ship). The maximum scan range is 10 sectors, and larger specified ranges are reduced to this value. If individual vertical and horizontal ranges are specified, the scanning field will be shaped accordingly. The WARNING keyword, if added to the end of a SCAN command string, will flag the empty sectors within range of an enemy base or planet with !'s instead of .'s. The SCAN symbols and their meanings are:
 
 ```text
-SCan [Up|Down|Right}Left|Corner] [(range)|<vr><hr>] [W]
-```
-
-
-Display a selected portion of the nearby universe. If no range is
-specified, SCAN defaults to a square scan range of ten sectors from
-the present ship location. The keywords UP, DOWN, RIGHT, LEFT, and
-CORNER modify this to include only the part of this original square
-specified (relative to the ship). The maximum scan range is 10
-sectors, and larger specified ranges are reduced to this value. If
-individual vertical and horizontal ranges are specified, the scanning
-field will be shaped accordingly. The WARNING keyword, if added to
-the end of a SCAN command string, will flag the empty sectors within
-range of an enemy base or planet with !'s instead of .'s. The SCAN
-symbols and their meanings are:
-
 L, N, R, S, V   Coalition warships
 D, G, H, T, W   Empire warships
             A   Acheron warship
@@ -1140,26 +1033,22 @@ D, G, H, T, W   Empire warships
             .   Empty sector
             !   Empty sector within range of enemy port
                 (only when using WARNING keyword)
+```
 
 #### Examples
 
-
+```text
 SC              Scan universe within a radius 10 sectors.
 SC 10           Equivalent to "SC".
 SC 13           Equivalent to "SC 10" or "SC".
-
-
 SC 4            Scan universe within four sectors.
 SC 4 4          Equivalent to "SC 4".
-SC 2 8          Scan up to 5 rows and 17 columns, centered on the
-                present ship location.
+SC 2 8          Scan up to 5 rows and 17 columns, centered on the present ship location.
 SC U 4 7        Show only upper half of normal "SC 4 7" scan.
 SC C -5 -5      Scan the region bounded by the present ship location
-                and the location (-5,-5) sectors away (puts ship in
-                upper right corner of the scan).
-SC W            Same as "SC", plus shows danger zones around enemy
-                bases and planets.
-
+                and the location (-5,-5) sectors away (puts ship in upper right corner of the scan).
+SC W            Same as "SC", plus shows danger zones around enemy bases and planets.
+```
 
 ### 7.25 SET
 
