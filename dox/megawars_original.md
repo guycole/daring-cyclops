@@ -44,7 +44,6 @@ MegaWars Commander's Manual
 
 ## 1.0 INTRODUCTION
 
-
 From the dark sister of Algol they came - unprovoked and undaunted in their determination to conquer, enslave and rule. From Algol they attacked and enslaved Perseus, conquered Capella and swept through Andromeda before we saw them. That was 700 years ago. MegaWars began without warning - without any regard for peace or civilization - when they belittled Algol. For 700 years the Kryons have now exported their culture of slavery and dictatorship; and for 700 years we Colonists of the Galaxy have fought and repelled their every thrust.
 
 Some say that they came from the Great Void expelled and chased by the Acherons, an enemy more powerful then even the Kryons dare be. Like the wandering River Styx, the Acherons seek out all matter in their path and empty it into the Great Void. And so MegaWars continues; not with one enemy but with two! The Kryons seek to conquer and enslave all civilizations, but the Acheron, who abhor the very existence of matter, now wander, annihilating all life, friend or foe, atomizing all matter in their path, and attempting to erase not only our universe but our very souls. So be it. We Colonists will fight to the last soul.
@@ -144,7 +143,6 @@ be their starcruisers that whimper across the stars!"
 
 ## 2.O OVERVIEW
 
-
 MegaWars is a real-time space battle game designed to be played by 1 to 10 people. The object of the game is to destroy all enemy bases and ships, and capture all enemy planets before the enemy does the same to you. Each person plays on a separate terminal, and enters the game by selecting the MegaWars menu selection on DISPLAY page HOM-60. Players are free to enter and leave the game as desired, since each has his/her own job and therefore won't interfere with the other players.
 
 Besides the enemy (Coalition or Empire), the following may also be a threat to your well-being.
@@ -155,7 +153,6 @@ Besides the enemy (Coalition or Empire), the following may also be a threat to y
 
 
 ### 2.1 How To Enter MegaWars
-
 
 There are two primary opposing forces in the galaxy -- Colonists (Coalition) and Kryons (Empire). As you enter the game for the first time, you get to choose which side you'll join and you may select from up to four separate games. When you first enter MegaWars, the following menu is displayed. It allows you to examine up to four games and lists each team's points and number of players in that game. If the game is not currently being played, it is listed as "* OPEN *".
 Selections one through three use a standard galaxy map (section 1.1) and selection four provides a totally random galaxy map.
@@ -196,7 +193,6 @@ Assuming your simply press you <ENTER> or <RETURN> key and enter the game you wi
 
 ### 2.2 Ranks
 
-
 There are four ranks of players in MegaWars as follows:
 
 1.  CADET  Cadets are always placed in a trainer class fighter. However, as beginners, they are given increased shield capacity in lieu of phaser power and they carry a lighter photon torpedo. They inflict only 50 percent as much damage as do higher ranking players and their scores are subsequently reduced by 50 percent. Once a cadet has attained a cumulative score of 10,000 points, he/she is promoted to the rank of Lieutenant.
@@ -209,7 +205,6 @@ There are four ranks of players in MegaWars as follows:
 
 
 ### 2.3 Ship Types
-
 
 There are four classes of ships available in MegaWars.
 
@@ -289,7 +284,6 @@ Due to continuous espionage activities, present front-line ships of the Coalitio
 
 ### 2.4 SHIP DEVICES
 
-
 The various devices of a ship are subject to damage. This damage may be due to enemy attack or to overuse. These damages, unlike total ship damage (see ship attributes below), may be repaired while underway. If damage on a device is less than 300 units, its performance is degraded. If damage is 300 er more units, the device is inoperative. A ship possesses the following devices:
 
 1. Warp Engines -- These engines are the normal mode of travel for starships. The maximum speed is warp factor six, with warps five and six risking potential damage to the engines. If warp engines are damaged (less than 300 units) the maximum speed is warp factor three. One warp unit is equivalent to one horizontal or one vertical grid movement. One diagonal movement is equivalent to one horizontal or one vertical grid movement.
@@ -325,7 +319,6 @@ The various devices of a ship are subject to damage. This damage may be due to e
 
 ### 2.5 Ship Attributes
 
-
 In addition to the individual devices discussed above, a newly commissioned ship (or a fully repaired and rearmed older ship) possesses the following attributes:
 
 NOTE: The attributes below may be increased or decreased according to ship type.
@@ -338,7 +331,6 @@ NOTE: The attributes below may be increased or decreased according to ship type.
 
 
 ### 2.6 MegaWars Enemy Categories
-
 
 The galaxy is arranged in a grid of 75 by 75 sectors.  Players can move freely throughout the galaxy in search of enemies, which come in several categories:
 
@@ -355,7 +347,6 @@ The galaxy is arranged in a grid of 75 by 75 sectors.  Players can move freely t
 
 
 ## 3.0 MEGAWARS COMMAND SUMMARY
-
 
 The MegaWars Command Instrument System accepts English-like commands.  For example, if you wished to list all enemy bases in the game, the command "LIST ENEMY BASES" would be typed.  However, when playing the game, all commands can be abbreviated to two characters, and some can be abbreviated to one character (you can use the shortest unambiguous abbreviation). For a list of commands type
 
@@ -465,7 +456,6 @@ The help on individual commands may be read from a help file.	The legal commands
 
 ### 4.1 RELATIVE, ABSOLUTE Or COMPUTED COORDINATES
 
-
 - Many commands require a coordinate as an argument (PHASERS, TORPEDOES, CAPTURE, BUILD, etc.). The required coordinate(s) can be specified in one of three ways:
 
   Absolute - the default coordinate input type, which is simply an absolute vertical position followed by an absolute horizontal position.  The coordinate may be preceded by keyword ABSOLUTE, but this isn't necessary unless the default coordinate input type has been changed by SET ICDEF RELATIVE.
@@ -512,7 +502,6 @@ The SET OUTPUT LONG/MEDIUM/SHORT command controls the length of text output thro
 
 ## 6.0 THE MEGAWARS PRE-GAME FEATURE
 
-
 MegaWars provides a Pre-game feature to allow:
 - New players to view the help file without entering the current game.
 - Experienced players to check the status of a current game before choosing a side and ship.
@@ -533,7 +522,6 @@ can be recognized from the "PG>" command prompt.
 
 ## 7.0 MEGAWARS COMMAND SYNTAX
 
-
 The following conventions are used in the detailed descriptions:
 
 1.  The first line contains, in all uppercase, the keyword that help is being given for.
@@ -551,9 +539,7 @@ The following conventions are used in the detailed descriptions:
 
 ### 7.1 BASES
 
-
 List various BASE information 
-
 
 **Syntax:** BAses [(keywords)]
 
@@ -572,6 +558,7 @@ BA 34 26    List the location and shield percent of friendly base at 34-26
             percent of an out of range enemy base).
 ```
 
+
 ### 7.2 BUILD
 
 BUILD fortifications on a captured planet
@@ -588,8 +575,8 @@ BU A 32 12  Equivalent to "BU 32 12"
 BU R 1 1    Build the planet at sector 32-12, if your present location is 31-11.
 ```
 
-### 7.3 CAPTURE
 
+### 7.3 CAPTURE
 
 CAPTURE a neutral or enemy planet
 
@@ -608,22 +595,18 @@ CA R 1 1    Capture planet at sector 12-32, if your present location is 11-31.
 
 ### 7.4 CHRONICLES
 
-
 Display the Chronicles of past MegaWars games
 
 **Syntax** Chronicles
-
 
 The summarized results of each MegaWars game is recorded in the Chronicles. This command will display the results of the most recent game first, giving the start and end times, the points scored by the Coalition and Kryon forces, the number of ships each side used, and the highest scoring player in the game. You may stop the display at any time by entering either control-C or control-P. This command is available only in the Pre-game.
 
 
 ### 7.5 DAMAGES
 
-
 DAMAGE report
 
 **Syntax** DAmages [\<device names\>]
-
 
 List damaged ship devices and the amount of damage to each.  The condition of all or just selected devices may be examined.  The damage command lists DEVICE DAMAGE only; it does not report total ship damage as shown with the STATUS command. A distinction is that DEVICE DAMAGE may be reduced by the REPAIR command, while ship damage can only be reduced by the DOCK command.
 
@@ -635,13 +618,13 @@ DA SH T     List damages for SHields and Torpedo tubes.
 DA PH RA C  List damages for PHasers, sub-space RAdio, and Computer.
 ```
 
+
 ### 7.6 DOCK
 
 
 DOCK at a friendly base, planet, or flagship
 
 **Syntax** DOck [Status [\<device names\>]]
-
 
 Refuel, repair, and rearm your ship, and set your ship's condition to green.	While docked, any repairs are accelerated, and you have an "infinite" supply of torpedoes.  If you have no damages and are completely refueled and rearmed, DOCKing will have no effect on your ship. A STATUS command string can be appended to a DOCK order.  The following table lists the maximum resources available per move when DOCKing at a base or planet:
 
@@ -659,16 +642,16 @@ Refuel, repair, and rearm your ship, and set your ship's condition to green.	Whi
 ```text
 DO            Dock, no status report.
 DO ST         Dock, show ship's status AFTER docking.
-DO ST SH T    Dock, show ship's shield strength and number of torpedoes on board AFTER docking.
+DO ST SH T    Dock, show ship's shield strength and number of torpedoes 
+              on board AFTER docking.
 ```
 
-### 7.7 DRop
 
+### 7.7 DRop
 
 Drop a mine
 
 **Syntax** DRop [Absolute|Relative] \<vpos\> \<hpos\>
-
 
 The DRop command moves your Miner ship under Impulse drive to the given new position and leaves a Photon Mine in its wake (at the old location).
 
@@ -682,13 +665,12 @@ DR A 37 45 Equivalent to "DR 37 45".
 DR R 1 -1  Move to sector 37-45, if your ship's present location is 36-46.
 ```
 
-### 7.8 ENERGY
 
+### 7.8 ENERGY
 
 Transfer ENERGY to a friendly ship
 
 **Syntax** Energy \<ship name\> \<units of energy to transfer\>
-
 
 The receiving ship must be located in an adjacent sector. 10 percent of the energy transferred will be lost due to broadcast dissipation. If you attempt to send more energy than the other ship can store (i.e. 5000 units), the transfer will automatically be reduced to the maximum
 possible.
@@ -696,31 +678,28 @@ possible.
 Example:
 
 ```text
-E I 1000  Transfer 1,000 units of energy to the Intrepid. The Intrepid will receive 900 units of-energy.
-
+E I 1000  Transfer 1,000 units of energy to the Intrepid. 
+          The Intrepid will receive 900 units of-energy.
           (Ten percent will be lost during the transfer.)
 ```
 
-### 7.9 EXIT
 
+### 7.9 EXIT
 
 EXIT the game
 
 **Syntax** EXit
-
 
 Exit the game before normal end and return to Calling Menu.
 
 
 ### 7.10 GAte
 
-
 Use a Stargate 
 
 **Syntax** GAte
 
 The GAte command allows you to use a Stargate to rapidly move to another Stargate across several sectors. You must be adjacent to a Stargate (X in the SCan output) and your shields must be down. The receiving Stargate chosen depends on the relative location of your ship to the adjacent Stargate. In addition, the receiving gate must be within 35 sectors, and both gates must have sufficient energy to effect the transfer. Transferring will deplete both gates energy supplies according to your ship's class.
-
 
 #### Examples
 
@@ -738,206 +717,165 @@ Consider. the following diagram:
 ............E......          F    Arrive at G
 ```
 
-### 7.11 GRIPE
 
+### 7.11 GRIPE
 
 Suhmit a GRIPE
 
 **Syntax** Gripe
-
 
 Add a comment, bug report, suggestion, etc. to the top of the file that wi11 be forwarded to the MegaWars GamesMaster. Type in your comments, then ^Z (CTL-Z) to exit and continue the game, or ^C (CTL-C) to abort and not send the gripe. Each gripe is preceded with a header that includes the version number, date, time, ship name, user name, TTY speed, PPN, TTY number, job number, and whether or not Acherons and/or black holes are included in the game. Unless you are currently under red alert, GRIPE will protect you from enemy attack. Gripes are appreciated and will help us to improve the game. However, individuals replies cannot be answered.
 
 
 ### 7.12 HELP
 
-
 Give HELP
 
-**Syntax**
+**Syntax** Help [*|\<keywords\>]
 
-```text
-Help [*!<keywords)}
-```
+Give general help information, a list of available commands or a detailed description of a particular command or keyword. Unless you are under red alert, HELP will protect you from enemy attack. The following conventions are used in the detailed descriptions:
 
+- The first line contains, in all uppercase, the keyword that help is being given for.
 
-Give general help information, a list of available commands or a
-detailed description of a particular command or keyword. Unless you
-are under red alert, HELP will protect you from enemy attack. The
-following conventions are used in the detailed descriptions:
-- The first line contains, in all uppercase, the keyword that help is
-  being given for.
-- The syntax line (second line) lists the portion of the keyword
-  required to make it unique in uppercase, and the remainder of the
-  keyword in lower case, followed by any parameters (if the keyword is
-  a command).
+- The syntax line (second line) lists the portion of the keyword required to make it unique in uppercase, and the remainder of the keyword in lower case, followed by any parameters (if the keyword is a command).
 
+- A quantity to be. filled in is lower case and enclosed in <> (angle brackets).
 
-- A quantity to be. filled in is lower case and enclosed in <> (angle
-  brackets).
 - Optional parameters are enclosed in [] (square brackets).
+
 - A choice (either or) is indicated by | (vertical bar).
-- Any parameter that must be typed in literally is started in capital
-  letters and continued in lower case. The upper case letters signal
-  the shortest unambiguous abbreviation (the shortest abbreviation
-  may change slightly, depending on context).
+
+- Any parameter that must be typed in literally is started in capital letters and continued in lower case. The upper case letters signal the shortest unambiguous abbreviation (the shortest abbreviation may change slightly, depending on context).
 
 #### Examples
 
-
+```text
 H          Give general help information.
 H *        List all available commands.
 H H        List this block of text.
 H SH       Give help for the SHIELDS command.
 H HI G     Give some general HINTS and a description of the GRIPE command.
+```
 
 
 ### 7.13 HISTORY
 
-
 Display MegaWars background
 
-**Syntax**
+**Syntax** History
 
-```text
-History
-```
-
-
-This Pre-game command displays a file of background information
-concerning the past history of the Coalition-Kryon conflict. Find out
-why the Colonists and Kryons are battling. Who are the Colonists?
-Where did the Kryon invaders come from? Who are the Acherons and why
-are they so destructive? All this, and more, are found in the
-History. The history of MegaWars at the time of this manual printing
-is in chapter one. Revisions will be placed on-line as appropriate.
+This Pre-game command displays a file of background information concerning the past history of the Coalition-Kryon conflict. Find out why the Colonists and Kryons are battling. Who are the Colonists? Where did the Kryon invaders come from? Who are the Acherons and why are they so destructive? All this, and more, are found in the History. The history of MegaWars at the time of this manual printing is in chapter one. Revisions will be placed on-line as appropriate.
 
 
 ### 7.14 HONOR ROLL
 
-
 Display the current top Colalition and Kryon Captains.
 
-**Syntax**
+**Syntax** HOnorroll
 
-```text
-HOnorroll
-```
+Each time a player leaves a MegaWars game, his/her score is compared to the current Honor Roll.  If the new score is greater than one of the current ten scores for the player's side, it is entered.  The HOnorroll command will display this list.  The side having the greatest score is displayed first. Find out who your competition is. Set your sights on getting to the top!
 
-
-Each time a player leaves a MegaWars game, his/her score is compared
-to the current Honor Roll.  If the new score is greater than one of
-the current ten scores for the player's side, it is entered.  The
-HOnorroll command will display this list.  The side having the
-greatest score is displayed first. Find out who your competition is.
-Set your sights on getting to the top!
-
-In addition to the Honor Roll, MegaWars maintains the record of the
-all-time high, which is displayed on entry to MegaWars.
-
+In addition to the Honor Roll, MegaWars maintains the record of the all-time high, which is displayed on entry to MegaWars.
 
 
 ### 7.15 IMPULSE
 
+**Syntax** Impulse [Absolute|Relative|Computed] \<vpos\> \<hpos\>
 
 Move using IMPULSE engines
 
-Move one sector vertically, horizontally, or diagonally (equivalent to
-warp factor one). Ship condition changes to green.
+Move one sector vertically, horizontally, or diagonally (equivalent to warp factor one). Ship condition changes to green.
 
 #### Examples
 
-
+```text
 I 37 45      Move to sector 37-45.
 I A 37 45    Equivalent to "I 37 45".
 I R l  -1   Move to sector 37-45, if your ship's present location is 36-46.
+```
 
 
 ### 7.16 LIST
 
-
 LIST ship, base, and planet information
 
-**Syntax**
-
-```text
-List [<keywords>]
-```
-
+**Syntax** List [<keywords>]
 
 The following information is available via the LIST command:
--- Name of any ship currently in the game (including the Acheron).
--- Location and shield percent of any friendly ship, or any ship within
-   scan range (10 sectors).
--- Location and shield percent of any friendly base, or any base within
-   range.
--- Location of any known enemy base (any base that has previously been
-   SCANned or LISTed by anyone on your team).
--- Location and number of builds of any known planet, or any planet
-   within range.
-The above information is also available, in whole or in part, through
-the SUMMARY, BASES, PLANETS, and TARGETS commands. Each command has
-its own default range, side (Coalition, Empire, Acheron, Neutral), and
-object (ship, base, planet). LIST (and SUMMARY) include everything
-(infinite range, all sides, all objects) by default. On output, enemy
-objects are flagged with * (star) in column 1 unless the command is TARGETS.
 
-Keywords used with BASES, PLANETS, TARGETS, LIST, and SUMMARY (not all
-keywords are legal for all commands) are:
+- Name of any ship currently in the game (including the Acheron).
 
-ship names     Include only specified ships (several ship names may
-               be given, including Acheron).
-vpos hpos      List only the object at the location vpos-hpos.
-CLosest        List only the closest of the specified objects.
-SHips          Include only ships (Coalition, Empire, or Ac.heron).
-BAses          Include only bases (Coalition or Empire).
-PLanets        Include only planets (Coalition, Empire, or Neutral).
-Stargates      Show location/condition of Stargates (List only).
-POrts          Include only bases and planets. If no side is
+- Location and shield percent of any friendly ship, or any ship within scan range (10 sectors).
 
+- Location and shield percent of any friendly base, or any base within range.
 
-               specified (Coalition, Empire, Neutral, or Captured),
-               include only friendly ports.
-Coalition      Include only Coalition forces.
-Colonist       Same as Coalition.
-Empire         Include only Empire forces.
-Kryon          Same as Empire.
-FRiendly       Include only friendly forces (Coalition or Empire).
-ENemy          Include only enemy forces (Empire or Coalition and Acheron).
-TArgets        Same as enemy.
-NEutral        Include only neutral planets.
-CAptured       Include only captured planets (Coalition or Empire).
-n              Include only objects within n sectors.
-ALL            Include all sides unless a side is explicitly given.
-               Extend the range to infinity unless a range is
-               explicitly given.
-LIst           List individual items. Turn off summary unless
-               command is SUMMARY or the keyword SUMMARY is
-               specified.
-SUmmary        List summary of all selected items. Turn off list
-               unless command is LIST or the keyword LIST is
-               specified.  Extend the range to infinity unless a
-               range is explicitly given.
-And            Used to separate groups or keywords.
-&              Same as AND.
+- Location of any known enemy base (any base that has previously been SCANned or LISTed by anyone on your team).
+
+- Location and number of builds of any known planet, or any planet within range.
+
+The above information is also available, in whole or in part, through the SUMMARY, BASES, PLANETS, and TARGETS commands. Each command has its own default range, side (Coalition, Empire, Acheron, Neutral), and object (ship, base, planet). LIST (and SUMMARY) include everything (infinite range, all sides, all objects) by default. On output, enemy objects are flagged with * (star) in column 1 unless the command is TARGETS.
+
+Keywords used with BASES, PLANETS, TARGETS, LIST, and SUMMARY (not all keywords are legal for all commands) are:
+
+- ship names Include only specified ships (several ship names may be given, including Acheron).
+
+- vpos hpos List only the object at the location vpos-hpos.
+
+- CLosest List only the closest of the specified objects.
+
+- SHips Include only ships (Coalition, Empire, or Acheron).
+
+- BAses Include only bases (Coalition or Empire).
+
+- PLanets Include only planets (Coalition, Empire, or Neutral).
+
+- Stargates Show location/condition of Stargates (List only).
+
+- POrts Include only bases and planets. If no side is specified (Coalition, Empire, Neutral, or Captured), include only friendly ports.
+
+- Coalition Include only Coalition forces.
+
+- Colonist Same as Coalition.
+
+- Empire Include only Empire forces.
+
+- Kryon Same as Empire.
+
+- FRiendly Include only friendly forces (Coalition or Empire).
+
+- ENemy Include only enemy forces (Empire or Coalition and Acheron).
+
+- TArgets Same as enemy.
+
+- NEutral Include only neutral planets.
+
+- CAptured Include only captured planets (Coalition or Empire).
+
+- n Include only objects within n sectors.
+
+- ALL Include all sides unless a side is explicitly given. Extend the range to infinity unless a range is explicitly given.
+
+- LIst List individual items. Turn off summary unless command is SUMMARY or the keyword SUMMARY is specified.
+
+- SUmmary List summary of all selected items. Turn off list unless command is LIST or the keyword LIST is specified.  Extend the range to infinity unless a range is explicitly given.
+
+- And Used to separate groups or keywords.
+
+- & Same as AND.
 
 #### Examples
 
-
-LIST           List all information available on all ships, bases,
-               and planets.
-LIST SUM       List all available info plus a summary of the number
-               of each object in game.
+```text
+LIST           List all information available on all ships, bases, and planets.
+LIST SUM       List all available info plus a summary of the number of each object in game.
 LI EN BA       List the location of all known enemy bases.
-LI SH          List all available information on all ships in the
-               game.
-LI CL PO       List closest friendly base or friendly or neutral
-               planet.
+LI SH          List all available information on all ships in the game.
+LI CL PO       List closest friendly base or friendly or neutral planet.
 LI 1 3 & 9 5   List the objects at locations 1-3 and 9-5.
 LI ST          List all Stargates.
 LI CL ST       List the closest Stargate.
-               (Note: STargate cannot be combined with any other
-               keywords.)
+               (Note: STargate cannot be combined with any other keywords.)
+```
 
 
 ### 7.17 MOVE
