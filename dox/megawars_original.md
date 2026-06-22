@@ -669,11 +669,8 @@ DA PH RA C  List damages for PHasers, sub-space RAdio, and Computer.
 
 DOCK at a friendly base, planet, or flagship
 
-**Syntax**
+**Syntax** DOck [Status [\<device names\>]]
 
-```text
-DOck [Status [<device names)]]
-```
 
 
 Refuel, repair, and rearm your ship, and set your ship's condition to
@@ -684,24 +681,22 @@ ship. A STATUS command string can be appended to a DOCK order.  The
 following table lists the maximum resources available per move when
 DOCKing at a base or planet:
 
-
-          Resource                        Base  Planet
-          --------------------------------------------
-          Ship energy                    +1000    +500
-          Shield energy                   +500    +250
-          Photon Torpedoes                 +10      +5
-          Life Support Reserves             +5      +5
-          Ship Damage                     -100     -50
-          Ship Damage, if already docked  -200    -100
+  | Resource                     | Base  | Planet |
+  |------------------------------|------:|-------:|
+  | Ship Energy                  | +1000 | +500   |
+  | Shield Energy                | +500  | +250   |
+  | Photon Torpedoes             | +10   | +5.    |
+  | Life Support Reserves        | +5    | +5.    |
+  | Ship Damage                  | -100  | -50    |
+  | Ship Damage (Already Docked) | -200  | -100   |
 
 #### Examples
 
-
-DO             Dock, no status report.
-DO ST          Dock, show ship's status AFTER docking.
-DO ST SH T     Dock, show ship's shield strength and number of
-               torpedoes on board AFTER docking.
-
+```text
+DO            Dock, no status report.
+DO ST         Dock, show ship's status AFTER docking.
+DO ST SH T    Dock, show ship's shield strength and number of torpedoes on board AFTER docking.
+```
 
 ### 7.7 DRop
 
