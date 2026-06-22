@@ -536,26 +536,17 @@ can be recognized from the "PG>" command prompt.
 
 The following conventions are used in the detailed descriptions:
 
-     1.  The first line contains, in all uppercase, the keyword that
-         help is being given for.
+1.  The first line contains, in all uppercase, the keyword that help is being given for.
 
-     2.  The syntax line (second line) lists the portion of the
-         keyword required to make it unique in uppercase, and the
-         remainder of the keyword in lower case, followed by any
-         parameters (if	the keyword is a command).
+2.  The syntax line (second line) lists the portion of the keyword required to make it unique in uppercase, and the remainder of the keyword in lower case, followed by any parameters (if the keyword is a command).
 
-     3.  A quantity to be filled in is lower case and enclosed in <>
-         (angle brackets).
+3.  A quantity to be filled in is lower case and enclosed in <> (angle brackets).
 
-     4.  Optional parameters are enclosed in [] (square brackets).
+4.  Optional parameters are enclosed in [] (square brackets).
 
-     5.  A choice (either or) is indicated by | (vertical bar).
+5.  A choice (either or) is indicated by | (vertical bar).
 
-     6.  Any parameter that must be typed in literally is started in
-         capital letters and continued in lower case. The upper case
-         letters signal the shortest unambiguous abbreviation (the
-         shortest abbreviation may change slightly, depending on
-         context).
+6.  Any parameter that must be typed in literally is started in capital letters and continued in lower case. The upper case letters signal the shortest unambiguous abbreviation (the shortest abbreviation may change slightly, depending on context).
 
 
 ### 7.1 BASES
@@ -575,21 +566,16 @@ less than 10 bases).
 
 #### Examples
 
-
-BA           List the location and shield percent of all friendly
-             bases
-BA ENEMY     List location of all known enemy bases
-BA SUM       Give summary of all friendly bases.
-BA ALL SUM   Give summary of all bases.
-BA CL        List the location and shield percent of the closest
-             friendly base.
-
-
-BA 34 26     List the location and shield percent of friendly base
-             at 34-26 (it doesn't have to be friendly, but you
-             can't see the shield percent of an out of range enemy
-             base).
-
+```text
+BA          List the location and shield percent of all friendly bases
+BA ENEMY    List location of all known enemy bases
+BA SUM      Give summary of all friendly bases.
+BA ALL SUM  Give summary of all bases.
+BA CL       List the location and shield percent of the closest friendly base.
+BA 34 26    List the location and shield percent of friendly base at 34-26 
+            (it doesn't have to be friendly, but you can't see the shield 
+            percent of an out of range enemy base).
+```
 
 ### 7.2 BUILD
 
