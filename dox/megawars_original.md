@@ -552,7 +552,9 @@ The following conventions are used in the detailed descriptions:
 ### 7.1 BASES
 
 
-List various BASE information Syntax: BAses [(keywords)]
+List various BASE information 
+
+Syntax: BAses [(keywords)]
 
 List location and shield percent of friendly bases; location of known
 enemy bases; or count of bases of either side within a specified
@@ -579,15 +581,9 @@ BA 34 26    List the location and shield percent of friendly base at 34-26
 
 ### 7.2 BUILD
 
-
 BUILD fortifications on a captured planet
 
-**Syntax**
-
-```text
-BUild [Absolute!Relative] <vpos> <hpos>
-```
-
+Syntax: BUild [Absolute|Relative] <vpos> <hpos>
 
 A fortified planet hits harder and is more resistant to destruction by
 the enemy. A planet can normally be built up to 4 times. As your
@@ -597,12 +593,11 @@ only 10 starbases can be functional per team at any one time.
 
 #### Examples
 
-
+```text
 BU 32 12     Build the planet at sector 32-12.
 BU A 32 12   Equivalent to "BU 32 12"
-BU R 1 1     Build the planet at sector 32-12, if your present
-             location is 31-11.
-
+BU R 1 1     Build the planet at sector 32-12, if your present location is 31-11.
+```
 
 ### 7.3 CAPTURE
 
